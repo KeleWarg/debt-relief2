@@ -184,14 +184,14 @@ function MapVisual({
         </div>
         
         {/* Stats */}
-        <div className="w-full md:w-44 py-2 grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-12 justify-center">
+        <div className="py-2 flex flex-row md:flex-col gap-8 md:gap-12 justify-center md:justify-start">
           {/* State name indicator (shows selected state) */}
           {selectedState && (
-            <div className="col-span-2 md:col-span-1 text-center md:text-left">
+            <div className="hidden md:block text-left">
               <span className="text-sm font-medium text-primary-700">{selectedState}</span>
             </div>
           )}
-          <div className="flex flex-col gap-2 max-w-[170px] md:max-w-none">
+          <div className="flex flex-col gap-2">
             <AnimatedCounter
               value={avgDebt}
               prefix="$"
@@ -200,7 +200,7 @@ function MapVisual({
             />
             <div className="text-xs font-normal leading-4 text-neutral-900">Avg debt per customer</div>
           </div>
-          <div className="flex flex-col gap-2 max-w-[170px] md:max-w-none">
+          <div className="flex flex-col gap-2">
             <AnimatedCounter
               value={avgSavings}
               prefix="$"
