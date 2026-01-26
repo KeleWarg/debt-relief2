@@ -1,11 +1,56 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDown, ChevronUp, DollarSign } from 'lucide-react'
+import Image from 'next/image'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button } from '@/components/ui/Button'
 import { Slider } from '@/components/ui/Slider'
 import { formatCurrency, calculateSavings } from '@/lib/utils'
+
+/**
+ * MoneyPyramid Component
+ * Displays a pyramid of money icons that grows based on income tier
+ */
+interface MoneyPyramidProps {
+  income: number
+}
+
+function MoneyPyramid({ income }: MoneyPyramidProps) {
+  const getTier = (income: number): number => {
+    if (income < 40000) return 1
+    if (income < 80000) return 2
+    if (income < 140000) return 3
+    return 4
+  }
+
+  const tier = getTier(income)
+  
+  // Build rows: row 1 has 1 icon, row 2 has 2, etc.
+  const rows = Array.from({ length: tier }, (_, i) => i + 1)
+
+  return (
+    <div className="flex flex-col items-center gap-1 min-h-[120px] justify-end">
+      {rows.map((count, rowIndex) => (
+        <div
+          key={`row-${rowIndex}-${tier}`}
+          className={`flex gap-1 animate-money-fade-in pyramid-row-${rowIndex + 1}`}
+        >
+          {Array.from({ length: count }).map((_, iconIndex) => (
+            <Image
+              key={`icon-${rowIndex}-${iconIndex}`}
+              src="/Money.svg"
+              alt=""
+              width={32}
+              height={32}
+              className={`w-8 h-8 animate-money-fade-in pyramid-icon-${iconIndex}`}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
 
 interface IncomeScreenProps {
   initialValue?: number
@@ -96,10 +141,8 @@ export function IncomeScreen({
         
         {/* Income Card - Matching Figma Design */}
         <div className="w-full bg-white rounded-lg px-8 py-6 flex flex-col items-center gap-4">
-          {/* Money Icon */}
-          <div className="w-20 h-20 bg-primary-300 rounded-full flex items-center justify-center">
-            <DollarSign className="w-10 h-10 text-primary-700" />
-          </div>
+          {/* Money Pyramid - responds to income slider */}
+          <MoneyPyramid income={income} />
           
           {/* Income Display */}
           <div className="flex flex-col items-center gap-1">

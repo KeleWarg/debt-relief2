@@ -437,3 +437,34 @@
 .debt-slider:focus-visible::-moz-range-thumb {
   box-shadow: 0 0 0 3px var(--color-focus), 0 2px 8px rgba(0, 122, 200, 0.4);
 }
+
+/* ============================================
+   MONEY PYRAMID ANIMATION
+   ============================================ */
+
+@keyframes moneyFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-money-fade-in {
+  animation: moneyFadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Staggered delay for pyramid rows */
+.pyramid-row-1 { animation-delay: 0ms; }
+.pyramid-row-2 { animation-delay: 80ms; }
+.pyramid-row-3 { animation-delay: 160ms; }
+.pyramid-row-4 { animation-delay: 240ms; }
+
+/* Individual icon stagger within rows */
+.pyramid-icon-0 { animation-delay: 0ms; }
+.pyramid-icon-1 { animation-delay: 50ms; }
+.pyramid-icon-2 { animation-delay: 100ms; }
+.pyramid-icon-3 { animation-delay: 150ms; }
