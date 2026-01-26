@@ -3,8 +3,7 @@
 import * as React from 'react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button } from '@/components/ui/Button'
-import { Slider } from '@/components/ui/Slider'
-import { formatCurrency, calculateSavings } from '@/lib/utils'
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
 
 interface DebtAmountScreenProps {
   initialValue?: number
@@ -12,11 +11,17 @@ interface DebtAmountScreenProps {
   onSubmit?: (value: number) => void
 }
 
+const MIN_DEBT = 5000
+const MAX_DEBT = 100000
+const STEP = 1000
+
+const TICK_MARKS = [5000, 25000, 50000, 75000, 100000]
+
 /**
  * DebtAmountScreen
  * 
  * Step 3 of the funnel - "How much debt do you have?"
- * Shows a slider to select debt amount with live savings calculator
+ * Shows a slider with animated counter and real-time savings estimate
  * 
  * @example
  * <DebtAmountScreen 
@@ -26,162 +31,113 @@ interface DebtAmountScreenProps {
  * />
  */
 export function DebtAmountScreen({ 
-  initialValue = 20000, 
+  initialValue = 25000, 
   onBack, 
   onSubmit 
 }: DebtAmountScreenProps) {
   const [debtAmount, setDebtAmount] = React.useState(initialValue)
-  const savings = calculateSavings(debtAmount)
+  const sliderRef = React.useRef<HTMLInputElement>(null)
+  
+  // Calculate potential savings (40% estimate)
+  const potentialSavings = Math.round(debtAmount * 0.4)
+  
+  // Update CSS variable for track fill
+  React.useEffect(() => {
+    if (sliderRef.current) {
+      const progress = ((debtAmount - MIN_DEBT) / (MAX_DEBT - MIN_DEBT)) * 100
+      sliderRef.current.style.setProperty('--progress', `${progress}%`)
+    }
+  }, [debtAmount])
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSubmit?.(debtAmount)
   }
   
-  const markers = [
-    { value: 10000, label: '10K' },
-    { value: 30000, label: '30K' },
-    { value: 50000, label: '50K' },
-    { value: 60000, label: '60K+' },
-  ]
-  
   return (
     <FormLayout 
       currentStep={3} 
       onBack={onBack}
-      sideContent={<SavingsPreview debtAmount={debtAmount} savings={savings} />}
     >
-      <form onSubmit={handleSubmit} className="animate-slide-up space-y-6">
-        {/* Headline */}
-        <div className="space-y-2 text-center">
-          <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
-            How much debt do you have?
-          </h1>
-          <p className="text-body text-neutral-500 text-center">
-            You could reduce your debt amount by 50%
+      <form onSubmit={handleSubmit} className="animate-slide-up">
+        <div className="space-y-8 text-center">
+          {/* Headline */}
+          <div>
+            <h1 className="font-display text-display md:text-display-md lg:text-display-lg text-neutral-900">
+              How much debt do you have?
+            </h1>
+            <p className="text-body text-neutral-500 mt-2">
+              Drag to estimate your total debt
+            </p>
+          </div>
+
+          {/* Big animated number - hero element */}
+          <div className="py-6">
+            <AnimatedCounter 
+              value={debtAmount} 
+              prefix="$" 
+              className="font-display text-5xl md:text-6xl font-bold text-neutral-900"
+              duration={300}
+            />
+            {/* Inline savings caption */}
+            <p className="text-emerald-600 text-sm mt-2 text-center">
+              <span className="mr-1.5">↓</span>
+              Save up to <span className="font-semibold">${potentialSavings.toLocaleString()}</span>
+            </p>
+          </div>
+
+          {/* Slider with tick marks */}
+          <div className="space-y-3 px-2">
+            {/* Tick marks */}
+            <div className="relative h-2 mb-4">
+              {TICK_MARKS.map((tick) => {
+                const position = ((tick - MIN_DEBT) / (MAX_DEBT - MIN_DEBT)) * 100
+                return (
+                  <div 
+                    key={tick}
+                    className="absolute top-0 w-0.5 h-2 bg-neutral-300 -translate-x-1/2"
+                    style={{ left: `${position}%` }}
+                  />
+                )
+              })}
+            </div>
+            
+            {/* Range slider */}
+            <input
+              ref={sliderRef}
+              type="range"
+              min={MIN_DEBT}
+              max={MAX_DEBT}
+              step={STEP}
+              value={debtAmount}
+              onChange={(e) => setDebtAmount(Number(e.target.value))}
+              className="debt-slider w-full"
+              aria-label="Debt amount"
+            />
+            
+            {/* Scale labels */}
+            <div className="flex justify-between text-body-sm text-neutral-500 pt-1">
+              <span>$5K</span>
+              <span>$25K</span>
+              <span>$50K</span>
+              <span>$75K</span>
+              <span>$100K+</span>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <Button type="submit" fullWidth showTrailingIcon>
+            Continue
+          </Button>
+
+          {/* Disclaimer */}
+          <p className="text-caption text-neutral-500">
+            *This is a savings estimate. Your actual savings amount is subject to change 
+            due to a variety of factors such as your debt to income ratio and interest rates.
           </p>
         </div>
-        
-        {/* Debt Amount Display */}
-        <div className="bg-primary-300 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-body text-neutral-800">Your debt</span>
-            <span className="text-headline-xl text-primary-700 font-bold">
-              {formatCurrency(debtAmount)}
-            </span>
-          </div>
-          
-          {/* Slider */}
-          <Slider
-            min={10000}
-            max={60000}
-            step={1000}
-            value={[debtAmount]}
-            onValueChange={([value]) => setDebtAmount(value)}
-            markers={markers}
-            showValue={false}
-          />
-        </div>
-        
-        {/* Savings Summary (Mobile) */}
-        <div className="lg:hidden">
-          <SavingsPreview debtAmount={debtAmount} savings={savings} />
-        </div>
-        
-        {/* Submit Button */}
-        <Button type="submit" fullWidth>
-          Tell Us About Your Income
-        </Button>
-        
-        {/* Disclaimer */}
-        <p className="text-caption text-neutral-500 text-center">
-          *This is a savings estimate. Your actual savings amount is subject to change 
-          due to a variety of factors such as your debt to income ratio and interest rates.
-        </p>
       </form>
     </FormLayout>
-  )
-}
-
-/**
- * SavingsPreview Component
- * Shows the debt reduction calculation
- */
-function SavingsPreview({ 
-  debtAmount, 
-  savings 
-}: { 
-  debtAmount: number
-  savings: ReturnType<typeof calculateSavings>
-}) {
-  return (
-    <div className="bg-white border border-neutral-200 rounded-lg p-6 shadow-card">
-      <h3 className="text-body font-semibold text-neutral-900 mb-4">
-        Your savings estimate
-      </h3>
-      
-      {/* Donut Chart Placeholder */}
-      <div className="flex justify-center mb-6">
-        <div className="relative w-32 h-32">
-          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-            {/* Background circle */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="#F3F5FB"
-              strokeWidth="12"
-            />
-            {/* Progress circle */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="#007AC8"
-              strokeWidth="12"
-              strokeLinecap="round"
-              strokeDasharray={`${0.6 * 251.2} 251.2`}
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-caption text-neutral-500">Your debt</span>
-            <span className="text-headline-md text-neutral-900 font-bold">
-              {formatCurrency(debtAmount)}
-            </span>
-          </div>
-        </div>
-      </div>
-      
-      {/* Stats */}
-      <div className="space-y-3">
-        <div className="flex justify-between py-2 border-b border-neutral-200">
-          <span className="text-body-sm text-neutral-500">Your debt</span>
-          <span className="text-body-sm text-neutral-900 font-medium">
-            {formatCurrency(debtAmount)}
-          </span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-neutral-200">
-          <span className="text-body-sm text-neutral-500">*New debt amount</span>
-          <span className="text-body-sm text-feedback-success font-medium">
-            {formatCurrency(savings.newDebtAmount)}
-          </span>
-        </div>
-        <div className="flex justify-between py-2 border-b border-neutral-200">
-          <span className="text-body-sm text-neutral-500">*Estimated savings</span>
-          <span className="text-body-sm text-feedback-success font-medium">
-            {formatCurrency(savings.savings)}
-          </span>
-        </div>
-        <div className="flex justify-between py-2">
-          <span className="text-body-sm text-neutral-500">*New monthly payments</span>
-          <span className="text-body-sm text-neutral-900 font-medium">
-            {formatCurrency(savings.monthlyPayment)}/mo
-          </span>
-        </div>
-      </div>
-    </div>
   )
 }
 

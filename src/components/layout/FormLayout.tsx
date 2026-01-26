@@ -91,9 +91,9 @@ export function FormLayout({
               {children}
             </div>
             
-            {/* Side Content (Calculator, Preview, etc.) */}
+            {/* Side Content (Calculator, Preview, etc.) - Desktop only */}
             {sideContent && (
-              <div className="w-full">
+              <div className="hidden lg:block w-full">
                 {sideContent}
               </div>
             )}
