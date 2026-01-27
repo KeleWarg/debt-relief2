@@ -468,3 +468,23 @@
 .pyramid-icon-1 { animation-delay: 50ms; }
 .pyramid-icon-2 { animation-delay: 100ms; }
 .pyramid-icon-3 { animation-delay: 150ms; }
+
+/* ============================================
+   STAGGERED FADE IN UP ANIMATION
+   ============================================ */
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}

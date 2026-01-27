@@ -24,8 +24,7 @@ interface EmailScreenProps {
 /**
  * EmailScreen
  * 
- * Step 8 of the funnel - "What's your email?"
- * Shows email input with validation
+ * Celebratory gate screen - asks for email before showing debt profile
  */
 export function EmailScreen({ 
   initialValue = '', 
@@ -48,20 +47,20 @@ export function EmailScreen({
   }
   
   return (
-    <FormLayout currentStep={9} onBack={onBack}>
+    <FormLayout currentStep={10} onBack={onBack}>
       <form onSubmit={handleSubmit(onFormSubmit)} className="animate-slide-up space-y-6">
         {/* Headline */}
-        <div className="space-y-2 text-center">
-          <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
-            What&apos;s your email?
-          </h1>
-          <p className="text-body text-neutral-500 text-center">
-            Please share your email so we know where to send your debt relief plan
-          </p>
-        </div>
+        <h1 className="font-display text-2xl md:text-3xl font-bold text-neutral-900 text-center">
+          Congrats! Your debt profile is ready.
+        </h1>
+        
+        {/* Subheading */}
+        <p className="text-body text-neutral-500 text-center">
+          What&apos;s your email address?
+        </p>
         
         {/* Email Input */}
-        <div>
+        <div className="pt-2">
           <Input
             label="Email address"
             type="email"
@@ -73,7 +72,7 @@ export function EmailScreen({
         
         {/* Submit Button */}
         <Button type="submit" fullWidth>
-          Continue
+          Continue to Debt Profile
         </Button>
         
         {/* Privacy note */}

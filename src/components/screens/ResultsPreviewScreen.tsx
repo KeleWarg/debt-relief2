@@ -69,8 +69,8 @@ export function ResultsPreviewScreen({
 
   return (
     <FormLayout currentStep={5} onBack={onBack}>
-      <div className="animate-slide-up flex flex-col items-center text-center">
-        {/* Lottie Animation */}
+      <div className="flex flex-col items-center text-center">
+        {/* Lottie Animation - plays immediately, no fade-in */}
         <div className="w-20 h-20 mb-4">
           <LottieIcon 
             animationData={interstitialAnimation} 
@@ -78,19 +78,28 @@ export function ResultsPreviewScreen({
           />
         </div>
 
-        {/* Headline */}
-        <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900">
+        {/* Headline - 0.2s delay */}
+        <h1 
+          className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 animate-fade-in-up"
+          style={{ animationDelay: '200ms' }}
+        >
           Good news — here&apos;s what we found.
         </h1>
 
-        {/* Personalized Intro */}
-        <p className="text-body text-neutral-500 mt-4 max-w-md mx-auto">
+        {/* Personalized Intro - 0.4s delay */}
+        <p 
+          className="text-body text-neutral-500 mt-4 max-w-md mx-auto animate-fade-in-up"
+          style={{ animationDelay: '400ms' }}
+        >
           Based on your {formatCurrency(debtAmount)} in {formatDebtType(debtType)} debt 
           and {formatCurrency(income)} income, you could be a strong candidate for debt relief.
         </p>
 
-        {/* Savings Card */}
-        <div className="w-full bg-primary-300 rounded-xl p-8 mt-8">
+        {/* Savings Card - 0.6s delay */}
+        <div 
+          className="w-full bg-primary-300 rounded-xl p-8 mt-8 animate-fade-in-up"
+          style={{ animationDelay: '600ms' }}
+        >
           {/* Label */}
           <p className="text-body-sm text-neutral-600">
             You could save up to
@@ -112,21 +121,27 @@ export function ResultsPreviewScreen({
           </p>
         </div>
 
-        {/* Supporting Line */}
-        <p className="text-body-sm text-neutral-500 mt-6 max-w-sm mx-auto">
+        {/* Supporting Line - 0.8s delay */}
+        <p 
+          className="text-body-sm text-neutral-500 mt-6 max-w-sm mx-auto animate-fade-in-up"
+          style={{ animationDelay: '800ms' }}
+        >
           Your debt-to-income ratio of <span className="font-medium">{debtToIncomeRatio}%</span> puts 
           you in a favorable range for most relief programs.
         </p>
 
-        {/* CTA Button */}
-        <div className="w-full mt-8">
+        {/* CTA Button - 1.0s delay */}
+        <div 
+          className="w-full mt-8 animate-fade-in-up"
+          style={{ animationDelay: '1000ms' }}
+        >
           <Button 
             type="button" 
             fullWidth 
             showTrailingIcon
             onClick={onNext}
           >
-            Continue to Get Matched
+            See my debt profile
           </Button>
         </div>
       </div>
