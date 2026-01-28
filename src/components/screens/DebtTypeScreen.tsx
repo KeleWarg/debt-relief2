@@ -77,7 +77,7 @@ export function DebtTypeScreen({
                   'flex sm:flex-col items-center justify-between sm:justify-center',
                   'gap-4 sm:gap-3 p-4 sm:p-6 rounded-lg border transition-all duration-200',
                   'sm:min-h-[180px]',
-                  'hover:border-primary-700 hover:scale-[1.02]',
+                  'shadow-card hover:shadow-card-hover hover:border-primary-700 hover:scale-[1.02]',
                   isSelected 
                     ? 'border-primary-700 bg-primary-300' 
                     : 'border-neutral-200 bg-white'
