@@ -595,13 +595,20 @@ export function DebtProfileScreen({
                       </p>
                     </div>
                     
-                    {/* CTA Button - Sticky on mobile */}
-                    <StickyButtonContainer className="mt-6">
+                    {/* CTA Button - inline on desktop, hidden on mobile (shown in sticky below) */}
+                    <div className="hidden sm:block mt-6">
                       <Button type="submit" fullWidth showTrailingIcon>
                         See My Options
                       </Button>
-                    </StickyButtonContainer>
+                    </div>
                   </div>
+                  
+                  {/* CTA Button - Sticky on mobile only */}
+                  <StickyButtonContainer className="sm:hidden">
+                    <Button type="submit" fullWidth showTrailingIcon>
+                      See My Options
+                    </Button>
+                  </StickyButtonContainer>
                 </form>
               )}
             </div>
