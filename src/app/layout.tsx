@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Work_Sans } from 'next/font/google'
 import localFont from 'next/font/local'
 import '@/styles/globals.css'
-import { GoogleMapsProvider } from '@/components/providers/GoogleMapsProvider'
 
 const workSans = Work_Sans({
   subsets: ['latin'],
@@ -31,11 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${workSans.variable} ${schnyderS.variable}`}>
-      <body className="font-sans">
-        <GoogleMapsProvider>
-          {children}
-        </GoogleMapsProvider>
-      </body>
+      <body className="font-sans">{children}</body>
     </html>
   )
 }

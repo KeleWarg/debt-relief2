@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete'
 import { cn } from '@/lib/utils'
 import { MapPin, Search } from 'lucide-react'
 
@@ -13,12 +12,17 @@ export interface ParsedAddress {
   apt?: string
 }
 
-// Type for Google Maps address component
-interface AddressComponent {
-  long_name: string
-  short_name: string
-  types: string[]
-}
+// Pre-populated dummy suggestions
+const DUMMY_SUGGESTIONS = [
+  { street: '123 Main Street', city: 'Austin', state: 'TX', zip: '78701' },
+  { street: '456 Oak Avenue', city: 'Denver', state: 'CO', zip: '80202' },
+  { street: '789 Pine Boulevard', city: 'Seattle', state: 'WA', zip: '98101' },
+  { street: '321 Elm Drive', city: 'Miami', state: 'FL', zip: '33101' },
+  { street: '555 Maple Lane', city: 'Chicago', state: 'IL', zip: '60601' },
+  { street: '888 Cedar Court', city: 'Phoenix', state: 'AZ', zip: '85001' },
+  { street: '999 Birch Way', city: 'Portland', state: 'OR', zip: '97201' },
+  { street: '222 Willow Street', city: 'Atlanta', state: 'GA', zip: '30301' },
+]
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: ParsedAddress) => void
@@ -30,8 +34,7 @@ interface AddressAutocompleteProps {
 /**
  * AddressAutocomplete Component
  * 
- * Smart address input using Google Places Autocomplete
- * Falls back to manual entry if Google Places isn't available
+ * Dummy address autocomplete with pre-populated suggestions
  */
 export function AddressAutocomplete({ 
   onAddressSelect, 
@@ -39,22 +42,9 @@ export function AddressAutocomplete({
   error,
   disabled = false 
 }: AddressAutocompleteProps) {
-  const {
-    ready,
-    value,
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: 'us' },
-      types: ['address'],
-    },
-    debounce: 300,
-    defaultValue: initialValue,
-  })
-
+  const [value, setValue] = React.useState(initialValue)
   const [isOpen, setIsOpen] = React.useState(false)
+  const [filteredSuggestions, setFilteredSuggestions] = React.useState(DUMMY_SUGGESTIONS)
   const wrapperRef = React.useRef<HTMLDivElement>(null)
 
   // Close dropdown when clicking outside
@@ -68,59 +58,59 @@ export function AddressAutocomplete({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Filter suggestions based on input
+  React.useEffect(() => {
+    if (!value.trim()) {
+      setFilteredSuggestions(DUMMY_SUGGESTIONS.slice(0, 4))
+      return
+    }
+    
+    const searchTerm = value.toLowerCase()
+    const filtered = DUMMY_SUGGESTIONS.filter(addr => 
+      addr.street.toLowerCase().includes(searchTerm) ||
+      addr.city.toLowerCase().includes(searchTerm) ||
+      addr.state.toLowerCase().includes(searchTerm) ||
+      addr.zip.includes(searchTerm)
+    )
+    
+    // If no matches, show suggestions that start with similar numbers/letters
+    if (filtered.length === 0) {
+      const firstChar = value.charAt(0)
+      if (/\d/.test(firstChar)) {
+        // User typed a number, show addresses with numbers
+        setFilteredSuggestions(DUMMY_SUGGESTIONS.slice(0, 4))
+      } else {
+        // Show addresses matching first letter
+        const byLetter = DUMMY_SUGGESTIONS.filter(addr =>
+          addr.street.toLowerCase().includes(firstChar.toLowerCase()) ||
+          addr.city.toLowerCase().startsWith(firstChar.toLowerCase())
+        )
+        setFilteredSuggestions(byLetter.length > 0 ? byLetter : DUMMY_SUGGESTIONS.slice(0, 3))
+      }
+    } else {
+      setFilteredSuggestions(filtered)
+    }
+  }, [value])
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
     setIsOpen(true)
   }
 
-  const handleSelect = async (description: string) => {
-    setValue(description, false)
-    clearSuggestions()
+  const handleSelect = (address: typeof DUMMY_SUGGESTIONS[0]) => {
+    const fullAddress = `${address.street}, ${address.city}, ${address.state} ${address.zip}`
+    setValue(fullAddress)
     setIsOpen(false)
 
-    try {
-      const results = await getGeocode({ address: description })
-      const addressComponents = results[0].address_components
-      
-      const parsed: ParsedAddress = {
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
-      }
-
-      let streetNumber = ''
-      let route = ''
-
-      addressComponents.forEach((component: AddressComponent) => {
-        const types = component.types
-
-        if (types.includes('street_number')) {
-          streetNumber = component.long_name
-        }
-        if (types.includes('route')) {
-          route = component.long_name
-        }
-        if (types.includes('locality') || types.includes('sublocality')) {
-          parsed.city = component.long_name
-        }
-        if (types.includes('administrative_area_level_1')) {
-          parsed.state = component.short_name
-        }
-        if (types.includes('postal_code')) {
-          parsed.zip = component.long_name
-        }
-      })
-
-      parsed.street = streetNumber ? `${streetNumber} ${route}` : route
-
-      onAddressSelect(parsed)
-    } catch (error) {
-      console.error('Error parsing address:', error)
-    }
+    onAddressSelect({
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      zip: address.zip,
+    })
   }
 
-  const showSuggestions = isOpen && status === 'OK' && data.length > 0
+  const showSuggestions = isOpen && filteredSuggestions.length > 0
 
   return (
     <div ref={wrapperRef} className="relative">
@@ -136,7 +126,7 @@ export function AddressAutocomplete({
           value={value}
           onChange={handleInput}
           onFocus={() => setIsOpen(true)}
-          disabled={disabled || !ready}
+          disabled={disabled}
           placeholder="123 Main Street, City, State"
           className={cn(
             'w-full min-h-[48px] pl-10 pr-4 py-3 rounded-[8px] border bg-white',
@@ -146,7 +136,7 @@ export function AddressAutocomplete({
             error 
               ? 'border-feedback-error' 
               : 'border-neutral-200 hover:border-neutral-500',
-            (disabled || !ready) && 'opacity-50 cursor-not-allowed'
+            disabled && 'opacity-50 cursor-not-allowed'
           )}
           aria-invalid={!!error}
           aria-describedby={error ? 'address-error' : undefined}
@@ -167,32 +157,25 @@ export function AddressAutocomplete({
           className="absolute z-50 w-full bg-white border border-neutral-200 rounded-lg mt-1 shadow-lg max-h-60 overflow-auto"
           role="listbox"
         >
-          {data.map(({ place_id, description, structured_formatting }) => (
+          {filteredSuggestions.map((address, index) => (
             <li
-              key={place_id}
-              onClick={() => handleSelect(description)}
+              key={index}
+              onClick={() => handleSelect(address)}
               className="px-4 py-3 hover:bg-neutral-100 cursor-pointer transition-colors flex items-start gap-3"
               role="option"
             >
               <MapPin className="w-4 h-4 text-neutral-500 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-sm text-neutral-900 font-medium">
-                  {structured_formatting.main_text}
+                  {address.street}
                 </p>
                 <p className="text-xs text-neutral-500">
-                  {structured_formatting.secondary_text}
+                  {address.city}, {address.state} {address.zip}
                 </p>
               </div>
             </li>
           ))}
         </ul>
-      )}
-
-      {/* Loading state */}
-      {!ready && (
-        <p className="mt-1.5 text-body-sm text-neutral-500">
-          Loading address search...
-        </p>
       )}
     </div>
   )

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Check, ShieldCheck, Edit3 } from 'lucide-react'
+import { Edit3, Quote, Star, Search } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { TrustBadges } from '@/components/layout/TrustBadges'
@@ -10,6 +10,139 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { AddressAutocomplete, type ParsedAddress } from '@/components/ui/AddressAutocomplete'
 import { formatCurrency, cn } from '@/lib/utils'
+
+// Testimonials data
+const testimonials = [
+  {
+    quote: "I was skeptical at first, but the process was simple. I'm saving $400/month and will be debt-free in 2 years.",
+    name: "Jessica M.",
+    location: "Texas",
+    rating: 5
+  },
+  {
+    quote: "They helped me settle $45,000 in credit card debt for $27,000. I finally feel like I can breathe again.",
+    name: "Michael R.",
+    location: "Florida",
+    rating: 5
+  },
+  {
+    quote: "The team was supportive and explained everything clearly. I'm on track to be debt-free by next year.",
+    name: "Sarah K.",
+    location: "Ohio",
+    rating: 5
+  },
+  {
+    quote: "I wish I had done this sooner. My monthly payments dropped by 40% and I can finally save money.",
+    name: "David L.",
+    location: "California",
+    rating: 5
+  }
+]
+
+// Partner logos data
+const partnerLogos = [
+  { src: '/accredited_logo.png', alt: 'Accredited' },
+  { src: '/ClearOne.png', alt: 'ClearOne' },
+  { src: '/freedom-debt-relief_logo.png', alt: 'Freedom Debt Relief' },
+  { src: '/JGW_logo.png', alt: 'JG Wentworth' },
+  { src: '/National_logo.png', alt: 'National Debt Relief' },
+]
+
+// Testimonial Carousel Component
+function TestimonialCarousel() {
+  const [currentIndex, setCurrentIndex] = React.useState(0)
+  const [isPaused, setIsPaused] = React.useState(false)
+
+  React.useEffect(() => {
+    if (isPaused) return
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+    }, 5000)
+    
+    return () => clearInterval(interval)
+  }, [isPaused])
+
+  const testimonial = testimonials[currentIndex]
+
+  return (
+    <div 
+      className="border border-gray-100 rounded-xl p-5 mb-6"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <Quote className="w-6 h-6 text-gray-200 mb-2" />
+      
+      <div key={currentIndex} className="animate-testimonial">
+        <p className="text-sm text-neutral-800 italic leading-relaxed">
+          &ldquo;{testimonial.quote}&rdquo;
+        </p>
+        
+        <div className="flex gap-1 mt-3">
+          {[...Array(testimonial.rating)].map((_, i) => (
+            <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+          ))}
+        </div>
+        
+        <p className="text-xs text-neutral-500 mt-2">
+          — {testimonial.name}, {testimonial.location}
+        </p>
+      </div>
+      
+      {/* Progress dots */}
+      <div className="flex justify-center gap-1.5 mt-4">
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={cn(
+              'h-1.5 rounded-full transition-all min-w-[44px] min-h-[44px] flex items-center justify-center',
+              'sm:min-w-0 sm:min-h-0'
+            )}
+            aria-label={`Go to testimonial ${index + 1}`}
+          >
+            <span className={cn(
+              'h-1.5 rounded-full transition-all',
+              index === currentIndex 
+                ? 'bg-primary-700 w-3' 
+                : 'bg-gray-300 w-1.5'
+            )} />
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Partner Logo Carousel Component
+function PartnerCarousel() {
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-wide text-neutral-500 text-center mb-3">
+        Trusted Partners
+      </p>
+      
+      <div className="relative overflow-hidden">
+        {/* Fade masks */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        
+        {/* Scrolling track */}
+        <div className="flex animate-scroll w-max">
+          {[...partnerLogos, ...partnerLogos].map((logo, index) => (
+            <div key={index} className="flex-shrink-0 px-4 flex items-center">
+              <img 
+                src={logo.src} 
+                alt={logo.alt} 
+                className="h-6 w-auto object-contain grayscale opacity-60"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 interface AddressScreenProps {
   firstName?: string
@@ -137,12 +270,12 @@ export function AddressScreen({
     }
   }
   
-  // "Why we ask" reasons
-  const whyWeAskReasons = [
-    "Find state-specific debt relief programs",
-    "Verify your identity securely",
-    "Connect you with local partners"
-  ]
+  // Switch back to autocomplete
+  const enableAutocomplete = () => {
+    setIsManualEntry(false)
+    setSelectedAddress(null)
+    setErrors({})
+  }
   
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -161,17 +294,12 @@ export function AddressScreen({
           </h1>
           
           {/* Two-column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             
             {/* Left Column - Context Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 order-1 lg:order-none">
-              {/* Section Label */}
-              <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">
-                One last step
-              </p>
-              
-              {/* Savings Reminder */}
-              <div className="bg-secondary-300 rounded-xl p-4 mb-5">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 order-2 lg:order-none">
+              {/* Savings Box */}
+              <div className="bg-secondary-300 rounded-xl p-5 mb-6">
                 <p className="text-sm text-neutral-500">Potential Savings</p>
                 <p className="text-2xl font-bold text-feedback-success mt-1">
                   {formatCurrency(savings)}*
@@ -181,36 +309,20 @@ export function AddressScreen({
                 </p>
               </div>
               
-              {/* Why We Ask */}
-              <p className="text-sm font-semibold text-neutral-900 mb-3">
-                Why we need your address:
-              </p>
+              {/* Rotating Testimonials */}
+              <TestimonialCarousel />
               
-              <div className="space-y-2">
-                {whyWeAskReasons.map((reason, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-feedback-success flex-shrink-0" />
-                    <p className="text-sm text-neutral-800">{reason}</p>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Privacy Assurance */}
-              <div className="flex items-start gap-2 mt-4 pt-4 border-t border-gray-100">
-                <ShieldCheck className="w-5 h-5 text-primary-700 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-neutral-500">
-                  Your address is never shared without your consent.
-                </p>
-              </div>
+              {/* Partner Logo Carousel */}
+              <PartnerCarousel />
               
               {/* Disclaimer */}
-              <p className="text-xs text-neutral-500 mt-4">
+              <p className="text-xs text-neutral-500 mt-4 text-center">
                 *Estimated savings. Results vary.
               </p>
             </div>
             
             {/* Right Column - Address Form */}
-            <div className="order-2 lg:order-none">
+            <div className="order-1 lg:order-none">
               <form onSubmit={handleSubmit} className="animate-slide-up">
                 {/* Subheading */}
                 <p className="text-neutral-500 text-sm mb-6">
@@ -283,6 +395,16 @@ export function AddressScreen({
                 ) : (
                   /* Manual Entry Mode */
                   <div className="space-y-4 animate-fade-in">
+                    {/* Link to switch back to autocomplete */}
+                    <button
+                      type="button"
+                      onClick={enableAutocomplete}
+                      className="text-sm text-primary-700 hover:text-primary-750 underline flex items-center gap-1 mb-2"
+                    >
+                      <Search className="w-3 h-3" />
+                      Use address search instead
+                    </button>
+                    
                     <Input
                       label="Street Address"
                       placeholder="123 Main Street"
