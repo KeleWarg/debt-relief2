@@ -336,11 +336,11 @@ export function DebtProfileScreen({
   // Build social proof message
   const socialProofMessage = stateLabel && ageRange ? (
     <>
-      Your debt profile matches with more than <strong>40,000 people</strong> in <strong>{stateLabel}</strong> who are in the <strong>{ageRange}</strong> age range. Our partners have helped <strong>5 million people</strong> across the US with profiles like yours.
+      Your debt profile matches with thousands of people in <strong>{stateLabel}</strong> in a similar situation. Our partners have worked with over <strong>5 million Americans</strong> with profiles like yours.
     </>
   ) : (
     <>
-      Your debt profile matches thousands of Americans in a similar financial situation. Our partners have helped <strong>5 million people</strong> across the US with profiles like yours.
+      Your debt profile matches thousands of Americans in a similar financial situation. Our partners have worked with over <strong>5 million Americans</strong> with profiles like yours.
     </>
   )
   
@@ -397,7 +397,7 @@ export function DebtProfileScreen({
           <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center mb-8">
             {showPhoneForm 
               ? `Ready to see your options, ${firstName || 'there'}?`
-              : `Here's your debt profile, ${firstName || 'there'}`
+              : <>Here's your debt profile<br className="hidden sm:block" />and what it means</>
             }
           </h1>
           
@@ -548,15 +548,18 @@ export function DebtProfileScreen({
                   {/* Stats Box */}
                   <div className="bg-gray-50 rounded-xl p-4">
                     {/* Row 1 - Debt-to-Income Ratio (highlighted) */}
-                    <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                      <div className="flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-neutral-500" />
-                        <span className="text-sm text-neutral-800">Debt-to-Income Ratio</span>
-                      </div>
+                    <div className="flex justify-between items-center pb-3 border-b border-gray-200 gap-4">
+                      <span className="text-sm text-neutral-800 flex items-center gap-1.5 whitespace-nowrap">
+                        <AlertTriangle className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+                        DTI Ratio
+                        <Tooltip content="Your debt-to-income ratio compares your total debt to your annual income. A higher ratio often means debt relief programs can provide more benefit.">
+                          <HelpCircle className="w-3.5 h-3.5 text-neutral-400 hover:text-neutral-600 transition-colors flex-shrink-0" />
+                        </Tooltip>
+                      </span>
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-neutral-900">{ratio}%</span>
                         <span className={cn(
-                          'px-2 py-0.5 rounded-full text-xs font-medium',
+                          'px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap',
                           ratioBadge.className
                         )}>
                           {ratioBadge.label}
@@ -565,34 +568,49 @@ export function DebtProfileScreen({
                     </div>
                     
                     {/* Row 2 - Debt Type */}
-                    <div className="flex justify-between py-3 border-b border-gray-200">
-                      <span className="text-sm text-neutral-800">Debt Type</span>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                      <span className="text-sm text-neutral-800 flex items-center gap-2">
+                        Debt Type
+                        <Tooltip content="The type of debt you have helps determine which relief programs may be the best fit for your situation.">
+                          <HelpCircle className="w-3.5 h-3.5 text-neutral-400 hover:text-neutral-600 transition-colors" />
+                        </Tooltip>
+                      </span>
                       <span className="font-semibold text-neutral-900">
                         {DEBT_TYPE_LABELS[debtType]}
                       </span>
                     </div>
                     
                     {/* Row 3 - Total Debt */}
-                    <div className="flex justify-between py-3 border-b border-gray-200">
-                      <span className="text-sm text-neutral-800">Total Debt</span>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                      <span className="text-sm text-neutral-800 flex items-center gap-2">
+                        Total Debt
+                        <Tooltip content="This is the total amount of unsecured debt you reported. Debt relief programs typically work with unsecured debts like credit cards and personal loans.">
+                          <HelpCircle className="w-3.5 h-3.5 text-neutral-400 hover:text-neutral-600 transition-colors" />
+                        </Tooltip>
+                      </span>
                       <span className="font-semibold text-neutral-900">
                         {formatCurrency(debtAmount)}
                       </span>
                     </div>
                     
                     {/* Row 4 - Annual Income */}
-                    <div className="flex justify-between pt-3">
-                      <span className="text-sm text-neutral-800">Annual Income</span>
+                    <div className="flex justify-between items-center pt-3">
+                      <span className="text-sm text-neutral-800 flex items-center gap-2">
+                        Annual Income
+                        <Tooltip content="Your annual income before taxes. This helps providers understand your financial situation and determine program eligibility.">
+                          <HelpCircle className="w-3.5 h-3.5 text-neutral-400 hover:text-neutral-600 transition-colors" />
+                        </Tooltip>
+                      </span>
                       <span className="font-semibold text-neutral-900">
                         {formatCurrency(income)}
                       </span>
                     </div>
                   </div>
                   
-                  {/* Recommended Approach */}
+                  {/* Possible Approaches */}
                   <div className="mt-6">
                     <p className="text-xs uppercase tracking-wide text-neutral-500 mb-3">
-                      Recommended Approach
+                      Possible Approaches
                     </p>
                     <div className="inline-flex flex-wrap gap-2">
                       <span className="bg-primary-300 text-primary-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5">
@@ -608,17 +626,11 @@ export function DebtProfileScreen({
                         Payment Plan
                       </span>
                     </div>
-                  </div>
-                  
-                  {/* Savings Box */}
-                  <div className="bg-secondary-300 rounded-xl p-4 mt-6">
-                    <p className="text-neutral-500 text-sm">Potential Savings</p>
-                    <p className="text-2xl font-bold text-feedback-success">
-                      {formatCurrency(savings)}
-                    </p>
-                    <p className="text-neutral-500 text-sm mt-1">
-                      Timeline: 24-36 months
-                    </p>
+                    <div className="border-t border-gray-200 mt-4 pt-3">
+                      <p className="text-sm text-neutral-500">
+                        Your profile matches multiple program types. Providers will explain which options fit your situation.
+                      </p>
+                    </div>
                   </div>
                   
                   {/* Partner logos carousel - Desktop only, moved from right panel */}
