@@ -190,7 +190,7 @@ function MapVisual({
         </div>
       </div>
       
-      <div className="flex flex-col-reverse md:flex-row items-center gap-6 mt-8">
+      <div className="flex flex-col md:flex-row items-center gap-6 mt-8">
         {/* Interactive US Map */}
         <div className="flex justify-center w-full flex-[3]">
           <USMap
