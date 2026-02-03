@@ -61,7 +61,13 @@
   }
   
   body {
-    @apply bg-white text-neutral-800;
+    @apply bg-white text-neutral-800 font-sans;
+    font-family: var(--font-work-sans), 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  }
+  
+  /* Ensure headings and paragraphs inherit font unless using display font */
+  h1, h2, h3, h4, h5, h6, p, span, div, label, button, input, select, textarea {
+    font-family: inherit;
   }
   
   /* Focus visible styles */

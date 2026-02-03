@@ -1,18 +1,24 @@
 'use client'
 
 import * as React from 'react'
+import { Info } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, StickyButtonContainer } from '@/components/ui'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/Select'
+import { Tooltip } from '@/components/ui/Tooltip'
 import { USMap } from '@/components/ui/USMap'
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
 import { US_STATES } from '@/types/funnel'
 import { 
-  getStateStats, 
   stateAbbreviationToName, 
   stateNameToAbbreviation,
-  defaultStats 
 } from '@/data/stateStats'
+import {
+  creditCardDebtByState,
+  personalLoanDebtByState,
+  nationalAverageCreditCard,
+  nationalAveragePersonalLoan,
+} from '@/data/stateDebtData'
 
 interface LocationScreenProps {
   initialValue?: string
@@ -23,8 +29,8 @@ interface LocationScreenProps {
 /**
  * LocationScreen
  * 
- * Step 1 of the funnel - "See How Much You Could Save with Debt Relief"
- * Shows a state dropdown with interactive US map visualization and stats
+ * Step 1 of the funnel - "Feeling overwhelmed by debt? You're not alone."
+ * Shows a state dropdown with interactive US map visualization and debt stats
  */
 // Default state to show pin on initial load
 const DEFAULT_STATE = 'KS' // Kansas - central US state
@@ -46,8 +52,13 @@ export function LocationScreen({
     ? stateAbbreviationToName[selectedStateAbbr] ?? null 
     : null
   
-  // Stats ONLY update on click, not hover
-  const stats = selectedStateName ? getStateStats(selectedStateName) : defaultStats
+  // Get debt stats for selected state (or national averages as fallback)
+  const creditCardDebt = selectedStateAbbr 
+    ? creditCardDebtByState[selectedStateAbbr] ?? nationalAverageCreditCard
+    : nationalAverageCreditCard
+  const personalLoanDebt = selectedStateAbbr
+    ? personalLoanDebtByState[selectedStateAbbr] ?? nationalAveragePersonalLoan
+    : nationalAveragePersonalLoan
   
   // Handle map state selection (receives full name)
   const handleMapStateSelect = (stateName: string) => {
@@ -84,19 +95,22 @@ export function LocationScreen({
         {/* Headline */}
         <div className="space-y-2 text-center">
           <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
-            <span className="block">See How Much You Could</span>
-            <span className="block">Save with Debt Relief</span>
+            Feeling overwhelmed by debt? You're not alone.
           </h1>
           <p className="text-body text-neutral-500 text-center">
-            Struggling with $15,000+ in credit card or personal loan debt? Get matched 
-            with relief options that could cut your payments in half.
+            {selectedStateName 
+              ? `See which debt relief programs are available in ${selectedStateName}. No obligations, just options for better finances.`
+              : "See which debt relief programs are available to you. No obligations, just options for better finances."}
           </p>
         </div>
         
         {/* State Dropdown */}
         <div className="w-full max-w-[410px] mx-auto">
-          <label className="block text-body-sm font-medium text-neutral-800 mb-2">
-            Select your state
+          <label className="flex items-center gap-1.5 text-body-sm font-medium text-neutral-800 mb-2">
+            Where do you live?
+            <Tooltip content="We use your state to show which debt relief options apply to you.">
+              <Info className="w-4 h-4 text-neutral-400 cursor-help" />
+            </Tooltip>
           </label>
           <Select value={selectedStateAbbr} onValueChange={handleDropdownChange}>
             <SelectTrigger error={!!error}>
@@ -123,8 +137,8 @@ export function LocationScreen({
           hoveredState={hoveredState}
           onStateSelect={handleMapStateSelect}
           onStateHover={setHoveredState}
-          avgDebt={stats.avgDebt}
-          avgSavings={stats.avgSavings}
+          creditCardDebt={creditCardDebt}
+          personalLoanDebt={personalLoanDebt}
         />
         
         {/* Submit Button - Sticky on mobile */}
@@ -132,6 +146,9 @@ export function LocationScreen({
           <Button type="submit" fullWidth showTrailingIcon>
             Continue
           </Button>
+          <p className="text-sm text-gray-500 text-center mt-2">
+            Does not affect your credit
+          </p>
         </StickyButtonContainer>
       </form>
     </FormLayout>
@@ -143,13 +160,13 @@ interface MapVisualProps {
   hoveredState: string | null
   onStateSelect: (stateName: string) => void
   onStateHover: (stateName: string | null) => void
-  avgDebt: number
-  avgSavings: number
+  creditCardDebt: number
+  personalLoanDebt: number
 }
 
 /**
  * MapVisual Component
- * Shows interactive US map visualization with dynamic stats
+ * Shows interactive US map visualization with dynamic debt stats
  * Stats only update on click, hover is just for map highlighting
  */
 function MapVisual({
@@ -157,8 +174,8 @@ function MapVisual({
   hoveredState,
   onStateSelect,
   onStateHover,
-  avgDebt,
-  avgSavings,
+  creditCardDebt,
+  personalLoanDebt,
 }: MapVisualProps) {
   return (
     <div className="relative pt-6">
@@ -167,12 +184,13 @@ function MapVisual({
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8 1L9.79 5.73L15 6.46L11.25 9.85L12.18 15L8 12.52L3.82 15L4.75 9.85L1 6.46L6.21 5.73L8 1Z" stroke="#000000" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span className="text-xs leading-4 text-neutral-900 font-medium">
-            Reduce your payments by up to 50%
+          <span className="text-xs leading-4 text-neutral-900 font-medium whitespace-nowrap">
+            Healthier finances • Free • 2 minutes
           </span>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center gap-6">
+      
+      <div className="flex flex-col md:flex-row items-center gap-6 mt-8">
         {/* Interactive US Map */}
         <div className="flex justify-center w-full flex-[3]">
           <USMap
@@ -184,31 +202,40 @@ function MapVisual({
           />
         </div>
         
-        {/* Stats */}
-        <div className="py-2 flex flex-row md:flex-col gap-8 md:gap-12 justify-center md:justify-start">
+        {/* Stats Panel */}
+        <div className="py-2 flex flex-col gap-4 justify-center md:justify-start min-w-[180px]">
           {/* State name indicator (shows selected state) */}
           {selectedState && (
-            <div className="hidden md:block text-left">
+            <div className="text-center md:text-left">
               <span className="text-sm font-medium text-primary-700">{selectedState}</span>
             </div>
           )}
-          <div className="flex flex-col gap-2">
-            <AnimatedCounter
-              value={avgDebt}
-              prefix="$"
-              className="font-display text-2xl font-bold leading-8 text-neutral-800"
-              duration={800}
-            />
-            <div className="text-xs font-normal leading-4 text-neutral-900">Avg debt enrolled</div>
+          
+          {/* Debt Stats */}
+          <div className="flex flex-row md:flex-col gap-6 md:gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="text-xs font-normal text-neutral-500">💳 Avg credit card debt:</div>
+              <AnimatedCounter
+                value={creditCardDebt}
+                prefix="$"
+                className="font-display text-xl font-bold leading-7 text-neutral-800"
+                duration={800}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="text-xs font-normal text-neutral-500">📋 Avg personal loan:</div>
+              <AnimatedCounter
+                value={personalLoanDebt}
+                prefix="$"
+                className="font-display text-xl font-bold leading-7 text-neutral-800"
+                duration={800}
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <AnimatedCounter
-              value={avgSavings}
-              prefix="$"
-              className="font-display text-2xl font-bold leading-8 text-primary-700"
-              duration={800}
-            />
-            <div className="text-xs font-normal leading-4 text-neutral-900">Average saved by<br />customers like you</div>
+          
+          {/* Source Attribution */}
+          <div className="text-[10px] leading-3 text-neutral-400 mt-1">
+            Source: NY Fed, TransUnion
           </div>
         </div>
       </div>

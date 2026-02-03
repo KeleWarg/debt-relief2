@@ -21,7 +21,7 @@ type DebtOption = {
 
 const DEBT_OPTIONS: DebtOption[] = [
   { value: 'credit-card', label: 'Credit Card Debt', lottie: creditCardAnimation },
-  { value: 'personal-loan', label: 'Personal Loan', lottie: personalLoanAnimation },
+  { value: 'personal-loan', label: 'Personal Loans', lottie: personalLoanAnimation },
   { value: 'both', label: 'Both', lottie: bothAnimation, containerClass: 'w-24 h-16 sm:w-40 sm:h-20' },
 ]
 
@@ -58,8 +58,7 @@ export function DebtTypeScreen({
         {/* Headline */}
         <div className="space-y-2 text-center">
           <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
-            <span className="block">What type of debt do you</span>
-            <span className="block">need help with?</span>
+            Which of these best describes your debt?
           </h1>
         </div>
         
@@ -117,7 +116,7 @@ export function DebtTypeScreen({
                 </svg>
               </div>
               <p className="text-sm font-normal text-[#1E2125] leading-5">
-                Our debt relief partners work to reduce what you owe
+                Get matched with debt relief specialists who negotiate with creditors on your behalf
               </p>
             </div>
             
@@ -133,7 +132,7 @@ export function DebtTypeScreen({
                 </svg>
               </div>
               <p className="text-sm font-normal text-[#1E2125] leading-5">
-                Stop paying each creditor separately. Make one payment per month and cut your debt by up to half.
+                Simplify your payments — work with one partner instead of juggling multiple creditors
               </p>
             </div>
           </div>

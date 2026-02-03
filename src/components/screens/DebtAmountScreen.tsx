@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { CheckCircle2 } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, StickyButtonContainer } from '@/components/ui'
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
@@ -14,6 +15,7 @@ interface DebtAmountScreenProps {
 const MIN_DEBT = 5000
 const MAX_DEBT = 100000
 const STEP = 1000
+const QUALIFICATION_THRESHOLD = 7500
 
 const TICK_MARKS = [5000, 25000, 50000, 75000, 100000]
 
@@ -21,7 +23,7 @@ const TICK_MARKS = [5000, 25000, 50000, 75000, 100000]
  * DebtAmountScreen
  * 
  * Step 3 of the funnel - "How much debt do you have?"
- * Shows a slider with animated counter and real-time savings estimate
+ * Shows a slider with animated counter and qualification messaging
  * 
  * @example
  * <DebtAmountScreen 
@@ -38,8 +40,8 @@ export function DebtAmountScreen({
   const [debtAmount, setDebtAmount] = React.useState(initialValue)
   const sliderRef = React.useRef<HTMLInputElement>(null)
   
-  // Calculate potential savings (40% estimate)
-  const potentialSavings = Math.round(debtAmount * 0.4)
+  // Check if amount qualifies for most programs
+  const qualifiesForMostPrograms = debtAmount >= QUALIFICATION_THRESHOLD
   
   // Update CSS variable for track fill
   React.useEffect(() => {
@@ -79,11 +81,22 @@ export function DebtAmountScreen({
               className="font-display text-5xl md:text-6xl font-bold text-neutral-900"
               duration={300}
             />
-            {/* Inline savings caption */}
-            <p className="text-emerald-600 text-sm mt-2 text-center">
-              <span className="mr-1.5">↓</span>
-              Save up to <span className="font-semibold">${potentialSavings.toLocaleString()}</span>
-            </p>
+            {/* Qualification messaging */}
+            <div className="mt-3">
+              {qualifiesForMostPrograms ? (
+                <p className="text-feedback-success font-medium text-center flex items-center justify-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4" />
+                  This amount qualifies for most relief programs
+                </p>
+              ) : (
+                <p className="text-neutral-500 font-medium text-center">
+                  Some programs may be available — let&apos;s check your options.
+                </p>
+              )}
+              <p className="text-sm text-neutral-500 text-center mt-1">
+                Most programs work with balances from $7,500 to $100,000+
+              </p>
+            </div>
           </div>
 
           {/* Slider with tick marks */}
@@ -131,12 +144,6 @@ export function DebtAmountScreen({
               Continue
             </Button>
           </StickyButtonContainer>
-
-          {/* Disclaimer */}
-          <p className="text-caption text-neutral-500">
-            *This is a savings estimate. Your actual savings amount is subject to change 
-            due to a variety of factors such as your debt to income ratio and interest rates.
-          </p>
         </div>
       </form>
     </FormLayout>
