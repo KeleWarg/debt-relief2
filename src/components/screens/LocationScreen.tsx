@@ -185,7 +185,7 @@ function MapVisual({
             <path d="M8 1L9.79 5.73L15 6.46L11.25 9.85L12.18 15L8 12.52L3.82 15L4.75 9.85L1 6.46L6.21 5.73L8 1Z" stroke="#000000" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           <span className="text-xs leading-4 text-neutral-900 font-medium whitespace-nowrap">
-            Healthier finances • Free • 2 minutes
+            Healthier finances • Free • 3 minutes
           </span>
         </div>
       </div>

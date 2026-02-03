@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { PiggyBank, CheckCircle2, Star } from 'lucide-react'
+import { PiggyBank, CheckCircle2, Star, Lock } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { cn } from '@/lib/utils'
 
@@ -161,6 +161,11 @@ export function ProcessingScreen({ onNext }: ProcessingScreenProps) {
           <div className="text-center">
             <p className="text-headline-sm font-bold text-neutral-900">✓</p>
             <p className="text-caption text-neutral-500">No credit impact</p>
+          </div>
+          <div className="h-8 w-px bg-neutral-200" />
+          <div className="text-center">
+            <Lock className="w-5 h-5 text-neutral-900 mx-auto" />
+            <p className="text-caption text-neutral-500">Info is secure</p>
           </div>
         </div>
       </div>
