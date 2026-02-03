@@ -8,7 +8,8 @@ import {
   Calendar,
   Users,
   Check,
-  HelpCircle
+  HelpCircle,
+  Star
 } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -83,6 +84,28 @@ const partnerLogos = [
   { src: '/JGW_logo.png', alt: 'JG Wentworth' },
   { src: '/National_logo.png', alt: 'National Debt Relief' },
 ]
+
+// Review Card Component
+function ReviewCard() {
+  return (
+    <div className="bg-neutral-50 rounded-xl p-4 mt-6">
+      {/* Stars */}
+      <div className="flex items-center gap-0.5 mb-2">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Star key={i} className="w-4 h-4 text-secondary-500 fill-secondary-500" />
+        ))}
+      </div>
+      {/* Quote */}
+      <p className="text-sm text-neutral-700 italic leading-relaxed">
+        "I was drowning in credit card debt. Within 3 months of starting my program, I could finally see a path forward."
+      </p>
+      {/* Attribution */}
+      <p className="text-xs text-neutral-500 mt-2">
+        — Michael R., Texas • Reduced $32K debt
+      </p>
+    </div>
+  )
+}
 
 // Partner Logo Carousel Component
 function PartnerCarousel() {
@@ -449,6 +472,9 @@ export function DebtProfileScreen({
                   
                   {/* Partner logos carousel */}
                   <PartnerCarousel />
+                  
+                  {/* Review Card - Mobile */}
+                  <ReviewCard />
                 </div>
               )}
             </div>
@@ -715,6 +741,9 @@ export function DebtProfileScreen({
                       See My Options
                     </Button>
                   </div>
+                  
+                  {/* Review Card - Desktop */}
+                  <ReviewCard />
                 </div>
               )}
             </div>
