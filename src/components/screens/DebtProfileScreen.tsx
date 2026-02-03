@@ -45,9 +45,9 @@ const DEBT_TYPE_LABELS: Record<DebtTypeOption, string> = {
 
 // Determine ratio badge based on debt-to-income ratio
 function getRatioBadge(ratio: number): { label: string; className: string } {
-  if (ratio < 30) {
+  if (ratio < 50) {
     return { label: 'Low', className: 'bg-green-100 text-green-700' }
-  } else if (ratio <= 50) {
+  } else if (ratio <= 100) {
     return { label: 'Moderate', className: 'bg-yellow-100 text-yellow-700' }
   } else {
     return { label: 'Elevated', className: 'bg-red-100 text-red-700' }
@@ -465,6 +465,7 @@ export function DebtProfileScreen({
                   
                   {/* Profile Summary */}
                   <div className="bg-gray-50 rounded-xl p-4">
+                    <p className="text-sm font-medium text-neutral-800 mb-3">Your debt snapshot</p>
                     {/* Row 1 - Debt-to-Income Ratio (highlighted) */}
                     <div className="flex justify-between items-center pb-3 border-b border-gray-200 gap-4">
                       <span className="text-sm text-neutral-800 flex items-center gap-1.5 whitespace-nowrap">
@@ -533,7 +534,7 @@ export function DebtProfileScreen({
                     <p className="text-sm text-neutral-600 mt-1">
                       {ratio > 100 
                         ? "A high DTI like yours is exactly what relief programs are designed to address."
-                        : ratio >= 70 
+                        : ratio >= 50 
                           ? `A ${ratio}% DTI means you're exactly who relief programs are built for.`
                           : `A ${ratio}% DTI puts you in a favorable range for most relief programs.`
                       }
@@ -562,8 +563,14 @@ export function DebtProfileScreen({
               ) : (
                 /* Debt Profile Card */
                 <div className="bg-white rounded-2xl p-6 md:p-8 shadow-card border border-gray-100">
+                  {/* Mini Title */}
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">
+                    Based on what you told us
+                  </p>
+                  
                   {/* Stats Box */}
                   <div className="bg-gray-50 rounded-xl p-4">
+                    <p className="text-sm font-medium text-neutral-800 mb-3">Your debt snapshot</p>
                     {/* Row 1 - Debt-to-Income Ratio (highlighted) */}
                     <div className="flex justify-between items-center pb-3 border-b border-gray-200 gap-4">
                       <span className="text-sm text-neutral-800 flex items-center gap-1.5 whitespace-nowrap">

@@ -11,33 +11,55 @@ import { Input } from '@/components/ui/Input'
 import { AddressAutocomplete, type ParsedAddress } from '@/components/ui/AddressAutocomplete'
 import { formatCurrency, cn } from '@/lib/utils'
 
-// Testimonials data
+// Testimonials data (experience-focused, no specific dollar amounts)
 const testimonials = [
   {
-    quote: "I was skeptical at first, but the process was simple. I'm saving $400/month and will be debt-free in 2 years.",
-    name: "Jessica M.",
-    location: "Texas",
-    rating: 5
-  },
-  {
-    quote: "They helped me settle $45,000 in credit card debt for $27,000. I finally feel like I can breathe again.",
+    quote: "I was drowning in debt and didn't know where to turn. This process helped me understand my options and finally feel in control.",
     name: "Michael R.",
     location: "Florida",
     rating: 5
   },
   {
-    quote: "The team was supportive and explained everything clearly. I'm on track to be debt-free by next year.",
+    quote: "The team was supportive and explained everything clearly. I finally have a plan that works for my situation.",
     name: "Sarah K.",
     location: "Ohio",
     rating: 5
   },
   {
-    quote: "I wish I had done this sooner. My monthly payments dropped by 40% and I can finally save money.",
+    quote: "I was skeptical at first, but the process was simple and the guidance was invaluable. I feel hopeful again.",
+    name: "Jessica M.",
+    location: "Texas",
+    rating: 5
+  },
+  {
+    quote: "I wish I had done this sooner. Understanding my options made all the difference in getting my finances back on track.",
     name: "David L.",
     location: "California",
     rating: 5
   }
 ]
+
+// Determine ratio badge based on debt-to-income ratio
+function getRatioBadge(ratio: number): { label: string; className: string } {
+  if (ratio < 50) {
+    return { label: 'Low', className: 'bg-green-100 text-green-700' }
+  } else if (ratio <= 100) {
+    return { label: 'Moderate', className: 'bg-yellow-100 text-yellow-700' }
+  } else {
+    return { label: 'Elevated', className: 'bg-red-100 text-red-700' }
+  }
+}
+
+// Get status based on DTI
+function getDtiStatus(ratio: number): string {
+  if (ratio < 50) {
+    return '✓ Matches program requirements'
+  } else if (ratio <= 100) {
+    return '✓ Strong fit'
+  } else {
+    return '✓ Programs available'
+  }
+}
 
 // Partner logos data
 const partnerLogos = [
@@ -147,6 +169,7 @@ function PartnerCarousel() {
 interface AddressScreenProps {
   firstName?: string
   debtAmount?: number
+  income?: number
   initialValue?: {
     line1: string
     line2?: string
@@ -165,6 +188,7 @@ interface AddressScreenProps {
 export function AddressScreen({ 
   firstName,
   debtAmount = 25000,
+  income = 50000,
   initialValue, 
   onBack, 
   onSubmit 
@@ -189,8 +213,10 @@ export function AddressScreen({
   const [manualZip, setManualZip] = React.useState(initialValue?.zipCode || '')
   const [manualApt, setManualApt] = React.useState(initialValue?.line2 || '')
   
-  // Calculate savings (40% reduction estimate)
-  const savings = Math.round(debtAmount * 0.4)
+  // Calculate DTI
+  const ratio = income > 0 ? Math.round((debtAmount / income) * 100) : 0
+  const ratioBadge = getRatioBadge(ratio)
+  const dtiStatus = getDtiStatus(ratio)
   
   // Handle address selection from autocomplete
   const handleAddressSelect = (address: ParsedAddress) => {
@@ -298,15 +324,33 @@ export function AddressScreen({
             
             {/* Left Column - Context Card */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 order-2 lg:order-none">
-              {/* Savings Box */}
-              <div className="bg-secondary-300 rounded-xl p-5 mb-6">
-                <p className="text-sm text-neutral-500">Potential Savings</p>
-                <p className="text-2xl font-bold text-feedback-success mt-1">
-                  {formatCurrency(savings)}*
-                </p>
-                <p className="text-sm text-neutral-500 mt-1">
-                  Timeline: 24-36 months
-                </p>
+              {/* Mini Title */}
+              <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">
+                Based on what you told us
+              </p>
+              
+              {/* Profile Snapshot */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <p className="text-sm font-medium text-neutral-800 mb-3">Your debt snapshot</p>
+                <div className="text-sm">
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-neutral-500">Total Debt</span>
+                    <span className="text-neutral-800 font-medium">{formatCurrency(debtAmount)}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-neutral-500">DTI</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-neutral-800 font-medium">{ratio}%</span>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ratioBadge.className}`}>
+                        {ratioBadge.label}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-neutral-500">Status</span>
+                    <span className="text-feedback-success font-medium">{dtiStatus}</span>
+                  </div>
+                </div>
               </div>
               
               {/* Rotating Testimonials */}
@@ -314,11 +358,6 @@ export function AddressScreen({
               
               {/* Partner Logo Carousel */}
               <PartnerCarousel />
-              
-              {/* Disclaimer */}
-              <p className="text-xs text-neutral-500 mt-4 text-center">
-                *Estimated savings. Results vary.
-              </p>
             </div>
             
             {/* Right Column - Address Form */}
