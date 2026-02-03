@@ -1,11 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Info, CheckCircle2 } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, StickyButtonContainer } from '@/components/ui'
 import { Slider } from '@/components/ui/Slider'
-import { formatCurrency, calculateSavings } from '@/lib/utils'
+import { Tooltip } from '@/components/ui/Tooltip'
+import { formatCurrency } from '@/lib/utils'
 
 /**
  * MoneyPyramid Component
@@ -60,10 +61,23 @@ interface IncomeScreenProps {
 }
 
 /**
+ * Get DTI-based encouragement message
+ */
+function getDtiMessage(dtiPercent: number): string {
+  if (dtiPercent <= 60) {
+    return 'Your profile matches most relief program requirements'
+  }
+  if (dtiPercent <= 100) {
+    return 'Your profile is a strong fit for debt relief programs'
+  }
+  return 'Programs exist specifically for high debt-to-income situations'
+}
+
+/**
  * IncomeScreen
  * 
  * Step 4 of the funnel - "What is your annual income?"
- * Shows a slider for income with savings projection
+ * Shows a slider for income with debt-to-income ratio calculation
  */
 export function IncomeScreen({ 
   initialValue = 50000,
@@ -74,25 +88,9 @@ export function IncomeScreen({
   const [income, setIncome] = React.useState(initialValue)
   const [showWhyWeAsk, setShowWhyWeAsk] = React.useState(false)
   
-  // Calculate savings with income-aware monthly payments
-  const baseSavings = calculateSavings(debtAmount)
-  
-  // Calculate affordable monthly payment (10-15% of monthly income)
-  const monthlyIncome = income / 12
-  const maxAffordablePayment = Math.round(monthlyIncome * 0.15)
-  
-  // Suggest a payment within the affordable range, but at least enough to pay off in 48 months
-  const minRequiredPayment = Math.round(baseSavings.newDebtAmount / 48)
-  const suggestedPayment = Math.max(minRequiredPayment, Math.min(maxAffordablePayment, Math.round(monthlyIncome * 0.12)))
-  
-  // Calculate payoff timeline based on suggested payment
-  const payoffMonths = Math.ceil(baseSavings.newDebtAmount / suggestedPayment)
-  
-  const savings = {
-    ...baseSavings,
-    monthlyPayment: suggestedPayment,
-    payoffMonths
-  }
+  // Calculate debt-to-income ratio
+  const dtiPercent = income > 0 ? Math.round((debtAmount / income) * 100) : 0
+  const dtiMessage = getDtiMessage(dtiPercent)
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -198,40 +196,48 @@ export function IncomeScreen({
             />
           </div>
           
-          {/* Debt Summary Section */}
-          <div className="w-full bg-neutral-100 rounded-lg p-3 border border-neutral-200">
-            {/* Your debt row */}
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-neutral-800">Your debt</span>
-              <span className="text-base font-medium text-neutral-700">
+          {/* Debt-to-Income Ratio Card */}
+          <div className="w-full bg-neutral-100 rounded-lg p-4 border border-neutral-200">
+            {/* Card Title with Tooltip */}
+            <div className="flex items-center gap-1.5 mb-3">
+              <span className="text-sm font-semibold text-neutral-900">Your debt-to-income ratio</span>
+              <Tooltip content="Debt-to-income ratio (DTI) compares what you owe to what you earn. Relief programs use this to understand your financial situation — it's not a credit score and doesn't affect your credit.">
+                <Info className="w-4 h-4 text-neutral-400 cursor-help" />
+              </Tooltip>
+            </div>
+            
+            {/* Debt row */}
+            <div className="flex justify-between items-center py-1.5">
+              <span className="text-sm text-neutral-600">Debt</span>
+              <span className="text-sm text-neutral-800">
                 {formatCurrency(debtAmount)}
               </span>
             </div>
             
-            {/* New debt amount row */}
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-neutral-800">New debt amount</span>
-              <span className="text-base font-medium text-feedback-success">
-                {formatCurrency(savings.newDebtAmount)}
+            {/* Income row */}
+            <div className="flex justify-between items-center py-1.5">
+              <span className="text-sm text-neutral-600">Income</span>
+              <span className="text-sm text-neutral-800">
+                {formatCurrency(income)}/year
+              </span>
+            </div>
+            
+            {/* DTI row - emphasized */}
+            <div className="flex justify-between items-center py-1.5">
+              <span className="text-sm text-neutral-600">DTI</span>
+              <span className="text-sm font-medium text-neutral-900">
+                {dtiPercent}%
               </span>
             </div>
             
             {/* Divider */}
-            <div className="h-px bg-neutral-300 my-2" />
+            <div className="h-px bg-neutral-300 my-3" />
             
-            {/* New monthly payments row */}
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-neutral-800">Suggested monthly payment</span>
-              <span className="text-base font-medium text-feedback-success">
-                {formatCurrency(savings.monthlyPayment)}/mo
-              </span>
-            </div>
-            
-            {/* Payoff timeline */}
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-neutral-800">Estimated payoff</span>
-              <span className="text-base font-medium text-neutral-700">
-                {savings.payoffMonths} months
+            {/* Qualification message */}
+            <div className="flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0 mt-0.5" />
+              <span className="text-sm font-medium text-feedback-success">
+                {dtiMessage}
               </span>
             </div>
           </div>
