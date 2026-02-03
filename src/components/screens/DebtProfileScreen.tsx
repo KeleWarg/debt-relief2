@@ -86,9 +86,9 @@ const partnerLogos = [
 ]
 
 // Review Card Component
-function ReviewCard() {
+function ReviewCard({ className = '' }: { className?: string }) {
   return (
-    <div className="bg-neutral-50 rounded-xl p-4 mt-6">
+    <div className={`bg-neutral-50 rounded-xl p-4 ${className}`}>
       {/* Stars */}
       <div className="flex items-center gap-0.5 mb-2">
         {[1, 2, 3, 4, 5].map((i) => (
@@ -414,9 +414,9 @@ export function DebtProfileScreen({
           <form id="profile-form" onSubmit={handleSeeOptions} className="contents" />
         )}
         
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-24 sm:pb-8 flex-1">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-24 sm:pb-8 flex-1">
           {/* Page headline */}
-          <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center mb-8">
+          <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center mb-4 sm:mb-8">
             {showPhoneForm 
               ? `Ready to see your options, ${firstName || 'there'}?`
               : <>Here's your debt profile<br className="hidden sm:block" />and what it means</>
@@ -424,7 +424,7 @@ export function DebtProfileScreen({
           </h1>
           
           {/* Two-column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 items-center">
             
             {/* Mobile: Image with overlay OR Phone Form */}
             <div className="lg:hidden">
@@ -472,9 +472,6 @@ export function DebtProfileScreen({
                   
                   {/* Partner logos carousel */}
                   <PartnerCarousel />
-                  
-                  {/* Review Card - Mobile */}
-                  <ReviewCard />
                 </div>
               )}
             </div>
@@ -743,11 +740,18 @@ export function DebtProfileScreen({
                   </div>
                   
                   {/* Review Card - Desktop */}
-                  <ReviewCard />
+                  <ReviewCard className="mt-6" />
                 </div>
               )}
             </div>
           </div>
+          
+          {/* Review Card - Mobile only, inside content area */}
+          {!showPhoneForm && (
+            <div className="lg:hidden mt-4">
+              <ReviewCard />
+            </div>
+          )}
           
         </div>
         
@@ -765,6 +769,7 @@ export function DebtProfileScreen({
             </Button>
           </StickyButtonContainer>
         )}
+        
       </main>
       
       {/* Trust Badges */}
