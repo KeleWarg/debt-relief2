@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Image from 'next/image'
-import { CheckCircle2, Shield, Star, Users } from 'lucide-react'
+import { CheckCircle2, Shield, Check, Users } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { cn } from '@/lib/utils'
@@ -18,7 +18,7 @@ const partnerLogos = [
 const steps = [
   'Analyzing your debt profile...',
   'Checking partner availability...',
-  'Comparing savings estimates...',
+  'Comparing program options...',
   'Selecting your best match...',
 ]
 
@@ -164,12 +164,12 @@ export function PartnerMatchingScreen({ firstName = 'there', onNext }: PartnerMa
               <span className="text-caption">Secure & Private</span>
             </div>
             <div className="flex items-center gap-2">
-              <Star className="w-4 h-4" />
-              <span className="text-caption">4.8/5 Trustpilot</span>
+              <Check className="w-4 h-4" />
+              <span className="text-caption">No credit impact</span>
             </div>
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              <span className="text-caption">1M+ Helped</span>
+              <span className="text-caption">1M+ Matched</span>
             </div>
           </div>
         </div>

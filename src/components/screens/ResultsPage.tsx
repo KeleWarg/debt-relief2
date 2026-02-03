@@ -113,7 +113,6 @@ export function ResultsPage({
   
   // Calculate derived values
   const ratio = Math.round((debtAmount / income) * 100)
-  const savings = Math.round(debtAmount * 0.4)
   
   // Countdown timer
   React.useEffect(() => {
@@ -151,10 +150,10 @@ export function ResultsPage({
       {/* 2. HEADER SECTION */}
       <div className="text-center py-8 px-4 bg-white">
         <p className="text-primary-700 text-sm font-medium uppercase tracking-wide">
-          Your Personalized Debt Relief Plan
+          Your Matched Results
         </p>
         <h1 className="font-display text-3xl md:text-4xl font-bold text-neutral-900 mt-2">
-          {firstName}, here&apos;s your recommended partner
+          {firstName}, here&apos;s your top match
         </h1>
         <p className="text-neutral-500 mt-3 max-w-xl mx-auto">
           Based on your {formatCurrency(debtAmount)} in {DEBT_TYPE_LABELS[debtType].toLowerCase()} and {ratio}% debt-to-income ratio, we&apos;ve matched you with a specialist.
@@ -185,7 +184,7 @@ export function ResultsPage({
                 />
                 
                 <div className="flex-1">
-                  <p className="text-xs text-primary-700 font-medium uppercase">Recommended Partner</p>
+                  <p className="text-xs text-primary-700 font-medium uppercase">Top Match for Your Profile</p>
                   <h3 className="text-xl font-bold text-neutral-900">Freedom Debt Relief</h3>
                   <p className="text-sm text-neutral-500 mt-1">
                     One of America&apos;s largest and most trusted debt relief companies.
@@ -253,9 +252,9 @@ export function ResultsPage({
               Here are the main steps you should take when applying to a debt relief company:
             </p>
             
-            <ol className="space-y-4">
+            <ol className="divide-y divide-neutral-100">
               {educationalSteps.map((step, index) => (
-                <li key={index} className="flex gap-3">
+                <li key={index} className="flex gap-3 py-4 first:pt-0 last:pb-0">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-300 text-primary-700 text-sm font-medium flex items-center justify-center">
                     {index + 1}
                   </span>
@@ -333,11 +332,9 @@ export function ResultsPage({
               </div>
             </div>
             
-            <div className="bg-neutral-100 rounded-xl p-4 mt-4">
-              <p className="text-sm text-neutral-500">Potential Savings</p>
-              <p className="text-2xl font-bold text-feedback-success">{formatCurrency(savings)}*</p>
-              <p className="text-xs text-neutral-500 mt-1">Timeline: 24-36 months</p>
-            </div>
+            <p className="text-feedback-success font-medium mt-3">
+              Status: ✓ Strong match
+            </p>
           </div>
           
           {/* b) CALL CTA CARD */}
@@ -346,7 +343,7 @@ export function ResultsPage({
             
             <a 
               href="tel:800-808-6539" 
-              className="flex items-center justify-center gap-2 w-full bg-primary-700 text-white py-3 rounded-xl font-semibold hover:bg-primary-750 transition"
+              className="flex items-center justify-center gap-2 w-full bg-primary-700 text-white py-3 rounded-[8px] font-semibold hover:bg-primary-750 transition"
             >
               <Phone className="w-5 h-5" />
               Call Now: 800-808-6539
