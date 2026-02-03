@@ -1,15 +1,72 @@
 'use client'
 
 import * as React from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Lightbulb } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, StickyButtonContainer } from '@/components/ui'
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
+import { creditCardDebtByState, personalLoanDebtByState } from '@/data/stateDebtData'
+import { US_STATES, type DebtTypeOption } from '@/types/funnel'
 
 interface DebtAmountScreenProps {
   initialValue?: number
+  userState?: string
+  debtType?: DebtTypeOption
   onBack?: () => void
   onSubmit?: (value: number) => void
+}
+
+// Helper to get state name from state code
+function getStateName(stateCode: string): string {
+  const state = US_STATES.find(s => s.value === stateCode)
+  return state?.label || stateCode
+}
+
+// Helper to format currency
+function formatCurrency(amount: number): string {
+  return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+}
+
+// Get "Did you know" content based on debt type and state
+function getDidYouKnowContent(
+  debtAmount: number,
+  userState: string,
+  debtType: DebtTypeOption
+): { message: string; source: string } | null {
+  const stateName = getStateName(userState)
+  const ccAvg = creditCardDebtByState[userState]
+  const plAvg = personalLoanDebtByState[userState]
+  
+  if (!ccAvg && !plAvg) return null
+  
+  if (debtType === 'credit-card' && ccAvg) {
+    const isBelowAvg = debtAmount <= ccAvg
+    return {
+      message: isBelowAvg
+        ? `In ${stateName}, the average credit card debt is ${formatCurrency(ccAvg)}. You're below that — and well within the range most relief programs work with.`
+        : `In ${stateName}, the average credit card debt is ${formatCurrency(ccAvg)}. You're not alone — and relief programs regularly work with balances like yours.`,
+      source: 'Source: NY Fed, Q4 2024'
+    }
+  }
+  
+  if (debtType === 'personal-loan' && plAvg) {
+    const isBelowAvg = debtAmount <= plAvg
+    return {
+      message: isBelowAvg
+        ? `In ${stateName}, the average personal loan debt is ${formatCurrency(plAvg)}. You're below that — and well within the range most relief programs work with.`
+        : `In ${stateName}, the average personal loan debt is ${formatCurrency(plAvg)}. You're not alone — and relief programs regularly work with balances like yours.`,
+      source: 'Source: TransUnion'
+    }
+  }
+  
+  if (debtType === 'both' && ccAvg && plAvg) {
+    return {
+      message: `In ${stateName}, average credit card debt is ${formatCurrency(ccAvg)} and personal loan debt is ${formatCurrency(plAvg)}. Relief programs are built for exactly this.`,
+      source: 'Source: NY Fed, TransUnion'
+    }
+  }
+  
+  return null
 }
 
 const MIN_DEBT = 5000
@@ -33,15 +90,23 @@ const TICK_MARKS = [5000, 25000, 50000, 75000, 100000]
  * />
  */
 export function DebtAmountScreen({ 
-  initialValue = 25000, 
+  initialValue = 25000,
+  userState,
+  debtType,
   onBack, 
   onSubmit 
 }: DebtAmountScreenProps) {
   const [debtAmount, setDebtAmount] = React.useState(initialValue)
+  const [hasInteracted, setHasInteracted] = React.useState(false)
   const sliderRef = React.useRef<HTMLInputElement>(null)
   
   // Check if amount qualifies for most programs
   const qualifiesForMostPrograms = debtAmount >= QUALIFICATION_THRESHOLD
+  
+  // Get "Did you know" content
+  const didYouKnowContent = userState && debtType 
+    ? getDidYouKnowContent(debtAmount, userState, debtType)
+    : null
   
   // Update CSS variable for track fill
   React.useEffect(() => {
@@ -50,6 +115,13 @@ export function DebtAmountScreen({
       sliderRef.current.style.setProperty('--progress', `${progress}%`)
     }
   }, [debtAmount])
+  
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!hasInteracted) {
+      setHasInteracted(true)
+    }
+    setDebtAmount(Number(e.target.value))
+  }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -123,7 +195,7 @@ export function DebtAmountScreen({
               max={MAX_DEBT}
               step={STEP}
               value={debtAmount}
-              onChange={(e) => setDebtAmount(Number(e.target.value))}
+              onChange={handleSliderChange}
               className="debt-slider w-full"
               aria-label="Debt amount"
             />
@@ -144,6 +216,27 @@ export function DebtAmountScreen({
               Continue
             </Button>
           </StickyButtonContainer>
+          
+          {/* Did You Know Card - appears after slider interaction */}
+          {hasInteracted && didYouKnowContent && (
+            <div 
+              className="bg-secondary-300 border-l-4 border-secondary-500 rounded-lg p-4 mt-6 text-left animate-fade-in"
+              style={{ animationDelay: '150ms' }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Lightbulb className="w-4 h-4 text-secondary-500" />
+                <p className="font-semibold text-neutral-800">
+                  Did you know?
+                </p>
+              </div>
+              <p className="text-body-sm text-neutral-800">
+                {didYouKnowContent.message}
+              </p>
+              <p className="text-caption text-neutral-500 mt-2">
+                {didYouKnowContent.source}
+              </p>
+            </div>
+          )}
         </div>
       </form>
     </FormLayout>

@@ -130,6 +130,8 @@ export default function Home() {
         return (
           <DebtAmountScreen
             initialValue={funnelData.debtAmount}
+            userState={funnelData.state}
+            debtType={funnelData.debtType}
             onBack={goToPreviousStep}
             onSubmit={(debtAmount) => {
               updateFunnelData({ debtAmount })
