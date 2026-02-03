@@ -70,11 +70,11 @@ function getDidYouKnowContent(
 }
 
 const MIN_DEBT = 5000
-const MAX_DEBT = 100000
+const MAX_DEBT = 200000
 const STEP = 1000
 const QUALIFICATION_THRESHOLD = 7500
 
-const TICK_MARKS = [5000, 25000, 50000, 75000, 100000]
+const TICK_MARKS = [5000, 50000, 100000, 150000, 200000]
 
 /**
  * DebtAmountScreen
@@ -166,7 +166,7 @@ export function DebtAmountScreen({
                 </p>
               )}
               <p className="text-sm text-neutral-500 text-center mt-1">
-                Most programs work with balances from $7,500 to $100,000+
+                Most programs work with balances from $7,500 to $200,000+
               </p>
             </div>
           </div>
@@ -203,10 +203,10 @@ export function DebtAmountScreen({
             {/* Scale labels */}
             <div className="flex justify-between text-body-sm text-neutral-500 pt-1">
               <span>$5K</span>
-              <span>$25K</span>
               <span>$50K</span>
-              <span>$75K</span>
-              <span>$100K+</span>
+              <span>$100K</span>
+              <span>$150K</span>
+              <span>$200K+</span>
             </div>
           </div>
 
