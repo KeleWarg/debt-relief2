@@ -99,8 +99,8 @@ export function LocationScreen({
           </h1>
           <p className="text-body text-neutral-500 text-center">
             {selectedStateName 
-              ? `See If You Qualify For Debt Relief in ${selectedStateName}`
-              : "See If You Qualify For Debt Relief"}
+              ? `See if you qualify for debt relief in ${selectedStateName}`
+              : "See if you qualify for debt relief"}
           </p>
         </div>
         
