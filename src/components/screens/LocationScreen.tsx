@@ -29,7 +29,7 @@ interface LocationScreenProps {
 /**
  * LocationScreen
  * 
- * Step 1 of the funnel - "Feeling overwhelmed by debt? You're not alone."
+ * Step 1 of the funnel - "Thousands Are Applying Daily For This Loan-Free Relief In 2026"
  * Shows a state dropdown with interactive US map visualization and debt stats
  */
 // Default state to show pin on initial load
@@ -95,12 +95,12 @@ export function LocationScreen({
         {/* Headline */}
         <div className="space-y-2 text-center">
           <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
-            Feeling overwhelmed by debt? You're not alone.
+            Thousands Are Applying Daily For This Loan-Free Relief In 2026
           </h1>
           <p className="text-body text-neutral-500 text-center">
             {selectedStateName 
-              ? `See which debt relief programs are available in ${selectedStateName}. No obligations, just options for better finances.`
-              : "See which debt relief programs are available to you. No obligations, just options for better finances."}
+              ? `See If You Qualify For Debt Relief in ${selectedStateName}`
+              : "See If You Qualify For Debt Relief"}
           </p>
         </div>
         
@@ -190,7 +190,7 @@ function MapVisual({
         </div>
       </div>
       
-      <div className="flex flex-col md:flex-row items-center gap-6 mt-8">
+      <div className="flex flex-col-reverse md:flex-row items-center gap-6 mt-8">
         {/* Interactive US Map */}
         <div className="flex justify-center w-full flex-[3]">
           <USMap
@@ -202,7 +202,7 @@ function MapVisual({
           />
         </div>
         
-        {/* Stats Panel */}
+        {/* Stats Panel - appears above map on mobile, to the right on desktop */}
         <div className="py-2 flex flex-col gap-4 justify-center md:justify-start min-w-[180px]">
           {/* State name indicator (shows selected state) */}
           {selectedState && (

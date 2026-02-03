@@ -114,8 +114,8 @@ export function DidYouKnowScreen({
         </div>
         
         {/* Headline */}
-        <h1 className="font-display text-2xl md:text-3xl text-neutral-900 text-center">
-          Over 100 million Americans are working to pay down debt. You&apos;re not alone.
+        <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
+          Thousands Are Applying Daily For This Loan-Free Relief In 2026
         </h1>
         
         {/* Stats Card */}
