@@ -166,7 +166,7 @@ export function DebtAmountScreen({
                 </p>
               )}
               <p className="text-sm text-neutral-500 text-center mt-1">
-                Most programs work with balances from $7,500 to $200,000+
+                Based on quoted partner outcomes of up to 50% reduction in total debt
               </p>
             </div>
           </div>
