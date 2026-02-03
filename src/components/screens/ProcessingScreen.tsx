@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils'
 
 const STEPS = [
   'Analyzing your responses...',
-  'Calculating your savings...',
+  'Reviewing program requirements...',
   'Matching relief programs...',
-  'Preparing your personalized plan...',
+  'Finding providers in your area...',
 ]
 
 interface ProcessingScreenProps {
@@ -150,7 +150,7 @@ export function ProcessingScreen({ onNext }: ProcessingScreenProps) {
         <div className="flex justify-center items-center gap-6 mt-8">
           <div className="text-center">
             <p className="text-headline-sm font-bold text-neutral-900">1M+</p>
-            <p className="text-caption text-neutral-500">Americans helped</p>
+            <p className="text-caption text-neutral-500">Americans matched</p>
           </div>
           <div className="h-8 w-px bg-neutral-200" />
           <div className="text-center">
@@ -159,8 +159,8 @@ export function ProcessingScreen({ onNext }: ProcessingScreenProps) {
           </div>
           <div className="h-8 w-px bg-neutral-200" />
           <div className="text-center">
-            <p className="text-headline-sm font-bold text-neutral-900">4.8★</p>
-            <p className="text-caption text-neutral-500">Trustpilot</p>
+            <p className="text-headline-sm font-bold text-neutral-900">✓</p>
+            <p className="text-caption text-neutral-500">No credit impact</p>
           </div>
         </div>
       </div>

@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Lightbulb } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, StickyButtonContainer } from '@/components/ui'
 import { Input } from '@/components/ui/Input'
@@ -21,6 +20,7 @@ interface EmailScreenProps {
   initialValue?: string
   firstName?: string
   debtAmount?: number
+  income?: number
   onBack?: () => void
   onSubmit?: (email: string) => void
 }
@@ -33,6 +33,19 @@ function capitalizeFirstLetter(str: string): string {
 }
 
 /**
+ * Get DTI status message based on debt-to-income ratio
+ */
+function getDtiStatus(dtiPercent: number): string {
+  if (dtiPercent < 50) {
+    return '✓ Matches program requirements'
+  } else if (dtiPercent <= 100) {
+    return '✓ Strong fit'
+  } else {
+    return '✓ Programs available'
+  }
+}
+
+/**
  * EmailScreen
  * 
  * Celebratory gate screen - asks for email before showing debt profile
@@ -41,6 +54,7 @@ export function EmailScreen({
   initialValue = '', 
   firstName,
   debtAmount = 20000,
+  income = 50000,
   onBack, 
   onSubmit 
 }: EmailScreenProps) {
@@ -59,8 +73,9 @@ export function EmailScreen({
     onSubmit?.(data.email)
   }
 
-  // Calculate potential savings (40% of debt)
-  const potentialSavings = Math.round(debtAmount * 0.4)
+  // Calculate DTI percentage
+  const dtiPercent = income > 0 ? Math.round((debtAmount / income) * 100) : 0
+  const dtiStatus = getDtiStatus(dtiPercent)
   
   return (
     <FormLayout currentStep={10} onBack={onBack}>
@@ -68,14 +83,14 @@ export function EmailScreen({
         {/* Headline */}
         <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center">
           {firstName 
-            ? `Congrats, ${capitalizeFirstLetter(firstName)}! Your debt profile is ready.`
-            : 'Congrats! Your debt profile is ready.'
+            ? `Congrats, ${capitalizeFirstLetter(firstName)}! We found debt relief options for you.`
+            : 'Congrats! We found debt relief options for you.'
           }
         </h1>
         
         {/* Subheading */}
         <p className="text-body text-neutral-500 text-center">
-          Please share your email so we know where to send your debt relief plan
+          Enter your email to view the programs that match your profile.
         </p>
         
         {/* Email Input */}
@@ -92,16 +107,31 @@ export function EmailScreen({
         {/* Submit Button - Sticky on mobile */}
         <StickyButtonContainer>
           <Button type="submit" fullWidth showTrailingIcon>
-            Continue to Debt Profile
+            Continue to matched options
           </Button>
         </StickyButtonContainer>
         
-        {/* Fun Fact Callout */}
-        <div className="bg-primary-300 rounded-xl p-4 flex items-start gap-3 max-w-[410px] mx-auto w-full">
-          <Lightbulb className="w-5 h-5 text-primary-700 flex-shrink-0 mt-0.5" />
-          <p className="text-body-sm text-neutral-800">
-            People with your debt profile typically save {formatCurrency(potentialSavings)}+ through a personalized debt relief plan.
-          </p>
+        {/* Profile Summary Card */}
+        <div className="bg-neutral-100 rounded-lg p-4 max-w-[410px] mx-auto w-full">
+          <p className="text-body-sm font-medium text-neutral-800 mb-3">Your debt snapshot</p>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Debt</span>
+              <span className="text-neutral-800 font-medium">{formatCurrency(debtAmount)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Income</span>
+              <span className="text-neutral-800 font-medium">{formatCurrency(income)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">DTI</span>
+              <span className="text-neutral-800 font-medium">{dtiPercent}%</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Status</span>
+              <span className="text-feedback-success font-medium">{dtiStatus}</span>
+            </div>
+          </div>
         </div>
         
         {/* Privacy note */}

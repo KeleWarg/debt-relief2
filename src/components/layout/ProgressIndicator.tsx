@@ -20,7 +20,7 @@ const stepSubtitles: Record<number, string> = {
   7: "What's your name?",
   8: 'Your personalized debt profile',
   9: 'Where should we send your results?',
-  10: 'Verify your phone number',
+  10: 'View your matches',
   11: 'Final step - your address',
 }
 

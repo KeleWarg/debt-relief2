@@ -68,7 +68,7 @@ function getDtiMessage(dtiPercent: number): string {
     return 'Your profile matches most relief program requirements'
   }
   if (dtiPercent <= 100) {
-    return 'Your profile is a strong fit for debt relief programs'
+    return 'This puts you in a range many debt relief programs look for.'
   }
   return 'Programs exist specifically for high debt-to-income situations'
 }
@@ -197,7 +197,7 @@ export function IncomeScreen({
           </div>
           
           {/* Debt-to-Income Ratio Card */}
-          <div className="w-full bg-neutral-100 rounded-lg p-4 border border-neutral-200">
+          <div className="w-full bg-primary-300 rounded-lg p-4 border border-neutral-200">
             {/* Card Title with Tooltip */}
             <div className="flex items-center gap-1.5 mb-3">
               <span className="text-sm font-semibold text-neutral-900">Your debt-to-income ratio</span>

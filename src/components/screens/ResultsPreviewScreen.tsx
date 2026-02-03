@@ -1,9 +1,9 @@
 'use client'
 
 import * as React from 'react'
+import { CheckCircle2 } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, StickyButtonContainer } from '@/components/ui'
-import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
 import { LottieIcon } from '@/components/ui/LottieIcon'
 import { formatCurrency } from '@/lib/utils'
 import type { DebtTypeOption } from '@/types/funnel'
@@ -36,36 +36,35 @@ function formatDebtType(debtType: DebtTypeOption): string {
 }
 
 /**
- * Calculate payoff months based on debt and income
- * Formula: (debtAmount * 0.6) / (income * 0.1 / 12)
- * Clamped between 24-48 months
+ * Get status message based on DTI
  */
-function calculatePayoffMonths(debtAmount: number, income: number): number {
-  const remainingDebt = debtAmount * 0.6
-  const monthlyBudget = (income * 0.1) / 12
-  const rawMonths = Math.round(remainingDebt / monthlyBudget)
-  // Clamp between 24-48 months for realistic range
-  return Math.max(24, Math.min(48, rawMonths))
+function getStatusMessage(dtiPercent: number): string {
+  if (dtiPercent < 50) {
+    return 'Matches program requirements'
+  }
+  if (dtiPercent <= 100) {
+    return 'Strong fit for relief programs'
+  }
+  return 'Programs available for your situation'
 }
 
 /**
- * Get contextual DTI message based on ratio
- * Provides accurate, helpful messaging without misleading claims
+ * Get contextual DTI explanation based on ratio
  */
-function getDTIMessage(ratio: number): string {
-  if (ratio < 30) {
-    return `Your debt-to-income ratio of ${ratio}% is low, which gives you more options for relief programs.`
-  } else if (ratio < 50) {
-    return `Your debt-to-income ratio of ${ratio}% is moderate. Many relief programs work well for people in your situation.`
-  } else {
-    return `Your debt-to-income ratio of ${ratio}% shows you're carrying significant debt relative to income — which is exactly what debt relief programs are designed to help with.`
+function getDTIExplanation(dtiPercent: number): string {
+  if (dtiPercent < 40) {
+    return `Your debt-to-income ratio of ${dtiPercent}% is manageable, but relief programs can still help you pay down debt faster.`
   }
+  if (dtiPercent <= 100) {
+    return `Your debt-to-income ratio of ${dtiPercent}% shows you're carrying significant debt relative to income, which is exactly what debt relief programs are designed to help with.`
+  }
+  return `Your debt-to-income ratio of ${dtiPercent}% shows significant debt relative to income. Relief programs are specifically designed for situations like yours.`
 }
 
 /**
  * ResultsPreviewScreen
  * 
- * Interstitial "value moment" screen that shows personalized results
+ * Interstitial "value moment" screen that shows personalized profile summary
  * based on what the user has shared. Builds trust and momentum
  * before asking for contact information.
  */
@@ -76,10 +75,10 @@ export function ResultsPreviewScreen({
   onBack,
   onNext,
 }: ResultsPreviewScreenProps) {
-  // Calculate all values
-  const savings = Math.round(debtAmount * 0.4)
-  const payoffMonths = calculatePayoffMonths(debtAmount, income)
-  const debtToIncomeRatio = Math.round((debtAmount / income) * 100)
+  // Calculate DTI
+  const dtiPercent = income > 0 ? Math.round((debtAmount / income) * 100) : 0
+  const statusMessage = getStatusMessage(dtiPercent)
+  const dtiExplanation = getDTIExplanation(dtiPercent)
 
   return (
     <FormLayout currentStep={5} onBack={onBack}>
@@ -97,7 +96,7 @@ export function ResultsPreviewScreen({
           className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 animate-fade-in-up"
           style={{ animationDelay: '200ms' }}
         >
-          Good news — here&apos;s what we found.
+          Good news! You may be a fit.
         </h1>
 
         {/* Personalized Intro - 0.4s delay */}
@@ -109,50 +108,63 @@ export function ResultsPreviewScreen({
           and {formatCurrency(income)} income, you could be a strong candidate for debt relief.
         </p>
 
-        {/* Savings Card - 0.6s delay */}
+        {/* Profile Summary Card - 0.6s delay */}
         <div 
-          className="w-full bg-primary-300 rounded-xl p-8 mt-8 animate-fade-in-up"
+          className="w-full bg-primary-300 rounded-xl p-6 mt-8 animate-fade-in-up"
           style={{ animationDelay: '600ms' }}
         >
-          {/* Label */}
-          <p className="text-body-sm text-neutral-600">
-            You could save up to
-          </p>
+          {/* Card Title */}
+          <h2 className="font-body text-sm font-semibold text-neutral-900 mb-4 text-left">
+            Your profile summary
+          </h2>
 
-          {/* Savings Amount */}
-          <div className="my-3">
-            <span className="text-4xl md:text-5xl font-bold font-display text-primary-700">
-              <AnimatedCounter
-                value={savings}
-                prefix="$"
-                duration={1200}
-                className="inline"
-              />
-              <span className="text-2xl align-top">*</span>
+          {/* Debt row */}
+          <div className="flex justify-between items-center py-2">
+            <span className="text-sm text-neutral-600">Debt</span>
+            <span className="text-sm text-neutral-800">
+              {formatCurrency(debtAmount)}
             </span>
           </div>
 
-          {/* Payoff Line */}
-          <p className="text-body text-neutral-700">
-            and pay off your reduced balance in as little as <span className="font-semibold">{payoffMonths} months</span>
+          <div className="h-px bg-neutral-300/50" />
+
+          {/* Income row */}
+          <div className="flex justify-between items-center py-2">
+            <span className="text-sm text-neutral-600">Income</span>
+            <span className="text-sm text-neutral-800">
+              {formatCurrency(income)}/year
+            </span>
+          </div>
+
+          <div className="h-px bg-neutral-300/50" />
+
+          {/* DTI row */}
+          <div className="flex justify-between items-center py-2">
+            <span className="text-sm text-neutral-600">DTI</span>
+            <span className="text-sm font-medium text-neutral-900">
+              {dtiPercent}%
+            </span>
+          </div>
+
+          <div className="h-px bg-neutral-300/50" />
+
+          {/* Status row */}
+          <div className="flex justify-between items-center py-2">
+            <span className="text-sm text-neutral-600">Status</span>
+            <span className="text-sm font-medium text-feedback-success flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4" />
+              {statusMessage}
+            </span>
+          </div>
+
+          {/* Divider before explanation */}
+          <div className="h-px bg-neutral-300/50 my-3" />
+
+          {/* DTI Explanation */}
+          <p className="text-body-sm text-neutral-600 text-left">
+            {dtiExplanation}
           </p>
         </div>
-
-        {/* Supporting Line - 0.8s delay */}
-        <p 
-          className="text-body-sm text-neutral-500 mt-6 max-w-sm mx-auto animate-fade-in-up"
-          style={{ animationDelay: '800ms' }}
-        >
-          {getDTIMessage(debtToIncomeRatio)}
-        </p>
-
-        {/* Disclaimer - 0.9s delay */}
-        <p 
-          className="text-caption text-neutral-400 mt-4 max-w-sm mx-auto animate-fade-in-up"
-          style={{ animationDelay: '900ms' }}
-        >
-          *Estimated savings. Actual results vary based on your specific debt situation and enrolled program.
-        </p>
 
         {/* CTA Button - Sticky on mobile */}
         <div className="w-full mt-8">
