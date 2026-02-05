@@ -7,10 +7,13 @@ interface ProgressIndicatorProps {
   currentStep: number
   onBack?: () => void
   className?: string
+  subtitles?: Record<number, string>
+  timeEstimates?: Record<number, number>
+  totalSteps?: number
 }
 
-// Step-specific subtitles for more granular feedback
-const stepSubtitles: Record<number, string> = {
+// Default debt relief subtitles
+const defaultSubtitles: Record<number, string> = {
   1: "Let's see if you qualify",
   2: 'What kind of debt do you have?',
   3: 'How much debt do you have?',
@@ -24,8 +27,8 @@ const stepSubtitles: Record<number, string> = {
   11: 'Final step - your address',
 }
 
-// Time estimate per step (in seconds) - Total: ~3 minutes
-const stepTimeEstimates: Record<number, number> = {
+// Default debt relief time estimates (in seconds) - Total: ~3 minutes
+const defaultTimeEstimates: Record<number, number> = {
   1: 15,  // Location selection
   2: 10,  // Debt type selection
   3: 10,  // Did you know screen
@@ -40,13 +43,13 @@ const stepTimeEstimates: Record<number, number> = {
 }
 
 const TOTAL_SEGMENTS = 6
-const TOTAL_STEPS = 11
+const DEFAULT_TOTAL_STEPS = 11
 
 // Calculate remaining time from current step onward
-const getRemainingTime = (currentStep: number): string => {
+const getRemainingTime = (currentStep: number, totalSteps: number, timeEstimates: Record<number, number>): string => {
   let totalSeconds = 0
-  for (let i = currentStep; i <= TOTAL_STEPS; i++) {
-    totalSeconds += stepTimeEstimates[i] || 30 // default 30s if not defined
+  for (let i = currentStep; i <= totalSteps; i++) {
+    totalSeconds += timeEstimates[i] || 30 // default 30s if not defined
   }
   
   const minutes = Math.ceil(totalSeconds / 60)
@@ -66,9 +69,16 @@ const getRemainingTime = (currentStep: number): string => {
  * @example
  * <ProgressIndicator currentStep={1} onBack={handleBack} />
  */
-export function ProgressIndicator({ currentStep, onBack, className }: ProgressIndicatorProps) {
+export function ProgressIndicator({ 
+  currentStep, 
+  onBack, 
+  className,
+  subtitles = defaultSubtitles,
+  timeEstimates = defaultTimeEstimates,
+  totalSteps = DEFAULT_TOTAL_STEPS
+}: ProgressIndicatorProps) {
   // Calculate how much of the total progress we've made (0 to 1)
-  const totalProgress = currentStep / TOTAL_STEPS
+  const totalProgress = currentStep / totalSteps
   
   // Calculate how many full segments + partial fill
   const progressInSegments = totalProgress * TOTAL_SEGMENTS
@@ -76,7 +86,7 @@ export function ProgressIndicator({ currentStep, onBack, className }: ProgressIn
   const partialFill = (progressInSegments - fullSegments) * 100 // percentage of current segment
   
   // Get subtitle for current step
-  const subtitle = stepSubtitles[currentStep] || 'Continue your application'
+  const subtitle = subtitles[currentStep] || 'Continue your application'
 
   return (
     <div className={cn('w-full bg-white sticky top-12 z-40', className)}>
@@ -112,7 +122,7 @@ export function ProgressIndicator({ currentStep, onBack, className }: ProgressIn
         <p className="text-center text-sm text-neutral-500 mb-2">
           {subtitle}
           <span className="text-neutral-300 mx-2">·</span>
-          <span className="text-neutral-400">{getRemainingTime(currentStep)}</span>
+          <span className="text-neutral-400">{getRemainingTime(currentStep, totalSteps, timeEstimates)}</span>
         </p>
 
         {/* Segmented Progress Bar with progressive fill */}

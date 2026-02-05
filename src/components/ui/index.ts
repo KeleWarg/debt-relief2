@@ -7,7 +7,7 @@ export type { InputProps } from './Input'
 
 export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './Select'
 
-export { RadioGroup, RadioCard } from './RadioCard'
+export { RadioGroup, RadioCard, RadioGridCard, RadioListItem } from './RadioCard'
 
 export { Slider } from './Slider'
 export type { SliderProps } from './Slider'

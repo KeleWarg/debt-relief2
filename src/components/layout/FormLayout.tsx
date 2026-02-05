@@ -12,6 +12,12 @@ interface FormLayoutProps {
   showProgress?: boolean
   sideContent?: React.ReactNode
   className?: string
+  /** Custom subtitles for progress indicator (for different funnels) */
+  progressSubtitles?: Record<number, string>
+  /** Custom time estimates for progress indicator */
+  progressTimeEstimates?: Record<number, number>
+  /** Total number of steps in the funnel */
+  totalSteps?: number
 }
 
 /**
@@ -35,7 +41,10 @@ export function FormLayout({
   onBack, 
   showProgress = true,
   sideContent,
-  className 
+  className,
+  progressSubtitles,
+  progressTimeEstimates,
+  totalSteps
 }: FormLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -44,7 +53,13 @@ export function FormLayout({
       
       {/* Sticky Progress Indicator with Back Button */}
       {showProgress ? (
-        <ProgressIndicator currentStep={currentStep} onBack={onBack} />
+        <ProgressIndicator 
+          currentStep={currentStep} 
+          onBack={onBack}
+          subtitles={progressSubtitles}
+          timeEstimates={progressTimeEstimates}
+          totalSteps={totalSteps}
+        />
       ) : onBack ? (
         /* Minimal back bar when progress is hidden but back is needed */
         <div className="w-full bg-white sticky top-12 z-40">
