@@ -19,8 +19,8 @@ const schnyderS = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Debt Relief - Forbes Advisor',
-  description: 'See if you qualify for loan-free debt relief. Reduce what you owe by up to 50%.',
+  title: 'Compare Moving Quotes - Forbes Advisor',
+  description: 'Compare free moving quotes from top-rated movers in your area. Save time and money on your next move.',
 }
 
 export default function RootLayout({
