@@ -1,10 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { MapPin, Lock, Clock, Route } from 'lucide-react'
+import { MapPin, Lock, Clock, Route, Check, AlertCircle } from 'lucide-react'
 import { FormLayout } from '@/components/layout/FormLayout'
 import { Button, Input, StickyButtonContainer } from '@/components/ui'
 import { MOVING_VALIDATION, MOVING_PROGRESS_SUBTITLES, MOVING_PROGRESS_TIME_ESTIMATES, MOVING_TOTAL_STEPS } from '@/types/moving'
+import { stateCentroids } from '@/data/stateCentroids'
 
 // Zip code prefix (3 digits) to approximate coordinates
 // Format: { prefix: [latitude, longitude] }
@@ -105,9 +106,18 @@ function getZipCoordinates(zip: string): [number, number] | null {
   return ZIP_COORDINATES[prefix] || null
 }
 
+// Distance info returned to the UI
+interface DistanceInfo {
+  message: string
+  distance: string
+  fromState?: string
+  toState?: string
+  isEstimate?: boolean
+}
+
 // Get distance message based on miles
 function getDistanceMessage(miles: number): { message: string; distance: string } {
-  const distanceStr = miles < 10 ? `${Math.round(miles)} mi` : `${Math.round(miles)} miles`
+  const distanceStr = miles < 10 ? `${Math.round(miles)} mi` : `${Math.round(miles).toLocaleString()} miles`
   
   if (miles < 10) {
     return {
@@ -137,6 +147,129 @@ function getDistanceMessage(miles: number): { message: string; distance: string 
   }
 }
 
+// Get coordinates for a zip — tries ZIP_COORDINATES first, falls back to state centroids
+function getCoordinatesForZip(zip: string): { coords: [number, number]; isEstimate: boolean } | null {
+  // Try exact 3-digit prefix lookup first
+  const exact = getZipCoordinates(zip)
+  if (exact) return { coords: exact, isEstimate: false }
+  
+  // Fall back to state centroid
+  const state = getStateFromZip(zip)
+  if (state) {
+    // stateCentroids format: [longitude, latitude] — flip to [latitude, longitude]
+    const centroid = stateCentroids[state.name]
+    if (centroid) return { coords: [centroid[1], centroid[0]], isEstimate: true }
+  }
+  
+  return null
+}
+
+// Map 3-digit zip code prefix to US state
+function getStateFromZip(zip: string): { abbr: string; name: string } | null {
+  if (zip.length < 3) return null
+  const prefix = parseInt(zip.substring(0, 3), 10)
+  if (isNaN(prefix)) return null
+
+  // US zip prefix ranges → state
+  const ranges: [number, number, string, string][] = [
+    [5, 5, 'NY', 'New York'],
+    [6, 9, 'PR', 'Puerto Rico'],
+    [10, 27, 'MA', 'Massachusetts'],
+    [28, 29, 'RI', 'Rhode Island'],
+    [30, 38, 'NH', 'New Hampshire'],
+    [39, 49, 'ME', 'Maine'],
+    [50, 59, 'VT', 'Vermont'],
+    [60, 69, 'CT', 'Connecticut'],
+    [70, 89, 'NJ', 'New Jersey'],
+    [100, 149, 'NY', 'New York'],
+    [150, 196, 'PA', 'Pennsylvania'],
+    [197, 199, 'DE', 'Delaware'],
+    [200, 205, 'DC', 'Washington DC'],
+    [206, 219, 'MD', 'Maryland'],
+    [220, 246, 'VA', 'Virginia'],
+    [247, 268, 'WV', 'West Virginia'],
+    [270, 289, 'NC', 'North Carolina'],
+    [290, 299, 'SC', 'South Carolina'],
+    [300, 319, 'GA', 'Georgia'],
+    [320, 349, 'FL', 'Florida'],
+    [350, 369, 'AL', 'Alabama'],
+    [370, 385, 'TN', 'Tennessee'],
+    [386, 397, 'MS', 'Mississippi'],
+    [400, 427, 'KY', 'Kentucky'],
+    [430, 459, 'OH', 'Ohio'],
+    [460, 479, 'IN', 'Indiana'],
+    [480, 499, 'MI', 'Michigan'],
+    [500, 528, 'IA', 'Iowa'],
+    [530, 549, 'WI', 'Wisconsin'],
+    [550, 567, 'MN', 'Minnesota'],
+    [570, 577, 'SD', 'South Dakota'],
+    [580, 588, 'ND', 'North Dakota'],
+    [590, 599, 'MT', 'Montana'],
+    [600, 629, 'IL', 'Illinois'],
+    [630, 658, 'MO', 'Missouri'],
+    [660, 679, 'KS', 'Kansas'],
+    [680, 693, 'NE', 'Nebraska'],
+    [700, 714, 'LA', 'Louisiana'],
+    [716, 729, 'AR', 'Arkansas'],
+    [730, 749, 'OK', 'Oklahoma'],
+    [750, 799, 'TX', 'Texas'],
+    [800, 816, 'CO', 'Colorado'],
+    [820, 831, 'WY', 'Wyoming'],
+    [832, 838, 'ID', 'Idaho'],
+    [840, 847, 'UT', 'Utah'],
+    [850, 865, 'AZ', 'Arizona'],
+    [870, 884, 'NM', 'New Mexico'],
+    [889, 898, 'NV', 'Nevada'],
+    [900, 961, 'CA', 'California'],
+    [967, 968, 'HI', 'Hawaii'],
+    [970, 979, 'OR', 'Oregon'],
+    [980, 994, 'WA', 'Washington'],
+    [995, 999, 'AK', 'Alaska'],
+  ]
+
+  for (const [lo, hi, abbr, name] of ranges) {
+    if (prefix >= lo && prefix <= hi) return { abbr, name }
+  }
+  return null
+}
+
+// Inline badge shown inside the zip input field
+function ZipStateBadge({ zip }: { zip: string }) {
+  const state = React.useMemo(() => getStateFromZip(zip), [zip])
+  const isComplete = zip.length === 5
+
+  if (zip.length < 3) return null
+
+  // 5 digits entered but no state match → invalid
+  if (isComplete && !state) {
+    return (
+      <span className="flex items-center gap-1 text-xs font-medium text-feedback-error bg-red-50 px-2.5 py-1 rounded-full">
+        <AlertCircle className="w-3 h-3" />
+        Invalid
+      </span>
+    )
+  }
+
+  if (!state) return null
+
+  // 3-4 digits — state preview (subtle)
+  if (!isComplete) {
+    return (
+      <span className="text-xs font-medium text-neutral-500 bg-neutral-100 px-2.5 py-1 rounded-full">
+        {state.name}
+      </span>
+    )
+  }
+
+  // 5 digits + valid state — confirmed
+  return (
+    <span className="flex items-center gap-1 text-xs font-medium text-feedback-success bg-emerald-50 px-2.5 py-1 rounded-full">
+      <Check className="w-3.5 h-3.5" />
+      {state.name}
+    </span>
+  )
+}
+
 interface ZipcodesScreenProps {
   initialFromZip?: string
   initialToZip?: string
@@ -164,27 +297,38 @@ export function ZipcodesScreen({
   const isValid = MOVING_VALIDATION.zipCode.pattern.test(zipFrom) && 
                   MOVING_VALIDATION.zipCode.pattern.test(zipTo)
   
+  // Resolve states for each zip
+  const fromState = React.useMemo(() => getStateFromZip(zipFrom), [zipFrom])
+  const toState = React.useMemo(() => getStateFromZip(zipTo), [zipTo])
+  
   // Calculate distance instantly when both zip codes are valid
-  const distanceInfo = React.useMemo(() => {
+  const distanceInfo: DistanceInfo | null = React.useMemo(() => {
     if (zipFrom.length !== 5 || zipTo.length !== 5) return null
     
-    const coordsFrom = getZipCoordinates(zipFrom)
-    const coordsTo = getZipCoordinates(zipTo)
+    const from = getCoordinatesForZip(zipFrom)
+    const to = getCoordinatesForZip(zipTo)
     
-    if (coordsFrom && coordsTo) {
-      const miles = getDistance(coordsFrom[0], coordsFrom[1], coordsTo[0], coordsTo[1])
-      return getDistanceMessage(miles)
+    if (from && to) {
+      const miles = getDistance(from.coords[0], from.coords[1], to.coords[0], to.coords[1])
+      const isEstimate = from.isEstimate || to.isEstimate
+      const msg = getDistanceMessage(miles)
+      return {
+        ...msg,
+        distance: isEstimate ? `~${msg.distance}` : msg.distance,
+        fromState: fromState?.name,
+        toState: toState?.name,
+        isEstimate,
+      }
     }
     
-    // Fallback for unknown zip prefixes
-    const sameRegion = zipFrom[0] === zipTo[0]
+    // Both zips entered but neither could be geolocated at all
     return {
-      message: sameRegion 
-        ? "Looks like a regional move — we'll find movers who know your area well."
-        : "We'll match you with movers experienced on this route.",
-      distance: "Est. distance"
+      message: "We'll match you with movers experienced on this route.",
+      distance: "Distance TBD",
+      fromState: fromState?.name,
+      toState: toState?.name,
     }
-  }, [zipFrom, zipTo])
+  }, [zipFrom, zipTo, fromState, toState])
   
   const handleZipChange = (field: 'zipFrom' | 'zipTo', value: string) => {
     // Only allow numeric input, max 5 digits
@@ -226,14 +370,10 @@ export function ZipcodesScreen({
       progressSubtitles={MOVING_PROGRESS_SUBTITLES}
       progressTimeEstimates={MOVING_PROGRESS_TIME_ESTIMATES}
       totalSteps={MOVING_TOTAL_STEPS}
+      progressUnified
     >
       <form onSubmit={handleSubmit} className="animate-slide-up has-sticky-button">
         <div className="space-y-8">
-          {/* Step indicator */}
-          <div className="text-center">
-            <span className="text-body-sm text-neutral-500">Step 1 of 5</span>
-          </div>
-          
           {/* Headline */}
           <div className="text-center space-y-2">
             <h1 className="font-display text-2xl sm:text-3xl text-neutral-900">
@@ -260,6 +400,7 @@ export function ZipcodesScreen({
                 onChange={(e) => handleZipChange('zipFrom', e.target.value)}
                 error={errors.zipFrom}
                 maxLength={5}
+                suffix={<ZipStateBadge zip={zipFrom} />}
               />
             </div>
             
@@ -277,18 +418,36 @@ export function ZipcodesScreen({
                 onChange={(e) => handleZipChange('zipTo', e.target.value)}
                 error={errors.zipTo}
                 maxLength={5}
+                suffix={<ZipStateBadge zip={zipTo} />}
               />
             </div>
             
             {/* Distance Message */}
             {distanceInfo && (
-              <div className="animate-fade-in bg-primary-300 rounded-lg p-3 flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full flex-shrink-0">
-                  <Route className="w-5 h-5 text-primary-700" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-neutral-900">{distanceInfo.distance}</p>
-                  <p className="text-xs text-neutral-600">{distanceInfo.message}</p>
+              <div className="animate-fade-in bg-primary-300 rounded-lg p-4 space-y-2.5">
+                {/* Route header */}
+                {distanceInfo.fromState && distanceInfo.toState && (
+                  <div className="flex items-center gap-2 text-xs font-medium text-primary-700">
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>{distanceInfo.fromState}</span>
+                    <span className="text-neutral-400">→</span>
+                    <span>{distanceInfo.toState}</span>
+                  </div>
+                )}
+                {/* Distance + message */}
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full flex-shrink-0">
+                    <Route className="w-5 h-5 text-primary-700" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-neutral-900">
+                      {distanceInfo.distance}
+                      {distanceInfo.isEstimate && (
+                        <span className="text-xs font-normal text-neutral-500 ml-1.5">est.</span>
+                      )}
+                    </p>
+                    <p className="text-xs text-neutral-600">{distanceInfo.message}</p>
+                  </div>
                 </div>
               </div>
             )}

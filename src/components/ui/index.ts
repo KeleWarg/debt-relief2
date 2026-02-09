@@ -30,4 +30,6 @@ export type { ParsedAddress } from './AddressAutocomplete'
 
 export { StickyButtonContainer } from './StickyButtonContainer'
 
+export { DatePicker } from './DatePicker'
+
 export { OTPVerificationModal } from './OTPVerificationModal'

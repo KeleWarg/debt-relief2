@@ -5,6 +5,8 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string
   error?: string
   hint?: string
+  /** Content rendered inside the input on the right side (e.g. validation badge) */
+  suffix?: React.ReactNode
 }
 
 /**
@@ -21,7 +23,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
  * />
  */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, hint, type = 'text', id, ...props }, ref) => {
+  ({ className, label, error, hint, suffix, type = 'text', id, ...props }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
     
     return (
@@ -34,24 +36,32 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <input
-          ref={ref}
-          id={inputId}
-          type={type}
-          className={cn(
-            'w-full bg-white border border-neutral-200 rounded-[8px] px-4 py-3',
-            'min-h-[48px] text-body text-neutral-800',
-            'placeholder:text-neutral-500',
-            'focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-focus/50',
-            'disabled:bg-neutral-50 disabled:cursor-not-allowed',
-            'transition-colors duration-200',
-            error && 'border-feedback-error focus:border-feedback-error focus:ring-feedback-error/20',
-            className
+        <div className="relative">
+          <input
+            ref={ref}
+            id={inputId}
+            type={type}
+            className={cn(
+              'w-full bg-white border border-neutral-200 rounded-[8px] px-4 py-3',
+              'min-h-[48px] text-body text-neutral-800',
+              'placeholder:text-neutral-500',
+              'focus:border-primary-700 focus:outline-none focus:ring-2 focus:ring-focus/50',
+              'disabled:bg-neutral-50 disabled:cursor-not-allowed',
+              'transition-colors duration-200',
+              error && 'border-feedback-error focus:border-feedback-error focus:ring-feedback-error/20',
+              suffix && 'pr-28',
+              className
+            )}
+            aria-invalid={error ? 'true' : 'false'}
+            aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+            {...props}
+          />
+          {suffix && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              {suffix}
+            </div>
           )}
-          aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-          {...props}
-        />
+        </div>
         {error && (
           <p 
             id={`${inputId}-error`}

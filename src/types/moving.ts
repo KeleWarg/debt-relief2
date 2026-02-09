@@ -18,6 +18,7 @@ export interface MovingFunnelData {
   
   // Step 3: Move Date
   moveDate?: MoveDateOption
+  specificMoveDate?: string  // ISO date string when 'specific-date' is selected
   
   // Step 4: Email
   email?: string
@@ -50,8 +51,8 @@ export const MOVE_DATE_OPTIONS: {
   savingsPercent?: number
 }[] = [
   { value: 'within-2-weeks', label: 'Within 2 weeks', tag: 'Most popular' },
-  { value: '2-4-weeks', label: '2-4 weeks', tag: 'Save 10%', savingsPercent: 0.10 },
-  { value: '1-2-months', label: '1-2 months', tag: 'Save 20%', savingsPercent: 0.20 },
+  { value: '2-4-weeks', label: '2-4 weeks', savingsPercent: 0.10 },
+  { value: '1-2-months', label: '1-2 months', savingsPercent: 0.20 },
   { value: '2+-months', label: '2+ months', tag: 'Best value', savingsPercent: 0.25 },
 ]
 
@@ -99,11 +100,11 @@ export const MOVING_VALIDATION = {
 // Progress indicator configuration for moving funnel
 // Flow: Zipcodes → Home Size → Email+Recap → Move Date → Details → Results
 export const MOVING_PROGRESS_SUBTITLES: Record<number, string> = {
-  1: 'Where are you moving?',
-  2: 'How big is your home?',
-  3: 'Get your free quotes',
-  4: 'When are you moving?',
-  5: 'Final details',
+  1: 'Step 1 of 5',
+  2: 'Step 2 of 5',
+  3: 'Step 3 of 5',
+  4: 'Step 4 of 5',
+  5: 'Step 5 of 5',
   6: 'Your matched movers',
 }
 

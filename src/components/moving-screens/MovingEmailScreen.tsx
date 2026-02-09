@@ -51,14 +51,10 @@ export function MovingEmailScreen({
       progressSubtitles={MOVING_PROGRESS_SUBTITLES}
       progressTimeEstimates={MOVING_PROGRESS_TIME_ESTIMATES}
       totalSteps={MOVING_TOTAL_STEPS}
+      progressUnified
     >
       <form onSubmit={handleSubmit} className="animate-slide-up has-sticky-button">
         <div className="space-y-6">
-          {/* Step indicator */}
-          <div className="text-center">
-            <span className="text-body-sm text-neutral-500">Step 4 of 5</span>
-          </div>
-          
           {/* Headline */}
           <div className="text-center space-y-2">
             <h1 className="font-display text-2xl sm:text-3xl text-neutral-900">

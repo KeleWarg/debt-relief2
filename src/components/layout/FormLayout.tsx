@@ -18,6 +18,8 @@ interface FormLayoutProps {
   progressTimeEstimates?: Record<number, number>
   /** Total number of steps in the funnel */
   totalSteps?: number
+  /** Use a single continuous progress bar instead of segmented pills */
+  progressUnified?: boolean
 }
 
 /**
@@ -44,7 +46,8 @@ export function FormLayout({
   className,
   progressSubtitles,
   progressTimeEstimates,
-  totalSteps
+  totalSteps,
+  progressUnified
 }: FormLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -59,6 +62,7 @@ export function FormLayout({
           subtitles={progressSubtitles}
           timeEstimates={progressTimeEstimates}
           totalSteps={totalSteps}
+          unified={progressUnified}
         />
       ) : onBack ? (
         /* Minimal back bar when progress is hidden but back is needed */

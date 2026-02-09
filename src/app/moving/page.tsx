@@ -27,8 +27,8 @@ type MovingFunnelStep =
 // Step order for navigation
 const STEP_ORDER: MovingFunnelStep[] = [
   'zipcodes',
-  'searching',
   'homeSize',
+  'searching',
   'estimateEmail',
   'moveDate',
   'matching',
@@ -107,6 +107,8 @@ export default function MovingPage() {
         return (
           <HomeSizeScreen
             initialValue={funnelData.homeSize}
+            zipFrom={funnelData.zipFrom}
+            zipTo={funnelData.zipTo}
             onBack={goToPreviousStep}
             onSubmit={(homeSize: HomeSizeOption) => {
               updateFunnelData({ homeSize })
@@ -134,10 +136,11 @@ export default function MovingPage() {
         return (
           <MoveDateScreen
             initialValue={funnelData.moveDate}
+            initialSpecificDate={funnelData.specificMoveDate}
             homeSize={funnelData.homeSize || '2-bedroom'}
             onBack={goToPreviousStep}
-            onSubmit={(moveDate: MoveDateOption) => {
-              updateFunnelData({ moveDate })
+            onSubmit={(moveDate: MoveDateOption, specificMoveDate?: string) => {
+              updateFunnelData({ moveDate, specificMoveDate })
               goToNextStep()
             }}
           />

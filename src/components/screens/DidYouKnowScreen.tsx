@@ -146,7 +146,7 @@ export function DidYouKnowScreen({
         </div>
         
         {/* CTA Button - Sticky on mobile */}
-        <StickyButtonContainer>
+        <StickyButtonContainer className="w-full">
           <Button type="button" fullWidth onClick={onNext} showTrailingIcon>
             Continue
           </Button>

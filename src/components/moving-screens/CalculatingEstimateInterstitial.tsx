@@ -1,8 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { CheckCircle2, Lock, MapPin, Truck, Users } from 'lucide-react'
-import { FormLayout } from '@/components/layout/FormLayout'
+import { CheckCircle2, Lock, MapPin, Truck, Users, Check } from 'lucide-react'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { TrustBadges } from '@/components/layout/TrustBadges'
+import { ProgressIndicator } from '@/components/layout/ProgressIndicator'
 import { Button, Input, StickyButtonContainer } from '@/components/ui'
 import { HOME_SIZE_OPTIONS, MOVING_VALIDATION, MOVING_PROGRESS_SUBTITLES, MOVING_PROGRESS_TIME_ESTIMATES, MOVING_TOTAL_STEPS, type HomeSizeOption } from '@/types/moving'
 
@@ -126,104 +129,206 @@ export function EstimateAndEmailScreen({
   }
 
   return (
-    <FormLayout 
-      currentStep={3} 
-      onBack={onBack}
-      progressSubtitles={MOVING_PROGRESS_SUBTITLES}
-      progressTimeEstimates={MOVING_PROGRESS_TIME_ESTIMATES}
-      totalSteps={MOVING_TOTAL_STEPS}
-    >
-      <form onSubmit={handleSubmit} className="animate-slide-up has-sticky-button">
-        <div className="space-y-6">
-          {/* Headline */}
-          <div className="text-center space-y-2">
-            <h1 className="font-display text-2xl sm:text-3xl text-neutral-900">
-              Where should we send your quotes?
-            </h1>
-            <p className="text-body-sm text-neutral-500">
-              Get free quotes from top-rated movers in your area.
-            </p>
-          </div>
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* Header */}
+      <Header />
+      
+      {/* Progress Indicator */}
+      <ProgressIndicator 
+        currentStep={3} 
+        onBack={onBack}
+        subtitles={MOVING_PROGRESS_SUBTITLES}
+        timeEstimates={MOVING_PROGRESS_TIME_ESTIMATES}
+        totalSteps={MOVING_TOTAL_STEPS}
+        unified
+      />
+      
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-24 sm:pb-8 flex-1">
+          {/* Page Headline */}
+          <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center mb-4 sm:mb-8">
+            Where should we send<br className="hidden sm:block" /> your quotes?
+          </h1>
           
-          {/* Email Section */}
-          <div className="w-full max-w-md mx-auto space-y-2">
-            <Input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value)
-                if (error) setError(null)
-              }}
-              error={error ?? undefined}
-              autoComplete="email"
-            />
+          {/* Two-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 items-center">
             
-            {/* Trust badges - stacked on mobile, side by side on desktop */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4">
-              <div className="flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-feedback-success flex-shrink-0" />
-                <span className="text-xs text-neutral-500">Secured by Forbes.com</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-feedback-success flex-shrink-0" />
-                <span className="text-xs text-neutral-500">100% free, no spam</span>
+            {/* Left Column - Recap Card */}
+            <div className="animate-fade-in-up">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-card border border-gray-100">
+                {/* Mini Title */}
+                <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">
+                  Based on what you told us
+                </p>
+                
+                {/* Move Details Summary */}
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <p className="text-sm font-medium text-neutral-800 mb-3">Your move snapshot</p>
+                  
+                  {/* Row 1 - Moving Route */}
+                  <div className="flex justify-between items-center pb-3 border-b border-gray-200 gap-4">
+                    <span className="text-sm text-neutral-800 flex items-center gap-1.5 whitespace-nowrap">
+                      <MapPin className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+                      Route
+                    </span>
+                    <span className="font-semibold text-neutral-900 text-right">
+                      {zipFrom}{stateFrom && `, ${stateFrom}`} → {zipTo}{stateTo && `, ${stateTo}`}
+                    </span>
+                  </div>
+                  
+                  {/* Row 2 - Home Size */}
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <span className="text-sm text-neutral-800 flex items-center gap-2">
+                      <Truck className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+                      Home Size
+                    </span>
+                    <span className="font-semibold text-neutral-900">
+                      {sizeLabel}
+                    </span>
+                  </div>
+                  
+                  {/* Row 3 - Available Movers */}
+                  <div className="flex justify-between items-center pt-3">
+                    <span className="text-sm text-neutral-800 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-primary-700 flex-shrink-0" />
+                      Available Movers
+                    </span>
+                    <span className="font-semibold text-primary-700">
+                      {contractorCount} licensed
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Status Badge */}
+                <div className="bg-green-50 rounded-lg p-4 mt-4 mb-4">
+                  <p className="text-feedback-success font-medium">
+                    Status: ✓ Quotes available in your area
+                  </p>
+                  <p className="text-sm text-neutral-600 mt-1">
+                    {contractorCount} licensed movers are ready to compete for your business.
+                  </p>
+                </div>
+                
+                {/* What you'll get */}
+                <p className="text-sm font-semibold text-neutral-900 mb-3">
+                  What you&apos;ll receive:
+                </p>
+                <div className="space-y-2">
+                  {[
+                    "Up to 5 personalized moving quotes",
+                    "Side-by-side mover comparison",
+                    "No obligation — compare and decide"
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-feedback-success flex-shrink-0" />
+                      <p className="text-sm text-neutral-800">{item}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          
-          {/* CTA */}
-          <div className="w-full max-w-md mx-auto">
-            <Button 
-              type="submit" 
-              fullWidth 
-              showTrailingIcon
-              disabled={!isValidEmail}
-            >
-              Refine My Estimates
-            </Button>
-          </div>
-          
-          {/* Recap Card - Below CTA */}
-          <div className="w-full max-w-md mx-auto bg-neutral-100 border border-neutral-200 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-neutral-900 mb-4">
-              Here&apos;s what you told us
-            </h2>
             
-            {/* Move Details */}
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-neutral-500 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  <p className="text-sm text-neutral-800">
-                    {zipFrom}{stateFrom && `, ${stateFrom}`} → {zipTo}{stateTo && `, ${stateTo}`}
-                  </p>
-                  <p className="text-xs text-neutral-500">Moving location</p>
+            {/* Right Column - Email Form */}
+            <div className="animate-fade-in-up">
+              <form id="email-form" onSubmit={handleSubmit}>
+                <p className="text-body text-neutral-500 mb-6">
+                  Get free quotes from top-rated movers in your area. Enter your email and we&apos;ll send your personalized moving estimates.
+                </p>
+                
+                {/* Email Input */}
+                <div className="space-y-2 mb-6">
+                  <Input
+                    label="Email address"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      if (error) setError(null)
+                    }}
+                    error={error ?? undefined}
+                    autoComplete="email"
+                  />
+                  
+                  {/* Trust badges */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mt-2">
+                    <div className="flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-feedback-success flex-shrink-0" />
+                      <span className="text-xs text-neutral-500">Secured by Forbes.com</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-feedback-success flex-shrink-0" />
+                      <span className="text-xs text-neutral-500">100% free, no spam</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <Truck className="w-4 h-4 text-neutral-500 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  <p className="text-sm text-neutral-800">{sizeLabel}</p>
-                  <p className="text-xs text-neutral-500">Home size</p>
+                
+                {/* CTA - Desktop */}
+                <div className="hidden sm:block">
+                  <Button 
+                    type="submit" 
+                    fullWidth 
+                    showTrailingIcon
+                    disabled={!isValidEmail}
+                  >
+                    Refine My Estimates
+                  </Button>
                 </div>
-              </div>
+              </form>
               
-              <div className="flex items-start gap-3">
-                <Users className="w-4 h-4 text-primary-700 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-primary-700">
-                    {contractorCount} licensed movers
-                  </p>
-                  <p className="text-xs text-neutral-500">Available in your area</p>
+              {/* Image with overlay - Desktop only */}
+              <div className="hidden lg:block mt-6">
+                <div className="relative rounded-2xl overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80"
+                    alt="Family preparing for a move"
+                    className="w-full h-56 object-cover"
+                  />
+                  
+                  {/* Quotes ready badge */}
+                  <div className="absolute top-4 right-4 inline-flex items-center gap-2 bg-white rounded-full px-3 py-1.5 shadow-sm text-sm">
+                    <Check className="w-4 h-4 text-feedback-success" />
+                    Quotes ready
+                  </div>
+                  
+                  {/* Overlay card */}
+                  <div className="absolute inset-x-4 bottom-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary-300 flex items-center justify-center flex-shrink-0">
+                        <Users className="w-4 h-4 text-primary-700" />
+                      </div>
+                      <p className="text-sm text-neutral-800 leading-relaxed">
+                        <strong>{contractorCount} movers</strong> in your area are ready to provide free quotes for your {sizeLabel.toLowerCase()} move.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </form>
-    </FormLayout>
+        
+        {/* CTA - Sticky on mobile */}
+        <StickyButtonContainer className="sm:hidden">
+          <Button 
+            type="submit" 
+            form="email-form"
+            fullWidth 
+            showTrailingIcon
+            disabled={!isValidEmail}
+          >
+            Refine My Estimates
+          </Button>
+        </StickyButtonContainer>
+      </main>
+      
+      {/* Trust Badges */}
+      <TrustBadges />
+      
+      {/* Footer */}
+      <Footer />
+    </div>
   )
 }
 

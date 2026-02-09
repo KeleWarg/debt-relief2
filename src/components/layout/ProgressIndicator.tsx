@@ -10,6 +10,8 @@ interface ProgressIndicatorProps {
   subtitles?: Record<number, string>
   timeEstimates?: Record<number, number>
   totalSteps?: number
+  /** When true, renders a single continuous bar instead of segmented pills */
+  unified?: boolean
 }
 
 // Default debt relief subtitles
@@ -75,15 +77,19 @@ export function ProgressIndicator({
   className,
   subtitles = defaultSubtitles,
   timeEstimates = defaultTimeEstimates,
-  totalSteps = DEFAULT_TOTAL_STEPS
+  totalSteps = DEFAULT_TOTAL_STEPS,
+  unified = false
 }: ProgressIndicatorProps) {
   // Calculate how much of the total progress we've made (0 to 1)
   const totalProgress = currentStep / totalSteps
   
-  // Calculate how many full segments + partial fill
+  // Calculate how many full segments + partial fill (segmented mode)
   const progressInSegments = totalProgress * TOTAL_SEGMENTS
   const fullSegments = Math.floor(progressInSegments)
   const partialFill = (progressInSegments - fullSegments) * 100 // percentage of current segment
+  
+  // Unified bar fill percentage
+  const unifiedFill = Math.round(totalProgress * 100)
   
   // Get subtitle for current step
   const subtitle = subtitles[currentStep] || 'Continue your application'
@@ -125,29 +131,38 @@ export function ProgressIndicator({
           <span className="text-neutral-400">{getRemainingTime(currentStep, totalSteps, timeEstimates)}</span>
         </p>
 
-        {/* Segmented Progress Bar with progressive fill */}
-        <div className="flex justify-center gap-1.5">
-          {[...Array(TOTAL_SEGMENTS)].map((_, index) => {
-            // Determine fill state for this segment
-            const isFull = index < fullSegments
-            const isPartial = index === fullSegments
-            const isEmpty = index > fullSegments
-            
-            return (
-              <div
-                key={index}
-                className="h-1.5 rounded-full w-8 sm:w-10 md:w-12 bg-[#D7DCE5] overflow-hidden"
-              >
-                <div 
-                  className="h-full bg-[#0C7663] rounded-full transition-all duration-500 ease-out"
-                  style={{ 
-                    width: isFull ? '100%' : isPartial ? `${partialFill}%` : '0%' 
-                  }}
-                />
-              </div>
-            )
-          })}
-        </div>
+        {unified ? (
+          /* Unified continuous progress bar */
+          <div className="max-w-xs mx-auto h-1.5 rounded-full bg-[#D7DCE5] overflow-hidden">
+            <div 
+              className="h-full bg-[#0C7663] rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${unifiedFill}%` }}
+            />
+          </div>
+        ) : (
+          /* Segmented Progress Bar with progressive fill */
+          <div className="flex justify-center gap-1.5">
+            {[...Array(TOTAL_SEGMENTS)].map((_, index) => {
+              // Determine fill state for this segment
+              const isFull = index < fullSegments
+              const isPartial = index === fullSegments
+              
+              return (
+                <div
+                  key={index}
+                  className="h-1.5 rounded-full w-8 sm:w-10 md:w-12 bg-[#D7DCE5] overflow-hidden"
+                >
+                  <div 
+                    className="h-full bg-[#0C7663] rounded-full transition-all duration-500 ease-out"
+                    style={{ 
+                      width: isFull ? '100%' : isPartial ? `${partialFill}%` : '0%' 
+                    }}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

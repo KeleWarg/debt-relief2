@@ -1,9 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { Calendar, Lightbulb } from 'lucide-react'
-import { FormLayout } from '@/components/layout/FormLayout'
-import { StickyButtonContainer, Button, RadioGroup, RadioListItem } from '@/components/ui'
+import { Calendar, Lightbulb, Check } from 'lucide-react'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { TrustBadges } from '@/components/layout/TrustBadges'
+import { ProgressIndicator } from '@/components/layout/ProgressIndicator'
+import { StickyButtonContainer, Button, RadioGroup, RadioListItem, DatePicker } from '@/components/ui'
 import { 
   MOVE_DATE_OPTIONS, 
   HOME_SIZE_OPTIONS,
@@ -16,124 +19,196 @@ import {
 
 interface MoveDateScreenProps {
   initialValue?: MoveDateOption
+  initialSpecificDate?: string
   homeSize: HomeSizeOption
   onBack?: () => void
-  onSubmit?: (value: MoveDateOption) => void
+  onSubmit?: (value: MoveDateOption, specificDate?: string) => void
 }
 
 /**
  * MoveDateScreen
  * 
- * Step 3 of 5 - "When are you planning to move?"
- * Vertical selection list with savings tags
+ * Step 4 of 5 - "When are you planning to move?"
+ * Two-column layout: left = savings info card, right = date selection
  */
 export function MoveDateScreen({ 
   initialValue,
+  initialSpecificDate,
   homeSize,
   onBack, 
   onSubmit 
 }: MoveDateScreenProps) {
   const [selected, setSelected] = React.useState<MoveDateOption | undefined>(initialValue)
+  const [specificDate, setSpecificDate] = React.useState<string>(initialSpecificDate || '')
   
   // Get price range for current home size
   const sizeOption = HOME_SIZE_OPTIONS.find(o => o.value === homeSize)
+  const sizeLabel = sizeOption?.label ?? 'Home'
   const priceRange = sizeOption?.priceRange ?? { low: 600, high: 1200 }
-  
-  // Calculate savings for selected date option
-  const selectedDateOption = MOVE_DATE_OPTIONS.find(o => o.value === selected)
-  const savingsPercent = selectedDateOption?.savingsPercent
-  const savingsRange = savingsPercent ? {
-    low: Math.round(priceRange.low * savingsPercent),
-    high: Math.round(priceRange.high * savingsPercent),
-  } : null
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (selected) {
-      onSubmit?.(selected)
+      onSubmit?.(selected, specificDate || undefined)
     }
   }
   
   return (
-    <FormLayout 
-      currentStep={4} 
-      onBack={onBack}
-      progressSubtitles={MOVING_PROGRESS_SUBTITLES}
-      progressTimeEstimates={MOVING_PROGRESS_TIME_ESTIMATES}
-      totalSteps={MOVING_TOTAL_STEPS}
-    >
-      <form onSubmit={handleSubmit} className="animate-slide-up has-sticky-button">
-        <div className="space-y-6">
-          {/* Step indicator */}
-          <div className="text-center">
-            <span className="text-body-sm text-neutral-500">Step 4 of 5</span>
-          </div>
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* Header */}
+      <Header />
+      
+      {/* Progress Indicator */}
+      <ProgressIndicator 
+        currentStep={4} 
+        onBack={onBack}
+        subtitles={MOVING_PROGRESS_SUBTITLES}
+        timeEstimates={MOVING_PROGRESS_TIME_ESTIMATES}
+        totalSteps={MOVING_TOTAL_STEPS}
+        unified
+      />
+      
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-24 sm:pb-8 flex-1">
+          {/* Page Headline */}
+          <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center mb-4 sm:mb-8">
+            When are you planning<br className="hidden sm:block" /> to move?
+          </h1>
           
-          {/* Headline */}
-          <div className="text-center space-y-2">
-            <h1 className="font-display text-2xl sm:text-3xl text-neutral-900">
-              When are you planning to move?
-            </h1>
-            <p className="text-body-sm text-neutral-500">
-              Book ahead and save — movers offer discounts for flexibility.
-            </p>
-          </div>
-          
-          {/* Selection List */}
-          <RadioGroup 
-            value={selected} 
-            onValueChange={(value) => setSelected(value as MoveDateOption)}
-            className="max-w-md mx-auto"
-          >
-            {MOVE_DATE_OPTIONS.map((option) => (
-              <RadioListItem
-                key={option.value}
-                value={option.value}
-                icon={<Calendar className="w-4 h-4" />}
-                tag={option.tag}
-                tagVariant={option.savingsPercent ? 'success' : 'default'}
-              >
-                {option.label}
-              </RadioListItem>
-            ))}
-          </RadioGroup>
-          
-          {/* Dynamic Savings Callout */}
-          {savingsRange && savingsRange.low > 0 && (
-            <div className="bg-feedback-success/10 border border-feedback-success/20 rounded-lg p-3 text-center max-w-md mx-auto animate-fade-in">
-              <p className="text-sm text-feedback-success font-medium">
-                Estimated savings: ${savingsRange.low.toLocaleString()}–${savingsRange.high.toLocaleString()}
-              </p>
-            </div>
-          )}
-          
-          {/* Pro Tip Card */}
-          <div className="bg-secondary-300 rounded-lg p-4 max-w-md mx-auto">
-            <div className="flex items-start gap-3">
-              <Lightbulb className="w-5 h-5 text-secondary-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-body-sm font-semibold text-neutral-800">Pro tip:</p>
-                <p className="text-body-sm text-neutral-600">
-                  Mid-week moves (Tue–Thu) are typically 15% cheaper than weekends.
+          {/* Two-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 items-center">
+            
+            {/* Left Column - Savings Info Card */}
+            <div className="animate-fade-in-up order-2 lg:order-1">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-card border border-gray-100">
+                {/* Mini Title */}
+                <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">
+                  Timing matters
                 </p>
+                
+                {/* Move Summary */}
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <p className="text-sm font-medium text-neutral-800 mb-3">Your move details</p>
+                  
+                  {/* Row 1 - Home Size */}
+                  <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+                    <span className="text-sm text-neutral-800">Your move</span>
+                    <span className="font-semibold text-neutral-900">{sizeLabel}</span>
+                  </div>
+                  
+                  {/* Row 2 - Price Range */}
+                  <div className="flex justify-between items-center pt-3">
+                    <span className="text-sm text-neutral-800">Est. cost range</span>
+                    <span className="font-semibold text-neutral-900">
+                      ${priceRange.low.toLocaleString()}–${priceRange.high.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Pro Tip */}
+                <div className="bg-secondary-300 rounded-lg p-4 mt-4 mb-4">
+                  <div className="flex items-start gap-3">
+                    <Lightbulb className="w-5 h-5 text-secondary-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-body-sm font-semibold text-neutral-800">Pro tip:</p>
+                      <p className="text-body-sm text-neutral-600">
+                        Mid-week moves (Tue–Thu) are typically 15% cheaper than weekends.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Key benefits */}
+                <p className="text-sm font-semibold text-neutral-900 mb-3">
+                  Why timing helps:
+                </p>
+                <div className="space-y-2">
+                  {[
+                    "Off-peak dates = lower mover rates",
+                    "More availability for top-rated movers",
+                    "Better scheduling flexibility"
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-feedback-success flex-shrink-0" />
+                      <p className="text-sm text-neutral-800">{item}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
+            
+            {/* Right Column - Date Selection */}
+            <div className="animate-fade-in-up order-1 lg:order-2">
+              <form id="date-form" onSubmit={handleSubmit}>
+                <p className="text-body text-neutral-500 mb-6">
+                  Knowing your timeline helps us match you with available movers.
+                </p>
+                
+                {/* Date Picker */}
+                <div className="mb-6">
+                  <DatePicker
+                    label="Select your move date"
+                    value={specificDate}
+                    onChange={(val) => setSpecificDate(val)}
+                    placeholder="Pick a date"
+                  />
+                </div>
+                
+                {/* Selection List */}
+                <RadioGroup 
+                  value={selected} 
+                  onValueChange={(value) => setSelected(value as MoveDateOption)}
+                >
+                  {MOVE_DATE_OPTIONS.map((option) => (
+                    <RadioListItem
+                      key={option.value}
+                      value={option.value}
+                      icon={<Calendar className="w-4 h-4" />}
+                      tag={option.tag}
+                      tagVariant={option.tag === 'Best value' ? 'success' : 'default'}
+                    >
+                      {option.label}
+                    </RadioListItem>
+                  ))}
+                </RadioGroup>
+                
+                {/* CTA - Desktop */}
+                <div className="hidden sm:block mt-6">
+                  <Button 
+                    type="submit" 
+                    fullWidth 
+                    showTrailingIcon
+                    disabled={!selected}
+                  >
+                    Continue
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
-          
-          {/* CTA */}
-          <StickyButtonContainer>
-            <Button 
-              type="submit" 
-              fullWidth 
-              showTrailingIcon
-              disabled={!selected}
-            >
-              Continue
-            </Button>
-          </StickyButtonContainer>
         </div>
-      </form>
-    </FormLayout>
+        
+        {/* CTA - Sticky on mobile */}
+        <StickyButtonContainer className="sm:hidden">
+          <Button 
+            type="submit" 
+            form="date-form"
+            fullWidth 
+            showTrailingIcon
+            disabled={!selected}
+          >
+            Continue
+          </Button>
+        </StickyButtonContainer>
+      </main>
+      
+      {/* Trust Badges */}
+      <TrustBadges />
+      
+      {/* Footer */}
+      <Footer />
+    </div>
   )
 }
 
