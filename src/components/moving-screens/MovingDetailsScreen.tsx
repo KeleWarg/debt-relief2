@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { User, Phone, Check, Clock, Shield, DollarSign, Star } from 'lucide-react'
+import { User, Phone, Check, Clock, Shield, DollarSign } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { TrustBadges } from '@/components/layout/TrustBadges'
@@ -112,7 +112,7 @@ export function MovingDetailsScreen({
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-24 sm:pb-8 flex-1">
           {/* Page Headline */}
           <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 text-center mb-4 sm:mb-8">
-            Almost there!
+            Get your free moving quotes
           </h1>
           
           {/* Two-column layout */}
@@ -171,21 +171,6 @@ export function MovingDetailsScreen({
                     <span className="text-caption text-neutral-500">No fees</span>
                   </div>
                 </div>
-                
-                {/* Review Card */}
-                <div className="bg-neutral-50 rounded-xl p-4">
-                  <div className="flex items-center gap-0.5 mb-2">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="w-4 h-4 text-secondary-500 fill-secondary-500" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-neutral-700 italic leading-relaxed">
-                    &quot;The whole process took less than 2 minutes. Had quotes in my inbox within the hour.&quot;
-                  </p>
-                  <p className="text-xs text-neutral-500 mt-2">
-                    — David M., Florida &bull; Studio move
-                  </p>
-                </div>
               </div>
             </div>
             
@@ -193,7 +178,7 @@ export function MovingDetailsScreen({
             <div className="animate-fade-in-up order-1 lg:order-2">
               <form id="details-form" onSubmit={handleSubmit}>
                 <p className="text-body text-neutral-500 mb-6">
-                  Just a few details to get your personalized quotes.
+                  Enter your name and phone number so licensed movers in your area can send you free, no-obligation estimates.
                 </p>
                 
                 {/* Form Fields */}

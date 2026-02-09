@@ -41,6 +41,17 @@ export function MoveDateScreen({
   const [selected, setSelected] = React.useState<MoveDateOption | undefined>(initialValue)
   const [specificDate, setSpecificDate] = React.useState<string>(initialSpecificDate || '')
   
+  // OR logic: picking a specific date clears the timeframe, and vice versa
+  const handleDateChange = (val: string) => {
+    setSpecificDate(val)
+    if (val) setSelected(undefined)
+  }
+  
+  const handleTimeframeChange = (value: string) => {
+    setSelected(value as MoveDateOption)
+    setSpecificDate('')
+  }
+  
   // Get price range for current home size
   const sizeOption = HOME_SIZE_OPTIONS.find(o => o.value === homeSize)
   const sizeLabel = sizeOption?.label ?? 'Home'
@@ -48,10 +59,15 @@ export function MoveDateScreen({
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (selected) {
-      onSubmit?.(selected, specificDate || undefined)
+    if (specificDate) {
+      // User picked a specific date — pass it without a timeframe
+      onSubmit?.(undefined as unknown as MoveDateOption, specificDate)
+    } else if (selected) {
+      onSubmit?.(selected, undefined)
     }
   }
+  
+  const canSubmit = !!selected || !!specificDate
   
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -146,19 +162,26 @@ export function MoveDateScreen({
                 </p>
                 
                 {/* Date Picker */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <DatePicker
                     label="Select your move date"
                     value={specificDate}
-                    onChange={(val) => setSpecificDate(val)}
+                    onChange={handleDateChange}
                     placeholder="Pick a date"
                   />
+                </div>
+                
+                {/* OR Divider */}
+                <div className="flex items-center gap-4 my-4">
+                  <div className="flex-1 h-px bg-neutral-200" />
+                  <span className="text-body-sm font-medium text-neutral-500 uppercase tracking-wider">or</span>
+                  <div className="flex-1 h-px bg-neutral-200" />
                 </div>
                 
                 {/* Selection List */}
                 <RadioGroup 
                   value={selected} 
-                  onValueChange={(value) => setSelected(value as MoveDateOption)}
+                  onValueChange={handleTimeframeChange}
                 >
                   {MOVE_DATE_OPTIONS.map((option) => (
                     <RadioListItem
@@ -179,7 +202,7 @@ export function MoveDateScreen({
                     type="submit" 
                     fullWidth 
                     showTrailingIcon
-                    disabled={!selected}
+                    disabled={!canSubmit}
                   >
                     Continue
                   </Button>
@@ -196,7 +219,7 @@ export function MoveDateScreen({
             form="date-form"
             fullWidth 
             showTrailingIcon
-            disabled={!selected}
+            disabled={!canSubmit}
           >
             Continue
           </Button>
