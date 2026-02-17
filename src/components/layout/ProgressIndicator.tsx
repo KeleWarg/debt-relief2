@@ -94,6 +94,76 @@ export function ProgressIndicator({
   // Get subtitle for current step
   const subtitle = subtitles[currentStep] || 'Continue your application'
 
+  if (unified) {
+    return (
+      <div className={cn('w-full bg-white sticky top-12 z-40', className)}>
+        {/* Full-width progress track */}
+        <div className="relative w-full pb-10">
+          {/* Track background */}
+          <div className="w-full h-[5px] bg-[#F3F5FB] overflow-hidden">
+            <div
+              className="h-full bg-[#003186]"
+              style={{ width: `${unifiedFill}%`, transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)' }}
+            />
+          </div>
+
+          {/* Percentage badge positioned at the end of the fill */}
+          <div
+            className="absolute top-[5px]"
+            style={{
+              left: `clamp(24px, ${unifiedFill}%, calc(100% - 24px))`,
+              transform: 'translateX(-50%)',
+              transition: 'left 1s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+          >
+            {/* Upward-pointing arrow */}
+            <div className="flex justify-center">
+              <div
+                className="w-2 h-2 bg-[#003186]"
+                style={{ transform: 'rotate(45deg)', marginBottom: '-4px' }}
+              />
+            </div>
+            {/* Badge */}
+            <div className="px-2 py-[5px] bg-[#003186] rounded-[5px] flex items-center justify-center">
+              <span className="text-[#F3F5FB] text-base font-semibold leading-5 whitespace-nowrap">
+                {unifiedFill}%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Back button below progress bar */}
+        {onBack && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-2 pb-1">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 text-neutral-900 hover:text-primary-700 transition-colors"
+              aria-label="Go back"
+            >
+              <svg
+                width="16"
+                height="24"
+                viewBox="0 0 16 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-5"
+              >
+                <path
+                  d="M10 6L4 12L10 18"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="text-sm font-normal leading-5">Back</span>
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className={cn('w-full bg-white sticky top-12 z-40', className)}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
@@ -131,38 +201,28 @@ export function ProgressIndicator({
           <span className="text-neutral-400">{getRemainingTime(currentStep, totalSteps, timeEstimates)}</span>
         </p>
 
-        {unified ? (
-          /* Unified continuous progress bar */
-          <div className="max-w-xs mx-auto h-1.5 rounded-full bg-[#D7DCE5] overflow-hidden">
-            <div 
-              className="h-full bg-[#0C7663] rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${unifiedFill}%` }}
-            />
-          </div>
-        ) : (
-          /* Segmented Progress Bar with progressive fill */
-          <div className="flex justify-center gap-1.5">
-            {[...Array(TOTAL_SEGMENTS)].map((_, index) => {
-              // Determine fill state for this segment
-              const isFull = index < fullSegments
-              const isPartial = index === fullSegments
-              
-              return (
-                <div
-                  key={index}
-                  className="h-1.5 rounded-full w-8 sm:w-10 md:w-12 bg-[#D7DCE5] overflow-hidden"
-                >
-                  <div 
-                    className="h-full bg-[#0C7663] rounded-full transition-all duration-500 ease-out"
-                    style={{ 
-                      width: isFull ? '100%' : isPartial ? `${partialFill}%` : '0%' 
-                    }}
-                  />
-                </div>
-              )
-            })}
-          </div>
-        )}
+        {/* Segmented Progress Bar with progressive fill */}
+        <div className="flex justify-center gap-1.5">
+          {[...Array(TOTAL_SEGMENTS)].map((_, index) => {
+            // Determine fill state for this segment
+            const isFull = index < fullSegments
+            const isPartial = index === fullSegments
+            
+            return (
+              <div
+                key={index}
+                className="h-1.5 rounded-full w-8 sm:w-10 md:w-12 bg-[#D7DCE5] overflow-hidden"
+              >
+                <div 
+                  className="h-full bg-[#0C7663] rounded-full transition-all duration-500 ease-out"
+                  style={{ 
+                    width: isFull ? '100%' : isPartial ? `${partialFill}%` : '0%' 
+                  }}
+                />
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

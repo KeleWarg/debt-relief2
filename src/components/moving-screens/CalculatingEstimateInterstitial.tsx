@@ -203,7 +203,7 @@ export function EstimateAndEmailScreen({
                 {/* Status Badge */}
                 <div className="bg-green-50 rounded-lg p-4 mt-4 mb-4">
                   <p className="text-feedback-success font-medium">
-                    Status: ✓ Quotes available in your area
+                    Status: ✓ Movers available in your area
                   </p>
                   <p className="text-sm text-neutral-600 mt-1">
                     {contractorCount} licensed movers are ready to compete for your business.

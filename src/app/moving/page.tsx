@@ -86,7 +86,6 @@ export default function MovingPage() {
           <ZipcodesScreen
             initialFromZip={funnelData.zipFrom}
             initialToZip={funnelData.zipTo}
-            onBack={goToPreviousStep}
             onSubmit={({ zipFrom, zipTo }) => {
               updateFunnelData({ zipFrom, zipTo })
               goToNextStep()

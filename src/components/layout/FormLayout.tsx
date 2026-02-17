@@ -20,6 +20,8 @@ interface FormLayoutProps {
   totalSteps?: number
   /** Use a single continuous progress bar instead of segmented pills */
   progressUnified?: boolean
+  /** Trust badge variant: "default" (white) or "longevity" (dark green) */
+  trustBadgeVariant?: 'default' | 'longevity'
 }
 
 /**
@@ -47,7 +49,8 @@ export function FormLayout({
   progressSubtitles,
   progressTimeEstimates,
   totalSteps,
-  progressUnified
+  progressUnified,
+  trustBadgeVariant
 }: FormLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -121,7 +124,7 @@ export function FormLayout({
       </main>
       
       {/* Trust Badges */}
-      <TrustBadges />
+      <TrustBadges variant={trustBadgeVariant} />
       
       {/* Footer */}
       <Footer />

@@ -44,7 +44,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }, ref) => {
     const [showStarburst, setShowStarburst] = React.useState(false)
     
-    const baseStyles = 'flex items-center justify-center gap-2 font-semibold rounded-[8px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed max-w-[410px] mx-auto'
+    const baseStyles = 'flex items-center justify-center gap-2 font-semibold rounded-[8px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
     
     const variants = {
       primary: 'btn-continue bg-primary-700 !text-white hover:bg-primary-750 active:bg-primary-800',
