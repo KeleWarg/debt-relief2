@@ -99,14 +99,15 @@ export function ResultsScreen({ funnelData }: ResultsScreenProps) {
               you!
             </p>
           </div>
-          <div className="relative h-48 w-full md:h-auto md:w-[45%] lg:w-[40%]">
-            <div className="flex h-full min-h-[200px] items-end justify-end bg-neutral-200/50 p-8 md:min-h-[280px]">
-              <div className="flex flex-col items-end gap-2 text-right text-neutral-300">
-                <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-                </svg>
-              </div>
-            </div>
+          <div className="relative h-48 w-full md:min-h-[260px] md:w-[45%] lg:w-[40%]">
+            <Image
+              src="/results-hero.jpg"
+              alt="Person reviewing banking options"
+              fill
+              sizes="(max-width: 768px) 100vw, 45vw"
+              className="object-cover"
+              priority
+            />
           </div>
         </div>
       </section>
@@ -118,11 +119,11 @@ export function ResultsScreen({ funnelData }: ResultsScreenProps) {
           <h2 className="text-headline-md text-neutral-900">
             Top {accountLabel} Accounts for {dateString}
           </h2>
-          <div className="relative">
+          <div className="relative w-fit shrink-0">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none rounded border border-neutral-200 bg-white py-2.5 pl-4 pr-10 text-body-sm text-neutral-800 outline-none focus:border-primary-700 focus:ring-2 focus:ring-focus"
+              className="cursor-pointer appearance-none rounded border border-neutral-200 bg-white py-2 pl-4 pr-10 text-body-sm text-neutral-800 outline-none focus:border-primary-700 focus:ring-2 focus:ring-focus"
             >
               <option value="recommended">Sort By</option>
               <option value="apy-high">APY (High to Low)</option>
