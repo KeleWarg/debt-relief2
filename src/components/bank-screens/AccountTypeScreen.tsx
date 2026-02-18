@@ -10,10 +10,12 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { BankFormLayout } from '@/components/bank-layout'
+import type { TransitionDirection } from '@/components/bank-layout'
 import { BANK_ACCOUNT_TYPE_OPTIONS, BANK_TOTAL_QUESTIONS, type BankAccountType } from '@/types/banks'
 
 interface AccountTypeScreenProps {
   initialValue?: BankAccountType
+  direction?: TransitionDirection
   onSubmit?: (value: BankAccountType) => void
 }
 
@@ -24,7 +26,7 @@ const OPTION_ICONS: Record<BankAccountType, LucideIcon> = {
   'money-market': Wallet,
 }
 
-export function AccountTypeScreen({ initialValue, onSubmit }: AccountTypeScreenProps) {
+export function AccountTypeScreen({ initialValue, direction = 'none', onSubmit }: AccountTypeScreenProps) {
   const [selected, setSelected] = React.useState<BankAccountType | undefined>(initialValue)
 
   const handleSelect = (value: BankAccountType) => {
@@ -36,8 +38,10 @@ export function AccountTypeScreen({ initialValue, onSubmit }: AccountTypeScreenP
     <BankFormLayout
       answeredQuestions={selected ? 1 : 0}
       totalQuestions={BANK_TOTAL_QUESTIONS}
+      stepKey="accountType"
+      direction={direction}
     >
-      <div className="animate-slide-up">
+      <div>
         <h2 className="mb-8 text-2xl font-semibold text-neutral-900 sm:text-[28px] sm:leading-9">
           1. What type of account are you interested in?
         </h2>

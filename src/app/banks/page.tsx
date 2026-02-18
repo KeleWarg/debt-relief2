@@ -8,7 +8,9 @@ import {
   BankingServicesScreen,
   LocationScreen,
   PersonalInfoScreen,
+  ResultsScreen,
 } from '@/components/bank-screens'
+import type { TransitionDirection } from '@/components/bank-layout'
 import type {
   BankAccountType,
   BankConsideration,
@@ -23,6 +25,7 @@ type BankFunnelStep =
   | 'bankingServices'
   | 'location'
   | 'personalInfo'
+  | 'results'
 
 const STEP_ORDER: BankFunnelStep[] = [
   'accountType',
@@ -31,17 +34,20 @@ const STEP_ORDER: BankFunnelStep[] = [
   'bankingServices',
   'location',
   'personalInfo',
+  'results',
 ]
 
 export default function BanksPage() {
   const [currentStep, setCurrentStep] = React.useState<BankFunnelStep>('accountType')
   const [funnelData, setFunnelData] = React.useState<BankFunnelData>({})
+  const [direction, setDirection] = React.useState<TransitionDirection>('none')
 
   const updateFunnelData = (data: Partial<BankFunnelData>) => {
     setFunnelData((prev) => ({ ...prev, ...data }))
   }
 
-  const goToStep = (step: BankFunnelStep) => {
+  const goToStep = (step: BankFunnelStep, dir: TransitionDirection) => {
+    setDirection(dir)
     setCurrentStep(step)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -49,14 +55,14 @@ export default function BanksPage() {
   const goToNextStep = () => {
     const currentIndex = STEP_ORDER.indexOf(currentStep)
     if (currentIndex < STEP_ORDER.length - 1) {
-      goToStep(STEP_ORDER[currentIndex + 1])
+      goToStep(STEP_ORDER[currentIndex + 1], 'next')
     }
   }
 
   const goToPrevStep = () => {
     const currentIndex = STEP_ORDER.indexOf(currentStep)
     if (currentIndex > 0) {
-      goToStep(STEP_ORDER[currentIndex - 1])
+      goToStep(STEP_ORDER[currentIndex - 1], 'prev')
     }
   }
 
@@ -71,6 +77,7 @@ export default function BanksPage() {
         return (
           <AccountTypeScreen
             initialValue={funnelData.accountType}
+            direction={direction}
             onSubmit={(accountType: BankAccountType) => {
               updateFunnelData({ accountType })
               goToNextStep()
@@ -83,6 +90,7 @@ export default function BanksPage() {
           <MinimumBalanceScreen
             answeredCount={getAnsweredCount()}
             initialValue={funnelData.depositAmount}
+            direction={direction}
             onBack={goToPrevStep}
             onSubmit={(depositAmount: string) => {
               updateFunnelData({ depositAmount })
@@ -96,6 +104,7 @@ export default function BanksPage() {
           <AccountConsiderationsScreen
             answeredCount={getAnsweredCount()}
             initialValue={funnelData.consideration}
+            direction={direction}
             onBack={goToPrevStep}
             onSubmit={(consideration: BankConsideration) => {
               updateFunnelData({ consideration })
@@ -109,6 +118,7 @@ export default function BanksPage() {
           <BankingServicesScreen
             answeredCount={getAnsweredCount()}
             initialValue={funnelData.interestedServices}
+            direction={direction}
             onBack={goToPrevStep}
             onSubmit={(interestedServices: BankingService[]) => {
               updateFunnelData({ interestedServices })
@@ -123,6 +133,7 @@ export default function BanksPage() {
           <LocationScreen
             answeredCount={getAnsweredCount()}
             initialValue={funnelData.zipCode}
+            direction={direction}
             onBack={goToPrevStep}
             onSubmit={(zipCode: string) => {
               updateFunnelData({ zipCode })
@@ -136,16 +147,17 @@ export default function BanksPage() {
           <PersonalInfoScreen
             answeredCount={getAnsweredCount()}
             initialEmail={funnelData.email}
+            direction={direction}
             onBack={goToPrevStep}
             onSubmit={({ email, agreedToTerms }) => {
               updateFunnelData({ email, agreedToTerms })
-              // Final step -- this would normally redirect to results
-              // eslint-disable-next-line no-console
-              console.log('Funnel complete:', { ...funnelData, email, agreedToTerms })
-              alert('Funnel complete! Check console for data.')
+              goToNextStep()
             }}
           />
         )
+
+      case 'results':
+        return <ResultsScreen funnelData={funnelData} />
 
       default:
         return null

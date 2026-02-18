@@ -1,13 +1,22 @@
+'use client'
+
 import * as React from 'react'
+import { ArrowLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { BankSidebar } from './BankSidebar'
+import { BankMobileHeader } from './BankMobileHeader'
 import { BankProgressCounter } from './BankProgressCounter'
 import { BankFooter } from './BankFooter'
+
+export type TransitionDirection = 'next' | 'prev' | 'none'
 
 interface BankFormLayoutProps {
   children: React.ReactNode
   answeredQuestions: number
   totalQuestions: number
+  stepKey: string
+  direction?: TransitionDirection
+  onBack?: () => void
   className?: string
 }
 
@@ -15,24 +24,56 @@ export function BankFormLayout({
   children,
   answeredQuestions,
   totalQuestions,
+  stepKey,
+  direction = 'none',
+  onBack,
   className,
 }: BankFormLayoutProps) {
+  const incomingClass =
+    direction === 'next'
+      ? 'animate-slideInFromBottom'
+      : direction === 'prev'
+        ? 'animate-slideInFromTop'
+        : ''
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      {/* Split layout: indigo left panel + white right panel from the very top */}
-      <div className="flex flex-1">
-        {/* Left indigo panel (logo + sidebar) -- hidden on mobile */}
-        <BankSidebar className="hidden lg:flex lg:w-[42%]" />
+      <BankMobileHeader />
 
-        {/* Right white content panel */}
-        <main className="flex flex-1 flex-col bg-white">
-          <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1">
+        <BankSidebar className="hidden md:flex md:w-[50%] lg:w-[40%]" />
+
+        <main className="relative flex flex-1 flex-col bg-white pt-[42px] md:pt-0">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex w-full items-center justify-center gap-2 bg-white pt-7 pb-0 text-sm text-neutral-500 hover:text-neutral-700 md:hidden"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Go to previous question
+            </button>
+          )}
+
+          <div className="flex flex-1 items-center justify-center overflow-hidden">
             <div className={cn('w-full max-w-[540px] px-6 py-12 sm:px-10', className)}>
-              {children}
+              {onBack && (
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="mb-3 hidden items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 md:flex"
+                >
+                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                  Go to previous question
+                </button>
+              )}
+
+              <div key={stepKey} className={incomingClass}>
+                {children}
+              </div>
             </div>
           </div>
 
-          {/* Progress counter -- inside right panel only */}
           <BankProgressCounter
             answeredQuestions={answeredQuestions}
             totalQuestions={totalQuestions}
@@ -41,7 +82,6 @@ export function BankFormLayout({
         </main>
       </div>
 
-      {/* Dark footer -- full width */}
       <BankFooter />
     </div>
   )

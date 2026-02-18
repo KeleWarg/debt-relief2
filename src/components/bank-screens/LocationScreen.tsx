@@ -3,11 +3,13 @@
 import * as React from 'react'
 import { MapPin, Navigation } from 'lucide-react'
 import { BankFormLayout } from '@/components/bank-layout'
+import type { TransitionDirection } from '@/components/bank-layout'
 import { BANK_TOTAL_QUESTIONS } from '@/types/banks'
 
 interface LocationScreenProps {
   answeredCount: number
   initialValue?: string
+  direction?: TransitionDirection
   onBack?: () => void
   onSubmit?: (zipCode: string) => void
 }
@@ -15,6 +17,7 @@ interface LocationScreenProps {
 export function LocationScreen({
   answeredCount,
   initialValue = '',
+  direction = 'none',
   onBack,
   onSubmit,
 }: LocationScreenProps) {
@@ -85,14 +88,16 @@ export function LocationScreen({
     <BankFormLayout
       answeredQuestions={answeredCount}
       totalQuestions={BANK_TOTAL_QUESTIONS}
+      stepKey="location"
+      direction={direction}
+      onBack={onBack}
     >
-      <div className="animate-slide-up">
+      <div>
         <h2 className="mb-8 text-2xl font-semibold text-neutral-900 sm:text-[28px] sm:leading-9">
           5. Where are you located?
         </h2>
 
         <div className="space-y-4">
-          {/* Zip code input */}
           <div className="relative">
             <MapPin className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
             <input
@@ -115,7 +120,6 @@ export function LocationScreen({
             <p className="text-sm text-feedback-error">{error}</p>
           )}
 
-          {/* Use current location */}
           <button
             type="button"
             onClick={handleUseLocation}
@@ -126,7 +130,6 @@ export function LocationScreen({
             {locating ? 'Detecting location...' : 'Use my current location'}
           </button>
 
-          {/* Continue button */}
           <button
             type="button"
             onClick={() => validateAndSubmit(zipCode)}
@@ -136,16 +139,6 @@ export function LocationScreen({
             Continue
           </button>
         </div>
-
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="mt-6 text-sm font-medium text-[#5B5FC7] hover:underline"
-          >
-            Back
-          </button>
-        )}
       </div>
     </BankFormLayout>
   )

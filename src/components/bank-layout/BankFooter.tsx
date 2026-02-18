@@ -9,7 +9,7 @@ interface BankFooterProps {
 export function BankFooter({ className }: BankFooterProps) {
   return (
     <footer className={className}>
-      <div className="bg-black px-6 py-2.5 sm:px-10">
+      <div className="hidden bg-black px-6 py-2.5 md:block md:px-10">
         <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-y-2">
           {/* Left group: A PRODUCT OF + Forbes logo | Trust text */}
           <div className="flex items-center gap-4">

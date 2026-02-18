@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { ChevronRight } from 'lucide-react'
 import { BankFormLayout } from '@/components/bank-layout'
+import type { TransitionDirection } from '@/components/bank-layout'
 import {
   BANK_BALANCE_OPTIONS,
   BANK_BALANCE_VALIDATION,
@@ -12,6 +13,7 @@ import {
 interface MinimumBalanceScreenProps {
   answeredCount: number
   initialValue?: string
+  direction?: TransitionDirection
   onBack?: () => void
   onSubmit?: (value: string) => void
 }
@@ -19,6 +21,7 @@ interface MinimumBalanceScreenProps {
 export function MinimumBalanceScreen({
   answeredCount,
   initialValue,
+  direction = 'none',
   onBack,
   onSubmit,
 }: MinimumBalanceScreenProps) {
@@ -77,8 +80,11 @@ export function MinimumBalanceScreen({
     <BankFormLayout
       answeredQuestions={answeredCount}
       totalQuestions={BANK_TOTAL_QUESTIONS}
+      stepKey="minimumBalance"
+      direction={direction}
+      onBack={onBack}
     >
-      <div className="animate-slide-up">
+      <div>
         <h2 className="mb-8 text-2xl font-semibold text-neutral-900 sm:text-[28px] sm:leading-9">
           2. What is your preferred minimum account balance?
         </h2>
@@ -107,7 +113,6 @@ export function MinimumBalanceScreen({
             )
           })}
 
-          {/* Custom amount option */}
           {!showCustom ? (
             <button
               type="button"
@@ -156,16 +161,6 @@ export function MinimumBalanceScreen({
             </div>
           )}
         </div>
-
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="mt-6 text-sm font-medium text-[#5B5FC7] hover:underline"
-          >
-            Back
-          </button>
-        )}
       </div>
     </BankFormLayout>
   )

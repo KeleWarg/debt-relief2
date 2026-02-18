@@ -194,6 +194,42 @@
   animation: slideUp 0.3s ease-out;
 }
 
+@keyframes slideInFromBottom {
+  from { transform: translateY(300%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-300%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideOutToTop {
+  from { transform: translateY(0); }
+  to { transform: translateY(-300%); }
+}
+
+@keyframes slideOutToBottom {
+  from { transform: translateY(0); }
+  to { transform: translateY(300%); }
+}
+
+.animate-slideInFromBottom {
+  animation: slideInFromBottom 0.5s ease-out;
+}
+
+.animate-slideInFromTop {
+  animation: slideInFromTop 0.5s ease-out;
+}
+
+.animate-slideOutToTop {
+  animation: slideOutToTop 0.5s ease-in;
+}
+
+.animate-slideOutToBottom {
+  animation: slideOutToBottom 0.5s ease-in;
+}
+
 /* Map Pin Floating Animation */
 @keyframes float {
   0%, 100% {

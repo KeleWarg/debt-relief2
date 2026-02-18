@@ -3,11 +3,13 @@
 import * as React from 'react'
 import { Mail } from 'lucide-react'
 import { BankFormLayout } from '@/components/bank-layout'
+import type { TransitionDirection } from '@/components/bank-layout'
 import { BANK_TOTAL_QUESTIONS } from '@/types/banks'
 
 interface PersonalInfoScreenProps {
   answeredCount: number
   initialEmail?: string
+  direction?: TransitionDirection
   onBack?: () => void
   onSubmit?: (data: { email: string; agreedToTerms: boolean }) => void
 }
@@ -15,6 +17,7 @@ interface PersonalInfoScreenProps {
 export function PersonalInfoScreen({
   answeredCount,
   initialEmail = '',
+  direction = 'none',
   onBack,
   onSubmit,
 }: PersonalInfoScreenProps) {
@@ -55,14 +58,16 @@ export function PersonalInfoScreen({
     <BankFormLayout
       answeredQuestions={answeredCount}
       totalQuestions={BANK_TOTAL_QUESTIONS}
+      stepKey="personalInfo"
+      direction={direction}
+      onBack={onBack}
     >
-      <div className="animate-slide-up">
+      <div>
         <h2 className="mb-8 text-2xl font-semibold text-neutral-900 sm:text-[28px] sm:leading-9">
           6. Where can we send your offers?
         </h2>
 
         <div className="space-y-4">
-          {/* Email input */}
           <div className="relative">
             <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
             <input
@@ -82,7 +87,6 @@ export function PersonalInfoScreen({
             />
           </div>
 
-          {/* Terms & Conditions checkbox */}
           <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-neutral-200 bg-white p-4">
             <input
               type="checkbox"
@@ -129,7 +133,6 @@ export function PersonalInfoScreen({
             <p className="text-sm text-feedback-error">{error}</p>
           )}
 
-          {/* Submit button */}
           <button
             type="button"
             onClick={handleSubmit}
@@ -138,16 +141,6 @@ export function PersonalInfoScreen({
             See your matches
           </button>
         </div>
-
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="mt-6 text-sm font-medium text-[#5B5FC7] hover:underline"
-          >
-            Back
-          </button>
-        )}
       </div>
     </BankFormLayout>
   )

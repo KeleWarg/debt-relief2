@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Check } from 'lucide-react'
 import { BankFormLayout } from '@/components/bank-layout'
+import type { TransitionDirection } from '@/components/bank-layout'
 import {
   BANK_SERVICE_OPTIONS,
   BANK_TOTAL_QUESTIONS,
@@ -12,6 +13,7 @@ import {
 interface BankingServicesScreenProps {
   answeredCount: number
   initialValue?: BankingService[]
+  direction?: TransitionDirection
   onBack?: () => void
   onSubmit?: (value: BankingService[]) => void
   onSkip?: () => void
@@ -20,6 +22,7 @@ interface BankingServicesScreenProps {
 export function BankingServicesScreen({
   answeredCount,
   initialValue = [],
+  direction = 'none',
   onBack,
   onSubmit,
   onSkip,
@@ -42,8 +45,11 @@ export function BankingServicesScreen({
     <BankFormLayout
       answeredQuestions={answeredCount}
       totalQuestions={BANK_TOTAL_QUESTIONS}
+      stepKey="bankingServices"
+      direction={direction}
+      onBack={onBack}
     >
-      <div className="animate-slide-up">
+      <div>
         <h2 className="mb-8 text-2xl font-semibold text-neutral-900 sm:text-[28px] sm:leading-9">
           4. What other banking services or financial products are you interested in exploring?
         </h2>
@@ -87,17 +93,8 @@ export function BankingServicesScreen({
           </button>
         )}
 
-        <div className="mt-4 flex items-center gap-4">
-          {onBack && (
-            <button
-              type="button"
-              onClick={onBack}
-              className="text-sm font-medium text-[#5B5FC7] hover:underline"
-            >
-              Back
-            </button>
-          )}
-          {onSkip && (
+        {onSkip && (
+          <div className="mt-4 flex items-center gap-4">
             <button
               type="button"
               onClick={onSkip}
@@ -105,8 +102,8 @@ export function BankingServicesScreen({
             >
               Skip
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </BankFormLayout>
   )

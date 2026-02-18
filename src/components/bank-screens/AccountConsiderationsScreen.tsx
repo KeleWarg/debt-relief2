@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { ChevronRight } from 'lucide-react'
 import { BankFormLayout } from '@/components/bank-layout'
+import type { TransitionDirection } from '@/components/bank-layout'
 import {
   BANK_CONSIDERATION_OPTIONS,
   BANK_TOTAL_QUESTIONS,
@@ -12,6 +13,7 @@ import {
 interface AccountConsiderationsScreenProps {
   answeredCount: number
   initialValue?: BankConsideration
+  direction?: TransitionDirection
   onBack?: () => void
   onSubmit?: (value: BankConsideration) => void
 }
@@ -19,6 +21,7 @@ interface AccountConsiderationsScreenProps {
 export function AccountConsiderationsScreen({
   answeredCount,
   initialValue,
+  direction = 'none',
   onBack,
   onSubmit,
 }: AccountConsiderationsScreenProps) {
@@ -33,8 +36,11 @@ export function AccountConsiderationsScreen({
     <BankFormLayout
       answeredQuestions={answeredCount}
       totalQuestions={BANK_TOTAL_QUESTIONS}
+      stepKey="considerations"
+      direction={direction}
+      onBack={onBack}
     >
-      <div className="animate-slide-up">
+      <div>
         <h2 className="mb-8 text-2xl font-semibold text-neutral-900 sm:text-[28px] sm:leading-9">
           3. When considering a bank account, which of the following matters most to you?
         </h2>
@@ -63,16 +69,6 @@ export function AccountConsiderationsScreen({
             )
           })}
         </div>
-
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="mt-6 text-sm font-medium text-[#5B5FC7] hover:underline"
-          >
-            Back
-          </button>
-        )}
       </div>
     </BankFormLayout>
   )
