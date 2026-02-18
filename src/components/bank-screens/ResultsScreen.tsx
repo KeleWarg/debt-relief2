@@ -47,7 +47,8 @@ export function ResultsScreen({ funnelData }: ResultsScreenProps) {
   const [expandedFaq, setExpandedFaq] = React.useState<number>(0)
   const [sortBy, setSortBy] = React.useState('recommended')
 
-  const products = MOCK_BANK_PRODUCTS
+  const products = MOCK_BANK_PRODUCTS[accountType] ?? MOCK_BANK_PRODUCTS.checking
+  const faqItems = BANK_FAQ_ITEMS[accountType] ?? BANK_FAQ_ITEMS.checking
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE)
   const paginatedProducts = products.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -284,7 +285,7 @@ export function ResultsScreen({ funnelData }: ResultsScreenProps) {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <h2 className="mb-8 text-headline-md text-neutral-900">Frequently Asked Questions</h2>
           <div className="divide-y divide-neutral-200">
-            {BANK_FAQ_ITEMS.map((item, idx) => (
+            {faqItems.map((item, idx) => (
               <div key={idx}>
                 <button
                   type="button"
