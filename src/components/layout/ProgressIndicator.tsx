@@ -12,6 +12,8 @@ interface ProgressIndicatorProps {
   totalSteps?: number
   /** When true, renders a single continuous bar instead of segmented pills */
   unified?: boolean
+  /** Transition duration in ms for the unified bar animation (default: 500) */
+  transitionMs?: number
 }
 
 // Default debt relief subtitles
@@ -78,7 +80,8 @@ export function ProgressIndicator({
   subtitles = defaultSubtitles,
   timeEstimates = defaultTimeEstimates,
   totalSteps = DEFAULT_TOTAL_STEPS,
-  unified = false
+  unified = false,
+  transitionMs = 500
 }: ProgressIndicatorProps) {
   // Calculate how much of the total progress we've made (0 to 1)
   const totalProgress = currentStep / totalSteps
@@ -103,7 +106,7 @@ export function ProgressIndicator({
           <div className="w-full h-[5px] bg-[#F3F5FB] overflow-hidden">
             <div
               className="h-full bg-[#003186]"
-              style={{ width: `${unifiedFill}%`, transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)' }}
+              style={{ width: `${unifiedFill}%`, transition: `width ${transitionMs}ms ease-out` }}
             />
           </div>
 
@@ -113,7 +116,7 @@ export function ProgressIndicator({
             style={{
               left: `clamp(24px, ${unifiedFill}%, calc(100% - 24px))`,
               transform: 'translateX(-50%)',
-              transition: 'left 1s cubic-bezier(0.4, 0, 0.2, 1)',
+              transition: `left ${transitionMs}ms ease-out`,
             }}
           >
             {/* Upward-pointing arrow */}
