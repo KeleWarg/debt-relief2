@@ -734,7 +734,7 @@ function HeaderSpecimen() {
         <div className="px-6">
           <p className="text-xs text-neutral-400 mb-2">With trust text:</p>
         </div>
-        <Header trustText="Trusted by 100k+ people" />
+        <Header trustText="Trusted by XXk+ people" />
       </div>
     </Specimen>
   )
@@ -961,14 +961,14 @@ function MapVisualSpecimen() {
           <div className="py-2 flex flex-col gap-4 justify-center min-w-[180px]">
             <span className="text-sm font-medium text-primary-700">Texas</span>
             <div className="flex flex-col gap-1">
-              <div className="text-xs font-normal text-neutral-500">Avg. cost of service:</div>
+              <div className="text-xs font-normal text-neutral-500">Sample stat A:</div>
               <AnimatedCounter value={5340} prefix="$" className="font-display text-xl font-bold text-neutral-800" duration={800} />
             </div>
             <div className="flex flex-col gap-1">
-              <div className="text-xs font-normal text-neutral-500">Avg. savings:</div>
+              <div className="text-xs font-normal text-neutral-500">Sample stat B:</div>
               <AnimatedCounter value={6973} prefix="$" className="font-display text-xl font-bold text-neutral-800" duration={800} />
             </div>
-            <div className="text-[10px] text-neutral-400 mt-1">Source: Industry Report, 2024</div>
+            <div className="text-[10px] text-neutral-400 mt-1">Source: Sample Source</div>
           </div>
         </div>
       </div>
@@ -981,9 +981,9 @@ function MapVisualSpecimen() {
 // ===========================================================================
 
 const TESTIMONIALS = [
-  { quote: "I didn't know where to turn. This process helped me understand my options and take the right next step.", name: "Michael R.", location: "Florida", rating: 5 },
-  { quote: "The team was supportive and explained everything clearly. I finally have a plan.", name: "Sarah K.", location: "Ohio", rating: 5 },
-  { quote: "I was skeptical at first, but the process was simple and the guidance was invaluable.", name: "Jessica M.", location: "Texas", rating: 5 },
+  { quote: "I didn't know where to turn. This process helped me understand my options and take the right next step.", name: "Sample User A", location: "Sample Region", rating: 5 },
+  { quote: "The team was supportive and explained everything clearly. I finally have a plan.", name: "Sample User B", location: "Sample Region", rating: 5 },
+  { quote: "I was skeptical at first, but the process was simple and the guidance was invaluable.", name: "Sample User C", location: "Sample Region", rating: 5 },
 ]
 
 const PARTNER_LOGOS = [
@@ -1028,7 +1028,7 @@ function TestimonialCarouselSpecimen() {
             {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 text-secondary-500 fill-secondary-500" />)}
           </div>
           <p className="text-sm text-neutral-700 italic">&ldquo;Within 3 months of starting the program, I could finally see a path forward.&rdquo;</p>
-          <p className="text-xs text-neutral-500 mt-2">&mdash; Michael R., Texas</p>
+          <p className="text-xs text-neutral-500 mt-2">&mdash; Sample User A, Sample Region</p>
         </div>
       </div>
     </Specimen>
@@ -1085,7 +1085,7 @@ function SocialProofOverlaySpecimen() {
               <Users className="w-5 h-5 text-primary-700" />
             </div>
             <p className="text-sm text-neutral-800">
-              Your profile matches thousands of people in <strong>Texas</strong>. Our partners have worked with over <strong>5 million Americans</strong>.
+              Your profile matches thousands of people in your area. Our partners have worked with over <strong>X million people</strong>.
             </p>
           </div>
         </div>
@@ -1180,19 +1180,19 @@ function TrustIndicatorsSpecimen() {
           <div className="flex items-center justify-center gap-6 text-neutral-500">
             <div className="flex items-center gap-2"><Shield className="w-4 h-4" /><span className="text-xs">Secure &amp; Private</span></div>
             <div className="flex items-center gap-2"><Check className="w-4 h-4" /><span className="text-xs">No impact</span></div>
-            <div className="flex items-center gap-2"><Users className="w-4 h-4" /><span className="text-xs">1M+ Matched</span></div>
+            <div className="flex items-center gap-2"><Users className="w-4 h-4" /><span className="text-xs">XM+ Matched</span></div>
           </div>
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Stats style</p>
           <div className="flex justify-center items-center gap-6">
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">1M+</p><p className="text-xs text-neutral-500">People matched</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">XM+</p><p className="text-xs text-neutral-500">Sample stat</p></div>
             <div className="h-8 w-px bg-neutral-200" />
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">24/7</p><p className="text-xs text-neutral-500">US Support</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">24/7</p><p className="text-xs text-neutral-500">Sample stat</p></div>
             <div className="h-8 w-px bg-neutral-200" />
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">&#10003;</p><p className="text-xs text-neutral-500">No impact</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">&#10003;</p><p className="text-xs text-neutral-500">Sample stat</p></div>
             <div className="h-8 w-px bg-neutral-200" />
-            <div className="text-center"><Lock className="w-5 h-5 text-neutral-900 mx-auto" /><p className="text-xs text-neutral-500">Info is secure</p></div>
+            <div className="text-center"><Lock className="w-5 h-5 text-neutral-900 mx-auto" /><p className="text-xs text-neutral-500">Sample stat</p></div>
           </div>
         </div>
       </div>
@@ -1242,9 +1242,9 @@ function ProfileSnapshotSpecimen() {
           <div className="bg-neutral-100 rounded-lg p-4">
             <p className="text-sm font-medium text-neutral-800 mb-3">Your profile snapshot</p>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-neutral-500">Amount</span><span className="text-neutral-800 font-medium">$25,000</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Income</span><span className="text-neutral-800 font-medium">$60,000</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Score</span><span className="text-neutral-800 font-medium">42%</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Amount</span><span className="text-neutral-800 font-medium">$XX,XXX</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Income</span><span className="text-neutral-800 font-medium">$XX,XXX</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Score</span><span className="text-neutral-800 font-medium">XX%</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Status</span><span className="text-feedback-success font-medium">&#10003; Matches program requirements</span></div>
             </div>
           </div>
@@ -1253,11 +1253,11 @@ function ProfileSnapshotSpecimen() {
           <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Branded background</p>
           <div className="bg-primary-300 rounded-xl p-4">
             <h2 className="text-sm font-semibold text-neutral-900 mb-4">Your profile summary</h2>
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Amount</span><span className="text-sm text-neutral-800">$25,000</span></div>
+            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Amount</span><span className="text-sm text-neutral-800">$XX,XXX</span></div>
             <div className="h-px bg-neutral-300/50" />
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Income</span><span className="text-sm text-neutral-800">$60,000/year</span></div>
+            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Income</span><span className="text-sm text-neutral-800">$XX,XXX/year</span></div>
             <div className="h-px bg-neutral-300/50" />
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Score</span><span className="text-sm font-medium text-neutral-900">42%</span></div>
+            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Score</span><span className="text-sm font-medium text-neutral-900">XX%</span></div>
             <div className="h-px bg-neutral-300/50" />
             <div className="flex justify-between items-center py-2">
               <span className="text-sm text-neutral-600">Status</span>
@@ -1348,22 +1348,22 @@ function IconStatRowSpecimen() {
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Category A</p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. balance: $4,180</span></div>
-            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. rate: 24.7%</span></div>
+            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. balance: $X,XXX</span></div>
+            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. rate: XX.X%</span></div>
           </div>
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Category B</p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. balance: $11,676</span></div>
-            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. rate: 13%–18%</span></div>
+            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. balance: $XX,XXX</span></div>
+            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. rate: XX%–XX%</span></div>
           </div>
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Both / Mixed</p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. A: $4,180</span></div>
-            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. B: $11,676</span></div>
+            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. A: $X,XXX</span></div>
+            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. B: $XX,XXX</span></div>
           </div>
         </div>
       </div>
@@ -1385,9 +1385,9 @@ function DidYouKnowSpecimen() {
             <p className="font-semibold text-neutral-800">Did you know?</p>
           </div>
           <p className="text-sm text-neutral-800">
-            The average American pays over $6,000 a year in unnecessary fees — that&apos;s more than most car payments.
+            The average person pays over $X,XXX a year in unnecessary fees — that&apos;s more than most monthly bills.
           </p>
-          <p className="text-xs text-neutral-500 mt-2">Source: Industry Report, 2024</p>
+          <p className="text-xs text-neutral-500 mt-2">Source: Sample Source</p>
         </div>
         <div className="bg-secondary-300 border-l-4 border-secondary-500 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -1395,9 +1395,9 @@ function DidYouKnowSpecimen() {
             <p className="font-semibold text-neutral-800">Did you know?</p>
           </div>
           <p className="text-sm text-neutral-800">
-            Our partner programs have helped over 5 million Americans save more than $10 billion.
+            Our partner programs have helped over X million people save more than $XB+.
           </p>
-          <p className="text-xs text-neutral-500 mt-2">Source: Partner Network Report</p>
+          <p className="text-xs text-neutral-500 mt-2">Source: Sample Source</p>
         </div>
       </div>
     </Specimen>
@@ -1467,8 +1467,8 @@ function TrustStatsRowSpecimen() {
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Text values + icon mix</p>
           <div className="flex justify-center items-center gap-6">
             <div className="text-center">
-              <p className="text-lg font-bold text-neutral-900">1M+</p>
-              <p className="text-xs text-neutral-500">People matched</p>
+              <p className="text-lg font-bold text-neutral-900">XM+</p>
+              <p className="text-xs text-neutral-500">Sample stat</p>
             </div>
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center">
@@ -1507,7 +1507,7 @@ function TrustStatsRowSpecimen() {
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center">
               <Users className="w-5 h-5 text-neutral-500 mx-auto" />
-              <p className="text-xs text-neutral-500 mt-1">1M+ Matched</p>
+              <p className="text-xs text-neutral-500 mt-1">XM+ Matched</p>
             </div>
           </div>
         </div>
@@ -1579,7 +1579,7 @@ function LegalConsentSpecimen() {
 function SourceAttributionSpecimen() {
   return (
     <Specimen id="source-attribution" title="Source Attribution" description="Tiny data source credit line.">
-      <div className="text-[10px] text-neutral-400">Source: Industry Report, 2024</div>
+      <div className="text-[10px] text-neutral-400">Source: Sample Source</div>
     </Specimen>
   )
 }
@@ -1603,8 +1603,8 @@ function ContextCardSpecimen() {
           {/* Potential Savings */}
           <div className="bg-secondary-300 rounded-lg p-4 mb-5">
             <p className="text-xs text-neutral-600">Potential Savings</p>
-            <p className="text-2xl font-bold text-feedback-success">$28,800*</p>
-            <p className="text-xs text-neutral-600 mt-0.5">Timeline: 24-36 months</p>
+            <p className="text-2xl font-bold text-feedback-success">$XX,XXX*</p>
+            <p className="text-xs text-neutral-600 mt-0.5">Timeline: XX-XX months</p>
           </div>
 
           {/* Score header row */}
@@ -1614,7 +1614,7 @@ function ContextCardSpecimen() {
               <span className="text-sm text-neutral-800">Key Ratio</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-neutral-900">53%</span>
+              <span className="text-sm font-bold text-neutral-900">XX%</span>
               <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Elevated</span>
             </div>
           </div>
@@ -1625,8 +1625,8 @@ function ContextCardSpecimen() {
               <span className="text-sm text-neutral-500 flex items-center gap-1">Category <HelpCircle className="w-3.5 h-3.5 text-neutral-400" /></span>
               <span className="text-sm font-semibold text-neutral-900">Plan Type</span>
             </div>
-            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Amount</span><span className="text-sm font-semibold text-neutral-900">$72,000</span></div>
-            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Annual Income</span><span className="text-sm font-semibold text-neutral-900">$135,000</span></div>
+            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Amount</span><span className="text-sm font-semibold text-neutral-900">$XX,XXX</span></div>
+            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Annual Income</span><span className="text-sm font-semibold text-neutral-900">$XXX,XXX</span></div>
           </div>
 
           {/* Approach Tags */}
@@ -1735,23 +1735,23 @@ function PartnerMatchCardSpecimen() {
             <img src="/freedom-debt-relief_logo.png" alt="Partner" className="w-16 h-16 object-contain" />
             <div>
               <p className="text-xs text-primary-700 font-medium uppercase">Top Match for Your Profile</p>
-              <h3 className="text-xl font-bold text-neutral-900">Partner Name</h3>
-              <p className="text-sm text-neutral-500 mt-1">One of America&apos;s largest and most trusted providers in this category.</p>
+              <h3 className="text-xl font-bold text-neutral-900">Sample Partner</h3>
+              <p className="text-sm text-neutral-500 mt-1">One of the largest and most trusted providers in this category.</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-neutral-100">
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">15-25%</p><p className="text-xs text-neutral-500">Avg. Fee</p></div>
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">A+</p><p className="text-xs text-neutral-500">BBB Rating</p></div>
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">24-48 mo</p><p className="text-xs text-neutral-500">Avg. Timeline</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">XX-XX%</p><p className="text-xs text-neutral-500">Avg. Fee</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">A+</p><p className="text-xs text-neutral-500">Industry Rating</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">XX-XX mo</p><p className="text-xs text-neutral-500">Avg. Timeline</p></div>
           </div>
           <div className="grid grid-cols-2 gap-3 mt-6">
-            {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ resolved', 'Dedicated advisor'].map((f, i) => (
+            {['No upfront fees', 'Free consultation', 'Top industry rating', '24/7 support', '$XB+ resolved', 'Dedicated advisor'].map((f, i) => (
               <div key={i} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-feedback-success" /><span className="text-sm text-neutral-800">{f}</span></div>
             ))}
           </div>
           <div className="flex items-center gap-2 mt-6 pt-4 border-t border-neutral-100">
             <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}</div>
-            <span className="text-sm text-neutral-500">4.7/5 from 10,000+ reviews</span>
+            <span className="text-sm text-neutral-500">X.X/5 from X,XXX+ reviews</span>
           </div>
         </div>
       </div>
@@ -1778,9 +1778,9 @@ function WhatToExpectSpecimen() {
 function FAQAccordionSpecimen() {
   const [open, setOpen] = React.useState<number | null>(null)
   const faqs = [
-    { q: 'How much does this service cost?', a: 'Providers typically charge 15-25% of the total amount, on a performance-based fee structure.' },
-    { q: 'How long does the process take?', a: 'Most programs take 24-48 months depending on the amount and complexity.' },
-    { q: 'Will it affect my credit score?', a: 'Some programs can temporarily lower your score, but many people recover over time.' },
+    { q: 'How much does this service cost?', a: 'Providers typically charge XX-XX% of the total amount, on a performance-based fee structure.' },
+    { q: 'How long does the process take?', a: 'Most programs take XX-XX months depending on the amount and complexity.' },
+    { q: 'Will it affect my score?', a: 'Some programs can temporarily lower your score, but many people recover over time.' },
   ]
   return (
     <Specimen id="faq-accordion" title="FAQ Accordion" description="Expandable Q&A list. Used on results pages.">
@@ -1802,7 +1802,7 @@ function FAQAccordionSpecimen() {
 function EducationalStepsSpecimen() {
   const steps = [
     { title: 'Research providers', desc: 'Identify reputable companies by reading reviews and checking credentials.' },
-    { title: 'Verify credentials', desc: 'Check accreditation with industry bodies like the BBB.' },
+    { title: 'Verify credentials', desc: 'Check accreditation with relevant industry bodies.' },
     { title: 'Schedule a consultation', desc: 'Most providers offer free initial consultations.' },
   ]
   return (
@@ -1827,7 +1827,7 @@ function CallCTACardSpecimen() {
       <div className="bg-white rounded-2xl border border-neutral-200 p-5 max-w-xs">
         <h4 className="font-semibold text-neutral-900 mb-3">Can&apos;t wait for the call?</h4>
         <a href="#" className="flex items-center justify-center gap-2 w-full bg-primary-700 text-white py-3 rounded-[8px] font-semibold hover:bg-primary-750 transition">
-          <Phone className="w-5 h-5" />Call Now: 800-808-6539
+          <Phone className="w-5 h-5" />Call Now: 800-XXX-XXXX
         </a>
         <p className="text-xs text-neutral-500 text-center mt-3">Speak with a specialist immediately</p>
         <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-neutral-100">
@@ -1943,7 +1943,7 @@ function ResultsPatternSpecimen() {
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Feature Grid (embedded in partner cards)</p>
           <div className="border border-neutral-200 rounded-lg bg-neutral-50 p-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-md">
-              {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ resolved', 'Dedicated advisor'].map((f, i) => (
+              {['No upfront fees', 'Free consultation', 'Top industry rating', '24/7 support', '$XB+ resolved', 'Dedicated advisor'].map((f, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0" />
                   <span className="text-sm text-neutral-800">{f}</span>
