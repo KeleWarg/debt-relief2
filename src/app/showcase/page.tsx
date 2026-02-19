@@ -115,7 +115,7 @@ const NAV: NavSection[] = [
     id: 'social-proof',
     label: 'Social Proof',
     children: [
-      { id: 'testimonial-carousel', label: 'Testimonial Carousel' },
+      { id: 'testimonial-card', label: 'Testimonial Card' },
       { id: 'partner-logo-carousel', label: 'Partner Logo Carousel' },
       { id: 'social-proof-overlay', label: 'Social Proof Overlay' },
       { id: 'trust-indicators', label: 'Trust Indicators' },
@@ -373,7 +373,7 @@ export default function ShowcasePage() {
         {/* ================================================================ */}
         <SectionHeader id="social-proof" label="Social Proof" />
 
-        <TestimonialCarouselSpecimen />
+        <TestimonialCardSpecimen />
         <PartnerLogoCarouselSpecimen />
         <SocialProofOverlaySpecimen />
         <TrustIndicatorsSpecimen />
@@ -994,41 +994,24 @@ const PARTNER_LOGOS = [
   { src: '/National_logo.png', alt: 'Partner E' },
 ]
 
-function TestimonialCarouselSpecimen() {
-  const [idx, setIdx] = React.useState(0)
-  const t = TESTIMONIALS[idx]
+function TestimonialCardSpecimen() {
+  const t = TESTIMONIALS[0]
   return (
     <Specimen
-      id="testimonial-carousel"
-      title="Testimonial Carousel"
-      description="Rotating quote cards with star ratings and progress dots. Used on profile and verification screens."
+      id="testimonial-card"
+      title="Testimonial Card"
+      description="Quote card with star rating and attribution. Used on profile, verification, and sidebar screens."
     >
-      <div className="max-w-md space-y-4">
-        <div className="border border-gray-100 rounded-xl p-5">
+      <div className="max-w-md">
+        <div className="bg-neutral-50 rounded-xl p-5">
           <Quote className="w-6 h-6 text-gray-200 mb-2" />
           <p className="text-sm text-neutral-800 italic leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-          <div className="flex gap-1 mt-3">
+          <div className="flex gap-0.5 mt-3">
             {[...Array(t.rating)].map((_, i) => (
               <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
             ))}
           </div>
           <p className="text-xs text-neutral-500 mt-2">&mdash; {t.name}, {t.location}</p>
-          <div className="flex justify-center gap-1.5 mt-4">
-            {TESTIMONIALS.map((_, i) => (
-              <button key={i} onClick={() => setIdx(i)} className="p-1">
-                <span className={cn('h-1.5 rounded-full transition-all block', i === idx ? 'bg-primary-700 w-3' : 'bg-gray-300 w-1.5')} />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <p className="text-xs font-medium text-neutral-400 uppercase">Single Review Card variant</p>
-        <div className="bg-neutral-50 rounded-xl p-4">
-          <div className="flex items-center gap-0.5 mb-2">
-            {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 text-secondary-500 fill-secondary-500" />)}
-          </div>
-          <p className="text-sm text-neutral-700 italic">&ldquo;Within 3 months of starting the program, I could finally see a path forward.&rdquo;</p>
-          <p className="text-xs text-neutral-500 mt-2">&mdash; Sample User A, Sample Region</p>
         </div>
       </div>
     </Specimen>
@@ -1750,7 +1733,7 @@ function ContextCardSpecimen() {
               { ref: '#value-checklist', label: 'Value Checklist', desc: 'Check icons + unlock benefit text' },
               { ref: '#partner-logo-carousel', label: 'Partner Logos', desc: 'Scrolling or static logo strip' },
               { ref: '#source-attribution', label: 'Source Attribution', desc: 'Disclaimer / footnote text' },
-              { ref: '#testimonial-carousel', label: 'Testimonial Card', desc: 'Quote, stars, attribution (optional)' },
+              { ref: '#testimonial-card', label: 'Testimonial Card', desc: 'Quote, stars, attribution (optional)' },
             ].map((sub) => (
               <a key={sub.ref} href={sub.ref} className="border border-dashed border-primary-700/30 rounded-lg p-2.5 bg-primary-300/10 hover:bg-primary-300/20 transition-colors flex items-baseline justify-between gap-2">
                 <p className="text-xs font-semibold text-primary-700">{sub.label}</p>
