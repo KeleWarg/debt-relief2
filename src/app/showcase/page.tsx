@@ -1286,17 +1286,19 @@ function SupportBoxSpecimen() {
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">3-column grid</p>
           <div className="max-w-lg">
-            <div className="w-full bg-[#FEF9EF] rounded-lg p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="flex items-start gap-3">
-                <Users className="w-5 h-5 text-neutral-900 flex-shrink-0 mt-0.5" />
+            <div className="w-full bg-[#FEF9EF] rounded-lg p-4 flex flex-col sm:flex-row items-stretch gap-4">
+              <div className="flex-1 flex items-center gap-3">
+                <Users className="w-5 h-5 text-neutral-900 flex-shrink-0" />
                 <p className="text-sm text-neutral-900">XM+ people matched with a partner</p>
               </div>
-              <div className="flex items-start gap-3">
-                <Shield className="w-5 h-5 text-neutral-900 flex-shrink-0 mt-0.5" />
+              <div className="h-px sm:h-auto sm:w-px bg-[#C0C0C0]" />
+              <div className="flex-1 flex items-center gap-3">
+                <Shield className="w-5 h-5 text-neutral-900 flex-shrink-0" />
                 <p className="text-sm text-neutral-900">Vetted, accredited provider network</p>
               </div>
-              <div className="flex items-start gap-3">
-                <Gift className="w-5 h-5 text-neutral-900 flex-shrink-0 mt-0.5" />
+              <div className="h-px sm:h-auto sm:w-px bg-[#C0C0C0]" />
+              <div className="flex-1 flex items-center gap-3">
+                <Gift className="w-5 h-5 text-neutral-900 flex-shrink-0" />
                 <p className="text-sm text-neutral-900">Free consultation, no upfront fees</p>
               </div>
             </div>
