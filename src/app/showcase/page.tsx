@@ -1234,35 +1234,16 @@ function ProfileSnapshotSpecimen() {
     <Specimen
       id="profile-snapshot"
       title="Profile Snapshot"
-      description="Key-value summary card showing user-submitted data. Light and branded background variants."
+      description="Key-value summary card showing user-submitted data with divider rows and status line."
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Light background</p>
-          <div className="bg-neutral-100 rounded-lg p-4">
-            <p className="text-sm font-medium text-neutral-800 mb-3">Your profile snapshot</p>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-neutral-500">Amount</span><span className="text-neutral-800 font-medium">$XX,XXX</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Income</span><span className="text-neutral-800 font-medium">$XX,XXX</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Score</span><span className="text-neutral-800 font-medium">XX%</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">Status</span><span className="text-feedback-success font-medium">&#10003; Matches program requirements</span></div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Branded background</p>
-          <div className="bg-primary-300 rounded-xl p-4">
-            <h2 className="text-sm font-semibold text-neutral-900 mb-4">Your profile summary</h2>
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Amount</span><span className="text-sm text-neutral-800">$XX,XXX</span></div>
-            <div className="h-px bg-neutral-300/50" />
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Income</span><span className="text-sm text-neutral-800">$XX,XXX/year</span></div>
-            <div className="h-px bg-neutral-300/50" />
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Score</span><span className="text-sm font-medium text-neutral-900">XX%</span></div>
-            <div className="h-px bg-neutral-300/50" />
-            <div className="flex justify-between items-center py-2">
-              <span className="text-sm text-neutral-600">Status</span>
-              <span className="text-sm font-medium text-feedback-success flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" />Matches program requirements</span>
-            </div>
+      <div className="max-w-sm">
+        <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-200">
+          <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Amount</span><span className="text-sm font-medium text-neutral-800">$XX,XXX</span></div>
+          <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Income</span><span className="text-sm font-medium text-neutral-800">$XX,XXX/year</span></div>
+          <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Score</span><span className="text-sm font-medium text-neutral-900">XX%</span></div>
+          <div className="flex justify-between items-center px-4 py-3">
+            <span className="text-sm text-neutral-500">Status</span>
+            <span className="text-sm font-medium text-feedback-success flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" />Matches program requirements</span>
           </div>
         </div>
       </div>
@@ -1619,6 +1600,12 @@ function ContextCardSpecimen() {
             </div>
           </div>
 
+          {/* Status Banner */}
+          <div className="bg-green-50 rounded-lg p-3 mb-4">
+            <p className="text-feedback-success text-sm font-medium">&#10003; Matches multiple programs</p>
+            <p className="text-xs text-neutral-600 mt-0.5">Your profile is a strong fit for the programs we partner with.</p>
+          </div>
+
           {/* Snapshot rows */}
           <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-200 mb-5">
             <div className="flex justify-between items-center px-4 py-3">
@@ -1673,6 +1660,7 @@ function ContextCardSpecimen() {
           <div className="space-y-2">
             {[
               { ref: '#profile-snapshot', label: 'Profile Snapshot', desc: 'Key-value rows: amount, income, score' },
+              { ref: '#status-banner', label: 'Status Banner', desc: 'Green status check + encouragement' },
               { ref: '#score-badge', label: 'Score Badge', desc: 'Colored pill: Low / Moderate / Elevated' },
               { ref: '#approach-tags', label: 'Approach Tags', desc: 'Icon pills: recommended approaches' },
               { ref: '#value-checklist', label: 'Value Checklist', desc: 'Check icons + unlock benefit text' },
