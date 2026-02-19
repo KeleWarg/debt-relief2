@@ -134,8 +134,8 @@ const NAV: NavSection[] = [
     id: 'data-cards',
     label: 'Data Cards',
     children: [
-      { id: 'debt-snapshot', label: 'Debt Snapshot Card' },
-      { id: 'dti-badge', label: 'DTI Ratio Badge' },
+      { id: 'profile-snapshot', label: 'Profile Snapshot' },
+      { id: 'score-badge', label: 'Score Badge' },
       { id: 'status-banner', label: 'Status Banner' },
       { id: 'approach-tags', label: 'Approach Tags' },
       { id: 'value-checklist', label: 'Value Checklist' },
@@ -157,7 +157,7 @@ const NAV: NavSection[] = [
     label: 'Disclaimers',
     children: [
       { id: 'privacy-note', label: 'Privacy Note' },
-      { id: 'credit-reassurance', label: 'Credit Reassurance' },
+      { id: 'reassurance', label: 'Reassurance' },
       { id: 'legal-consent', label: 'Legal Consent Block' },
       { id: 'source-attribution', label: 'Source Attribution' },
     ],
@@ -262,7 +262,7 @@ export default function ShowcasePage() {
       <aside className="hidden lg:block w-64 flex-shrink-0 border-r border-neutral-200 bg-white sticky top-0 h-screen overflow-y-auto">
         <div className="p-4 border-b border-neutral-200">
           <p className="text-sm font-bold text-neutral-900">Component Showcase</p>
-          <p className="text-xs text-neutral-500 mt-0.5">Debt Relief Funnel</p>
+          <p className="text-xs text-neutral-500 mt-0.5">Lead Gen Funnel</p>
         </div>
         <nav className="p-3 text-sm">
           {NAV.map((section) => (
@@ -322,9 +322,9 @@ export default function ShowcasePage() {
       {/* Main content */}
       <main className="flex-1 max-w-4xl mx-auto px-6 py-8 pt-16 lg:pt-8">
         <div className="mb-12">
-          <h1 className="text-2xl font-bold text-neutral-900">Debt Relief Funnel — Component Showcase</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">Component Showcase</h1>
           <p className="text-neutral-500 mt-1">
-            Every primitive, block, and page pattern used in the debt relief journey.
+            Every primitive, block, and page pattern used in the lead generation journey.
           </p>
         </div>
 
@@ -392,8 +392,8 @@ export default function ShowcasePage() {
         {/* ================================================================ */}
         <SectionHeader id="data-cards" label="Data Cards" />
 
-        <DebtSnapshotSpecimen />
-        <DTIBadgeSpecimen />
+        <ProfileSnapshotSpecimen />
+        <ScoreBadgeSpecimen />
         <StatusBannerSpecimen />
         <ApproachTagsSpecimen />
         <ValueChecklistSpecimen />
@@ -415,7 +415,7 @@ export default function ShowcasePage() {
         <SectionHeader id="disclaimers" label="Disclaimers" />
 
         <PrivacyNoteSpecimen />
-        <CreditReassuranceSpecimen />
+        <ReassuranceSpecimen />
         <LegalConsentSpecimen />
         <SourceAttributionSpecimen />
 
@@ -618,8 +618,8 @@ function RadioCardSpecimen() {
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">RadioCard</p>
           <RadioGroup value={v1} onValueChange={setV1} className="flex gap-3">
-            <RadioCard value="a" icon={<CreditCard className="w-6 h-6" />}>Credit Card</RadioCard>
-            <RadioCard value="b" icon={<Banknote className="w-6 h-6" />}>Personal Loan</RadioCard>
+            <RadioCard value="a" icon={<CreditCard className="w-6 h-6" />}>Option A</RadioCard>
+            <RadioCard value="b" icon={<Banknote className="w-6 h-6" />}>Option B</RadioCard>
             <RadioCard value="c">Both</RadioCard>
           </RadioGroup>
         </div>
@@ -665,8 +665,8 @@ function TooltipSpecimen() {
   return (
     <Specimen id="tooltip" title="Tooltip" description="Hover to reveal contextual information.">
       <div className="flex items-center gap-2">
-        <span className="text-sm text-neutral-800">DTI Ratio</span>
-        <Tooltip content="Your debt-to-income ratio compares your total debt to your annual income.">
+        <span className="text-sm text-neutral-800">Key Score</span>
+        <Tooltip content="This ratio compares your total obligations to your annual income.">
           <Info className="w-4 h-4 text-neutral-400 cursor-help" />
         </Tooltip>
       </div>
@@ -728,7 +728,7 @@ function StarburstSpecimen() {
 
 function HeaderSpecimen() {
   return (
-    <Specimen id="header" title="Header" description="Forbes Advisor branded header. Optional trust text.">
+    <Specimen id="header" title="Header" description="Branded header bar. Optional trust text.">
       <div className="space-y-4 -mx-6 -mt-6">
         <Header />
         <div className="px-6">
@@ -798,7 +798,7 @@ function StickyButtonSpecimen() {
       <div className="relative">
         <StickyButtonContainer>
           <Button fullWidth showTrailingIcon>Continue</Button>
-          <p className="text-sm text-gray-500 text-center mt-2">Does not affect your credit</p>
+          <p className="text-sm text-gray-500 text-center mt-2">No impact to your score</p>
         </StickyButtonContainer>
       </div>
     </Specimen>
@@ -896,7 +896,7 @@ function MoneyPyramidSpecimen() {
     <Specimen
       id="money-pyramid"
       title="MoneyPyramid"
-      description="Dynamic icon pyramid that grows based on income tier. From IncomeScreen."
+      description="Dynamic icon pyramid that grows based on income tier."
     >
       <div className="flex flex-col items-center gap-6">
         <div className="flex flex-col items-center -space-y-2">
@@ -938,13 +938,13 @@ function MapVisualSpecimen() {
     <Specimen
       id="map-visual"
       title="MapVisual"
-      description="Composed block: USMap + debt stats panel + 'Healthier finances' badge. From LocationScreen."
+      description="Composed block: USMap + regional stats panel + reassurance badge."
     >
       <div className="relative pt-6">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
           <div className="inline-flex items-center gap-2 rounded bg-secondary-500 px-2 py-1">
             <span className="text-xs leading-4 text-neutral-900 font-medium whitespace-nowrap">
-              Healthier finances &bull; No obligations &bull; 3 minutes
+              Better outcomes &bull; No obligations &bull; 3 minutes
             </span>
           </div>
         </div>
@@ -961,14 +961,14 @@ function MapVisualSpecimen() {
           <div className="py-2 flex flex-col gap-4 justify-center min-w-[180px]">
             <span className="text-sm font-medium text-primary-700">Texas</span>
             <div className="flex flex-col gap-1">
-              <div className="text-xs font-normal text-neutral-500">Avg credit card debt:</div>
+              <div className="text-xs font-normal text-neutral-500">Avg. cost of service:</div>
               <AnimatedCounter value={5340} prefix="$" className="font-display text-xl font-bold text-neutral-800" duration={800} />
             </div>
             <div className="flex flex-col gap-1">
-              <div className="text-xs font-normal text-neutral-500">Avg personal loan:</div>
+              <div className="text-xs font-normal text-neutral-500">Avg. savings:</div>
               <AnimatedCounter value={6973} prefix="$" className="font-display text-xl font-bold text-neutral-800" duration={800} />
             </div>
-            <div className="text-[10px] text-neutral-400 mt-1">Source: NY Fed, TransUnion</div>
+            <div className="text-[10px] text-neutral-400 mt-1">Source: Industry Report, 2024</div>
           </div>
         </div>
       </div>
@@ -981,17 +981,17 @@ function MapVisualSpecimen() {
 // ===========================================================================
 
 const TESTIMONIALS = [
-  { quote: "I was drowning in debt and didn't know where to turn. This process helped me understand my options.", name: "Michael R.", location: "Florida", rating: 5 },
+  { quote: "I didn't know where to turn. This process helped me understand my options and take the right next step.", name: "Michael R.", location: "Florida", rating: 5 },
   { quote: "The team was supportive and explained everything clearly. I finally have a plan.", name: "Sarah K.", location: "Ohio", rating: 5 },
   { quote: "I was skeptical at first, but the process was simple and the guidance was invaluable.", name: "Jessica M.", location: "Texas", rating: 5 },
 ]
 
 const PARTNER_LOGOS = [
-  { src: '/accredited_logo.png', alt: 'Accredited' },
-  { src: '/ClearOne.png', alt: 'ClearOne' },
-  { src: '/freedom-debt-relief_logo.png', alt: 'Freedom Debt Relief' },
-  { src: '/JGW_logo.png', alt: 'JG Wentworth' },
-  { src: '/National_logo.png', alt: 'National Debt Relief' },
+  { src: '/accredited_logo.png', alt: 'Partner A' },
+  { src: '/ClearOne.png', alt: 'Partner B' },
+  { src: '/freedom-debt-relief_logo.png', alt: 'Partner C' },
+  { src: '/JGW_logo.png', alt: 'Partner D' },
+  { src: '/National_logo.png', alt: 'Partner E' },
 ]
 
 function TestimonialCarouselSpecimen() {
@@ -1001,7 +1001,7 @@ function TestimonialCarouselSpecimen() {
     <Specimen
       id="testimonial-carousel"
       title="Testimonial Carousel"
-      description="Rotating quote cards with star ratings and progress dots. From AddressScreen and DebtProfileScreen."
+      description="Rotating quote cards with star ratings and progress dots. Used on profile and verification screens."
     >
       <div className="max-w-md space-y-4">
         <div className="border border-gray-100 rounded-xl p-5">
@@ -1027,7 +1027,7 @@ function TestimonialCarouselSpecimen() {
           <div className="flex items-center gap-0.5 mb-2">
             {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 text-secondary-500 fill-secondary-500" />)}
           </div>
-          <p className="text-sm text-neutral-700 italic">&ldquo;Within 3 months of starting my program, I could finally see a path forward.&rdquo;</p>
+          <p className="text-sm text-neutral-700 italic">&ldquo;Within 3 months of starting the program, I could finally see a path forward.&rdquo;</p>
           <p className="text-xs text-neutral-500 mt-2">&mdash; Michael R., Texas</p>
         </div>
       </div>
@@ -1040,7 +1040,7 @@ function PartnerLogoCarouselSpecimen() {
     <Specimen
       id="partner-logo-carousel"
       title="Partner Logo Carousel"
-      description="Infinite-scroll logo strip with fade masks. Used in 3 screens."
+      description="Infinite-scroll logo strip with fade masks. Used across multiple screens."
     >
       <div>
         <p className="text-xs uppercase tracking-wide text-neutral-500 text-center mb-3">Trusted Partners</p>
@@ -1066,13 +1066,13 @@ function SocialProofOverlaySpecimen() {
     <Specimen
       id="social-proof-overlay"
       title="Social Proof Overlay"
-      description="Image with 'Profile ready' badge and social proof message card. From DebtProfileScreen."
+      description="Image with status badge and social proof message card. Used on profile screens."
     >
       <div className="max-w-md relative rounded-2xl overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&auto=format&fit=crop&q=80"
-          alt="Person feeling relieved"
+          alt="Person"
           className="w-full h-64 object-cover"
         />
         <div className="absolute top-4 right-4 inline-flex items-center gap-2 bg-white rounded-full px-3 py-1.5 shadow-sm text-sm">
@@ -1085,7 +1085,7 @@ function SocialProofOverlaySpecimen() {
               <Users className="w-5 h-5 text-primary-700" />
             </div>
             <p className="text-sm text-neutral-800">
-              Your debt profile matches thousands of people in <strong>Texas</strong>. Our partners have worked with over <strong>5 million Americans</strong>.
+              Your profile matches thousands of people in <strong>Texas</strong>. Our partners have worked with over <strong>5 million Americans</strong>.
             </p>
           </div>
         </div>
@@ -1109,7 +1109,7 @@ function AnimatedChecklistSpecimen() {
     <Specimen
       id="animated-checklist"
       title="Animated Checklist"
-      description="Spinner-to-check step progression with progress bar. From ProcessingScreen and PartnerMatchingScreen."
+      description="Spinner-to-check step progression with progress bar. Used on processing and matching screens."
     >
       <div className="flex flex-col items-center gap-6">
         <div className="space-y-3 inline-flex flex-col items-start">
@@ -1139,7 +1139,7 @@ function ProgressBarSpecimen() {
     <Specimen
       id="progress-bar"
       title="Progress Bar"
-      description="Determinate progress bar with percentage label. Used in ProcessingScreen and PartnerMatchingScreen during auto-advance."
+      description="Determinate progress bar with percentage label. Used on processing screens during auto-advance."
     >
       <div className="space-y-6 max-w-sm">
         <div>
@@ -1165,13 +1165,13 @@ function TrustIndicatorsSpecimen() {
     <Specimen
       id="trust-indicators"
       title="Trust Indicators"
-      description="Inline icon + text rows for reassurance. From DebtTypeScreen, ProcessingScreen, PartnerMatchingScreen."
+      description="Inline icon + text rows for reassurance. Used on selection, processing, and matching screens."
     >
       <div className="space-y-6">
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Check style</p>
           <div className="flex items-center justify-center gap-6 text-sm text-neutral-600">
-            <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-feedback-success" />Soft credit pull to start</span>
+            <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-feedback-success" />No impact to your score</span>
             <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-feedback-success" />No obligation</span>
           </div>
         </div>
@@ -1179,18 +1179,18 @@ function TrustIndicatorsSpecimen() {
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Icon style</p>
           <div className="flex items-center justify-center gap-6 text-neutral-500">
             <div className="flex items-center gap-2"><Shield className="w-4 h-4" /><span className="text-xs">Secure &amp; Private</span></div>
-            <div className="flex items-center gap-2"><Check className="w-4 h-4" /><span className="text-xs">No credit impact</span></div>
+            <div className="flex items-center gap-2"><Check className="w-4 h-4" /><span className="text-xs">No impact</span></div>
             <div className="flex items-center gap-2"><Users className="w-4 h-4" /><span className="text-xs">1M+ Matched</span></div>
           </div>
         </div>
         <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Stats style (from ProcessingScreen)</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Stats style</p>
           <div className="flex justify-center items-center gap-6">
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">1M+</p><p className="text-xs text-neutral-500">Americans matched</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">1M+</p><p className="text-xs text-neutral-500">People matched</p></div>
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center"><p className="text-lg font-bold text-neutral-900">24/7</p><p className="text-xs text-neutral-500">US Support</p></div>
             <div className="h-8 w-px bg-neutral-200" />
-            <div className="text-center"><p className="text-lg font-bold text-neutral-900">&#10003;</p><p className="text-xs text-neutral-500">No credit impact</p></div>
+            <div className="text-center"><p className="text-lg font-bold text-neutral-900">&#10003;</p><p className="text-xs text-neutral-500">No impact</p></div>
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center"><Lock className="w-5 h-5 text-neutral-900 mx-auto" /><p className="text-xs text-neutral-500">Info is secure</p></div>
           </div>
@@ -1205,19 +1205,19 @@ function HowItWorksSpecimen() {
     <Specimen
       id="how-it-works"
       title="How it Works Card"
-      description="Warm-background explainer with icon + text bullets. From DebtTypeScreen."
+      description="Warm-background explainer with icon + text bullets. Used on selection screens."
     >
       <div className="max-w-lg">
         <h2 className="text-center text-xl font-bold text-neutral-900 mb-4">How it works</h2>
         <div className="w-full bg-[#FEF9EF] rounded-lg p-4 flex flex-col sm:flex-row items-stretch gap-4">
           <div className="flex-1 flex items-center gap-4">
             <Star className="w-6 h-6 text-neutral-900 flex-shrink-0" />
-            <p className="text-sm text-neutral-900">Get matched with debt relief specialists who negotiate with creditors on your behalf</p>
+            <p className="text-sm text-neutral-900">Get matched with specialists who work on your behalf to find the best options</p>
           </div>
           <div className="h-px sm:h-auto sm:w-px bg-[#C0C0C0]" />
           <div className="flex-1 flex items-center gap-4">
             <CreditCard className="w-6 h-6 text-neutral-900 flex-shrink-0" />
-            <p className="text-sm text-neutral-900">Simplify your payments — work with one partner instead of juggling multiple creditors</p>
+            <p className="text-sm text-neutral-900">Simplify the process — work with one partner instead of juggling multiple providers</p>
           </div>
         </div>
       </div>
@@ -1229,35 +1229,35 @@ function HowItWorksSpecimen() {
 // DATA CARDS
 // ===========================================================================
 
-function DebtSnapshotSpecimen() {
+function ProfileSnapshotSpecimen() {
   return (
     <Specimen
-      id="debt-snapshot"
-      title="Debt Snapshot Card"
-      description="Key-value card: Debt / Income / DTI / Status. 6 variations across screens."
+      id="profile-snapshot"
+      title="Profile Snapshot"
+      description="Key-value summary card showing user-submitted data. Light and branded background variants."
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Light bg (EmailScreen)</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Light background</p>
           <div className="bg-neutral-100 rounded-lg p-4">
-            <p className="text-sm font-medium text-neutral-800 mb-3">Your debt snapshot</p>
+            <p className="text-sm font-medium text-neutral-800 mb-3">Your profile snapshot</p>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-neutral-500">Debt</span><span className="text-neutral-800 font-medium">$25,000</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Amount</span><span className="text-neutral-800 font-medium">$25,000</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Income</span><span className="text-neutral-800 font-medium">$60,000</span></div>
-              <div className="flex justify-between"><span className="text-neutral-500">DTI</span><span className="text-neutral-800 font-medium">42%</span></div>
+              <div className="flex justify-between"><span className="text-neutral-500">Score</span><span className="text-neutral-800 font-medium">42%</span></div>
               <div className="flex justify-between"><span className="text-neutral-500">Status</span><span className="text-feedback-success font-medium">&#10003; Matches program requirements</span></div>
             </div>
           </div>
         </div>
         <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Blue bg (ResultsPreviewScreen)</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-2">Branded background</p>
           <div className="bg-primary-300 rounded-xl p-4">
             <h2 className="text-sm font-semibold text-neutral-900 mb-4">Your profile summary</h2>
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Debt</span><span className="text-sm text-neutral-800">$25,000</span></div>
+            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Amount</span><span className="text-sm text-neutral-800">$25,000</span></div>
             <div className="h-px bg-neutral-300/50" />
             <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Income</span><span className="text-sm text-neutral-800">$60,000/year</span></div>
             <div className="h-px bg-neutral-300/50" />
-            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">DTI</span><span className="text-sm font-medium text-neutral-900">42%</span></div>
+            <div className="flex justify-between items-center py-2"><span className="text-sm text-neutral-600">Score</span><span className="text-sm font-medium text-neutral-900">42%</span></div>
             <div className="h-px bg-neutral-300/50" />
             <div className="flex justify-between items-center py-2">
               <span className="text-sm text-neutral-600">Status</span>
@@ -1270,9 +1270,9 @@ function DebtSnapshotSpecimen() {
   )
 }
 
-function DTIBadgeSpecimen() {
+function ScoreBadgeSpecimen() {
   return (
-    <Specimen id="dti-badge" title="DTI Ratio Badge" description="Colored pill: Low (green), Moderate (yellow), Elevated (red).">
+    <Specimen id="score-badge" title="Score Badge" description="Colored status pill: Low (green), Moderate (yellow), Elevated (red).">
       <div className="flex gap-3">
         <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Low</span>
         <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Moderate</span>
@@ -1287,11 +1287,11 @@ function StatusBannerSpecimen() {
     <Specimen
       id="status-banner"
       title="Status Banner"
-      description="Green background card with status check and contextual encouragement. From DebtProfileScreen."
+      description="Green background card with status check and contextual encouragement. Used on profile screens."
     >
       <div className="bg-green-50 rounded-lg p-4 max-w-md">
-        <p className="text-feedback-success font-medium">Status: &#10003; Matches multiple relief programs</p>
-        <p className="text-sm text-neutral-600 mt-1">A 42% DTI means you&apos;re exactly who relief programs are built for.</p>
+        <p className="text-feedback-success font-medium">Status: &#10003; Matches multiple programs</p>
+        <p className="text-sm text-neutral-600 mt-1">Your profile is a strong fit for the programs we partner with.</p>
       </div>
     </Specimen>
   )
@@ -1302,11 +1302,11 @@ function ApproachTagsSpecimen() {
     <Specimen
       id="approach-tags"
       title="Approach Tags"
-      description="Pill badges with icons for possible debt relief approaches. From DebtProfileScreen."
+      description="Pill badges with icons for recommended approaches or options. Used on profile screens."
     >
       <div className="inline-flex flex-wrap gap-2">
-        <span className="bg-primary-300 text-primary-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5"><Handshake className="w-4 h-4" />Debt Negotiation</span>
-        <span className="bg-primary-300 text-primary-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5"><TrendingDown className="w-4 h-4" />Lower Interest</span>
+        <span className="bg-primary-300 text-primary-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5"><Handshake className="w-4 h-4" />Negotiation</span>
+        <span className="bg-primary-300 text-primary-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5"><TrendingDown className="w-4 h-4" />Lower Rate</span>
         <span className="bg-primary-300 text-primary-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5"><Calendar className="w-4 h-4" />Payment Plan</span>
       </div>
     </Specimen>
@@ -1318,11 +1318,11 @@ function ValueChecklistSpecimen() {
     <Specimen
       id="value-checklist"
       title="Value Checklist"
-      description="Check icon + text list. From DebtProfileScreen ('Verify to unlock')."
+      description="Check icon + text list highlighting benefits of completing the next step."
     >
       <div className="space-y-2 max-w-sm">
         <p className="text-sm font-semibold text-neutral-900 mb-3">Verify to unlock:</p>
-        {['Personalized debt relief options', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
+        {['Personalized recommendations', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
           <div key={i} className="flex items-center gap-2">
             <Check className="w-4 h-4 text-feedback-success flex-shrink-0" />
             <p className="text-sm text-neutral-800">{t}</p>
@@ -1342,28 +1342,28 @@ function IconStatRowSpecimen() {
     <Specimen
       id="icon-stat-row"
       title="Icon + Stat Row"
-      description="Horizontal flex pairing a lucide icon with a stat label. Three variants by debt type. From DidYouKnowScreen."
+      description="Horizontal flex pairing a lucide icon with a stat label. Multiple category variants shown."
     >
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Credit Card</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Category A</p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg balance: $4,180</span></div>
-            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg APR: 24.7%</span></div>
+            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. balance: $4,180</span></div>
+            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. rate: 24.7%</span></div>
           </div>
         </div>
         <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Personal Loan</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Category B</p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg balance: $11,676</span></div>
-            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg APR: 13%–18%</span></div>
+            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. balance: $11,676</span></div>
+            <div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. rate: 13%–18%</span></div>
           </div>
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Both / Mixed</p>
           <div className="space-y-2">
-            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg CC: $4,180</span></div>
-            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg loan: $11,676</span></div>
+            <div className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. A: $4,180</span></div>
+            <div className="flex items-center gap-2"><FileText className="w-5 h-5 text-primary-700 flex-shrink-0" /><span className="text-sm text-neutral-800">Avg. B: $11,676</span></div>
           </div>
         </div>
       </div>
@@ -1376,7 +1376,7 @@ function DidYouKnowSpecimen() {
     <Specimen
       id="did-you-know"
       title={'"Did You Know" Callout'}
-      description="Left-border accent card with Lightbulb icon, bold title, message body, and source attribution. From DebtAmountScreen."
+      description="Left-border accent card with Lightbulb icon, bold title, message body, and source attribution."
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-secondary-300 border-l-4 border-secondary-500 rounded-lg p-4">
@@ -1385,9 +1385,9 @@ function DidYouKnowSpecimen() {
             <p className="font-semibold text-neutral-800">Did you know?</p>
           </div>
           <p className="text-sm text-neutral-800">
-            The average American with $25K in credit card debt pays over $6,000 a year in interest alone.
+            The average American pays over $6,000 a year in unnecessary fees — that&apos;s more than most car payments.
           </p>
-          <p className="text-xs text-neutral-500 mt-2">Source: Federal Reserve, 2024</p>
+          <p className="text-xs text-neutral-500 mt-2">Source: Industry Report, 2024</p>
         </div>
         <div className="bg-secondary-300 border-l-4 border-secondary-500 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -1395,9 +1395,9 @@ function DidYouKnowSpecimen() {
             <p className="font-semibold text-neutral-800">Did you know?</p>
           </div>
           <p className="text-sm text-neutral-800">
-            Debt relief programs have helped over 5 million Americans resolve more than $10 billion in debt.
+            Our partner programs have helped over 5 million Americans save more than $10 billion.
           </p>
-          <p className="text-xs text-neutral-500 mt-2">Source: AFCC Industry Report</p>
+          <p className="text-xs text-neutral-500 mt-2">Source: Partner Network Report</p>
         </div>
       </div>
     </Specimen>
@@ -1409,21 +1409,21 @@ function QualificationMessageSpecimen() {
     <Specimen
       id="qualification-message"
       title="Qualification Message"
-      description="Inline CheckCircle2 icon with colored status text. Success (green) and neutral (grey) states. From DebtAmountScreen."
+      description="Inline CheckCircle2 icon with colored status text. Success (green) and neutral (grey) states."
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Qualified (success)</p>
           <p className="text-feedback-success font-medium flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-            This amount qualifies for most relief programs
+            This qualifies for most programs
           </p>
-          <p className="text-sm text-neutral-500 mt-1">Based on quoted partner outcomes of up to 50% reduction in total debt</p>
+          <p className="text-sm text-neutral-500 mt-1">Based on quoted partner outcomes of up to 50% savings</p>
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Not yet qualified (neutral)</p>
           <p className="text-neutral-500 font-medium">Some programs may be available — let&apos;s check your options.</p>
-          <p className="text-sm text-neutral-500 mt-1">Based on quoted partner outcomes of up to 50% reduction in total debt</p>
+          <p className="text-sm text-neutral-500 mt-1">Based on quoted partner outcomes of up to 50% savings</p>
         </div>
       </div>
     </Specimen>
@@ -1435,16 +1435,16 @@ function BadgeBannerSpecimen() {
     <Specimen
       id="badge-banner"
       title="Badge Banner"
-      description="Compact horizontal pill with icon and bullet-separated text. Used as a reassurance strip above content areas. From LocationScreen / MapVisual."
+      description="Compact horizontal pill with icon and bullet-separated text. Used as a reassurance strip above content areas."
     >
       <div className="flex flex-wrap gap-3">
         <div className="inline-flex items-center gap-2 rounded bg-secondary-500 px-3 py-1.5">
           <Star className="w-4 h-4 text-neutral-900" />
-          <span className="text-xs text-neutral-900 font-medium">Healthier finances &bull; No obligations &bull; 3 minutes</span>
+          <span className="text-xs text-neutral-900 font-medium">Better outcomes &bull; No obligations &bull; 3 minutes</span>
         </div>
         <div className="inline-flex items-center gap-2 rounded bg-primary-300 px-3 py-1.5">
           <Shield className="w-4 h-4 text-primary-700" />
-          <span className="text-xs text-primary-700 font-medium">Secure &bull; Private &bull; No credit impact</span>
+          <span className="text-xs text-primary-700 font-medium">Secure &bull; Private &bull; No impact</span>
         </div>
         <div className="inline-flex items-center gap-2 rounded bg-green-100 px-3 py-1.5">
           <CheckCircle2 className="w-4 h-4 text-green-700" />
@@ -1460,7 +1460,7 @@ function TrustStatsRowSpecimen() {
     <Specimen
       id="trust-stats-row"
       title="Trust Stats Row"
-      description="4-column divider-separated stat row. Each column supports a text value or icon on top with a label below. From ProcessingScreen."
+      description="4-column divider-separated stat row. Each column supports a text value or icon on top with a label below."
     >
       <div className="space-y-8">
         <div>
@@ -1468,7 +1468,7 @@ function TrustStatsRowSpecimen() {
           <div className="flex justify-center items-center gap-6">
             <div className="text-center">
               <p className="text-lg font-bold text-neutral-900">1M+</p>
-              <p className="text-xs text-neutral-500">Americans matched</p>
+              <p className="text-xs text-neutral-500">People matched</p>
             </div>
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center">
@@ -1478,7 +1478,7 @@ function TrustStatsRowSpecimen() {
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center">
               <Check className="w-5 h-5 text-neutral-900 mx-auto" />
-              <p className="text-xs text-neutral-500 mt-1">No credit impact</p>
+              <p className="text-xs text-neutral-500 mt-1">No impact</p>
             </div>
             <div className="h-8 w-px bg-neutral-200" />
             <div className="text-center">
@@ -1522,23 +1522,23 @@ function TrustStatsRowSpecimen() {
 
 function PrivacyNoteSpecimen() {
   return (
-    <Specimen id="privacy-note" title="Privacy Note" description="Short centered disclaimer below CTAs. From EmailScreen, AddressScreen.">
+    <Specimen id="privacy-note" title="Privacy Note" description="Short centered disclaimer below CTAs.">
       <div className="space-y-4 text-center max-w-md mx-auto">
-        <p className="text-xs text-neutral-500">We respect your privacy. Your email will only be used to send you information about your debt relief options.</p>
-        <p className="text-xs text-neutral-500">Your address is used to verify your identity and find location-specific debt relief options. We never share your address with third parties without your consent.</p>
+        <p className="text-xs text-neutral-500">We respect your privacy. Your email will only be used to send you information about your options.</p>
+        <p className="text-xs text-neutral-500">Your address is used to verify your identity and find location-specific options. We never share your address with third parties without your consent.</p>
       </div>
     </Specimen>
   )
 }
 
-function CreditReassuranceSpecimen() {
+function ReassuranceSpecimen() {
   return (
-    <Specimen id="credit-reassurance" title="Credit Reassurance" description="Appears below Continue buttons. From LocationScreen, DidYouKnowScreen.">
+    <Specimen id="reassurance" title="Reassurance" description="Appears below Continue buttons to reduce friction.">
       <div className="space-y-4 text-center">
-        <p className="text-sm text-gray-500">Does not affect your credit</p>
+        <p className="text-sm text-gray-500">No impact to your score</p>
         <div className="flex items-center justify-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-feedback-success" />
-          <span className="text-feedback-success font-medium">Checking your options won&apos;t affect your credit</span>
+          <span className="text-feedback-success font-medium">Checking your options won&apos;t affect your score</span>
         </div>
       </div>
     </Specimen>
@@ -1551,7 +1551,7 @@ function LegalConsentSpecimen() {
     <Specimen
       id="legal-consent"
       title="Legal Consent Block"
-      description="Full TCPA consent with checkbox and linked terms. From PhoneScreen, DebtProfileScreen."
+      description="Full TCPA consent with checkbox and linked terms. Used on phone and profile screens."
     >
       <div className="p-4 bg-neutral-100 rounded-lg max-w-lg">
         <Checkbox
@@ -1560,7 +1560,7 @@ function LegalConsentSpecimen() {
           label={
             <span className="text-sm text-neutral-800">
               By clicking &quot;Agree &amp; Continue&quot; I consent to be contacted by
-              Spinwheel and/or its{' '}
+              the company and/or its{' '}
               <a href="#" className="text-primary-700 underline">marketing partners</a>{' '}
               using automated technology at the phone number I have provided.
               I agree to the{' '}
@@ -1578,8 +1578,8 @@ function LegalConsentSpecimen() {
 
 function SourceAttributionSpecimen() {
   return (
-    <Specimen id="source-attribution" title="Source Attribution" description="Tiny data source credit. From LocationScreen.">
-      <div className="text-[10px] text-neutral-400">Source: NY Fed, TransUnion</div>
+    <Specimen id="source-attribution" title="Source Attribution" description="Tiny data source credit line.">
+      <div className="text-[10px] text-neutral-400">Source: Industry Report, 2024</div>
     </Specimen>
   )
 }
@@ -1607,11 +1607,11 @@ function ContextCardSpecimen() {
             <p className="text-xs text-neutral-600 mt-0.5">Timeline: 24-36 months</p>
           </div>
 
-          {/* DTI header row */}
+          {/* Score header row */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-neutral-500" />
-              <span className="text-sm text-neutral-800">Debt-to-Income Ratio</span>
+              <span className="text-sm text-neutral-800">Key Ratio</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-neutral-900">53%</span>
@@ -1622,10 +1622,10 @@ function ContextCardSpecimen() {
           {/* Snapshot rows */}
           <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-200 mb-5">
             <div className="flex justify-between items-center px-4 py-3">
-              <span className="text-sm text-neutral-500 flex items-center gap-1">Debt Type <HelpCircle className="w-3.5 h-3.5 text-neutral-400" /></span>
-              <span className="text-sm font-semibold text-neutral-900">Personal Loan</span>
+              <span className="text-sm text-neutral-500 flex items-center gap-1">Category <HelpCircle className="w-3.5 h-3.5 text-neutral-400" /></span>
+              <span className="text-sm font-semibold text-neutral-900">Plan Type</span>
             </div>
-            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Debt</span><span className="text-sm font-semibold text-neutral-900">$72,000</span></div>
+            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Amount</span><span className="text-sm font-semibold text-neutral-900">$72,000</span></div>
             <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Annual Income</span><span className="text-sm font-semibold text-neutral-900">$135,000</span></div>
           </div>
 
@@ -1633,8 +1633,8 @@ function ContextCardSpecimen() {
           <div className="mb-5">
             <p className="text-xs uppercase tracking-wide text-neutral-500 mb-2">Recommended Approach</p>
             <div className="flex flex-wrap gap-2">
-              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Handshake className="w-3.5 h-3.5" />Debt Negotiation</span>
-              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5" />Lower Interest</span>
+              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Handshake className="w-3.5 h-3.5" />Negotiation</span>
+              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5" />Lower Rate</span>
               <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />Payment Plan</span>
             </div>
           </div>
@@ -1643,7 +1643,7 @@ function ContextCardSpecimen() {
           <div className="mb-5">
             <p className="text-sm font-semibold text-neutral-900 mb-2">Verify to unlock:</p>
             <div className="space-y-1.5">
-              {['Personalized debt relief options', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
+              {['Personalized recommendations', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0" />
                   <span className="text-sm text-neutral-800">{t}</span>
@@ -1672,9 +1672,9 @@ function ContextCardSpecimen() {
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Sub-components</p>
           <div className="space-y-2">
             {[
-              { ref: '#debt-snapshot', label: 'Debt Snapshot Card', desc: 'Key-value rows: debt, income, type, DTI' },
-              { ref: '#dti-badge', label: 'DTI Ratio Badge', desc: 'Colored pill: Low / Moderate / Elevated' },
-              { ref: '#approach-tags', label: 'Approach Tags', desc: 'Icon pills: Negotiation, Interest, Plan' },
+              { ref: '#profile-snapshot', label: 'Profile Snapshot', desc: 'Key-value rows: amount, income, score' },
+              { ref: '#score-badge', label: 'Score Badge', desc: 'Colored pill: Low / Moderate / Elevated' },
+              { ref: '#approach-tags', label: 'Approach Tags', desc: 'Icon pills: recommended approaches' },
               { ref: '#value-checklist', label: 'Value Checklist', desc: 'Check icons + unlock benefit text' },
               { ref: '#partner-logo-carousel', label: 'Partner Logos', desc: 'Scrolling or static logo strip' },
               { ref: '#source-attribution', label: 'Source Attribution', desc: 'Disclaimer / footnote text' },
@@ -1706,12 +1706,12 @@ function UrgencyBannerSpecimen() {
   const mins = Math.floor(countdown / 60)
   const secs = countdown % 60
   return (
-    <Specimen id="urgency-banner" title="Urgency Banner" description="Sticky countdown timer. From ResultsPage.">
+    <Specimen id="urgency-banner" title="Urgency Banner" description="Sticky countdown timer. Used on results pages.">
       <div className="bg-feedback-warning text-neutral-900 py-3 px-4 rounded-lg">
         <div className="flex items-center justify-center gap-2">
           <Phone className="w-4 h-4 animate-pulse" />
           <span className="text-sm font-medium">
-            A debt specialist will call you in{' '}
+            A specialist will call you in{' '}
             <span className="bg-black/10 px-2 py-0.5 rounded font-bold">{mins}:{secs.toString().padStart(2, '0')}</span>
           </span>
         </div>
@@ -1725,18 +1725,18 @@ function PartnerMatchCardSpecimen() {
     <Specimen
       id="partner-match-card"
       title="Partner Match Card"
-      description="Full partner card: logo, stats, features, rating. From ResultsPage."
+      description="Full partner card: logo, stats, features, rating. Used on results pages."
     >
       <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden max-w-lg">
         <div className="bg-feedback-success text-white text-center py-2 text-sm font-medium">&#10003; Best Match for Your Profile</div>
         <div className="p-6">
           <div className="flex items-start gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/freedom-debt-relief_logo.png" alt="Freedom Debt Relief" className="w-16 h-16 object-contain" />
+            <img src="/freedom-debt-relief_logo.png" alt="Partner" className="w-16 h-16 object-contain" />
             <div>
               <p className="text-xs text-primary-700 font-medium uppercase">Top Match for Your Profile</p>
-              <h3 className="text-xl font-bold text-neutral-900">Freedom Debt Relief</h3>
-              <p className="text-sm text-neutral-500 mt-1">One of America&apos;s largest and most trusted debt relief companies.</p>
+              <h3 className="text-xl font-bold text-neutral-900">Partner Name</h3>
+              <p className="text-sm text-neutral-500 mt-1">One of America&apos;s largest and most trusted providers in this category.</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-neutral-100">
@@ -1745,7 +1745,7 @@ function PartnerMatchCardSpecimen() {
             <div className="text-center"><p className="text-lg font-bold text-neutral-900">24-48 mo</p><p className="text-xs text-neutral-500">Avg. Timeline</p></div>
           </div>
           <div className="grid grid-cols-2 gap-3 mt-6">
-            {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ debt resolved', 'Dedicated advisor'].map((f, i) => (
+            {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ resolved', 'Dedicated advisor'].map((f, i) => (
               <div key={i} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-feedback-success" /><span className="text-sm text-neutral-800">{f}</span></div>
             ))}
           </div>
@@ -1761,7 +1761,7 @@ function PartnerMatchCardSpecimen() {
 
 function WhatToExpectSpecimen() {
   return (
-    <Specimen id="what-to-expect" title="What to Expect Callout" description="Colored callout with icon and guidance. From ResultsPage.">
+    <Specimen id="what-to-expect" title="What to Expect Callout" description="Colored callout with icon and guidance. Used on results pages.">
       <div className="bg-primary-300 rounded-xl p-5 max-w-lg">
         <div className="flex items-start gap-3">
           <Phone className="w-6 h-6 text-primary-700 flex-shrink-0" />
@@ -1778,12 +1778,12 @@ function WhatToExpectSpecimen() {
 function FAQAccordionSpecimen() {
   const [open, setOpen] = React.useState<number | null>(null)
   const faqs = [
-    { q: 'How much does debt relief cost?', a: 'Debt relief companies typically charge 15-25% of the total debt owed, on a performance-based fee structure.' },
-    { q: 'How long does debt settlement take?', a: 'Most programs take 24-48 months depending on the amount of debt.' },
-    { q: 'Will it affect my credit score?', a: 'Debt settlement can temporarily lower your score, but many people recover over time.' },
+    { q: 'How much does this service cost?', a: 'Providers typically charge 15-25% of the total amount, on a performance-based fee structure.' },
+    { q: 'How long does the process take?', a: 'Most programs take 24-48 months depending on the amount and complexity.' },
+    { q: 'Will it affect my credit score?', a: 'Some programs can temporarily lower your score, but many people recover over time.' },
   ]
   return (
-    <Specimen id="faq-accordion" title="FAQ Accordion" description="Expandable Q&A list. From ResultsPage.">
+    <Specimen id="faq-accordion" title="FAQ Accordion" description="Expandable Q&A list. Used on results pages.">
       <div className="max-w-lg space-y-3">
         {faqs.map((faq, i) => (
           <div key={i} className="border-b border-neutral-100 pb-3 last:border-b-0">
@@ -1801,12 +1801,12 @@ function FAQAccordionSpecimen() {
 
 function EducationalStepsSpecimen() {
   const steps = [
-    { title: 'Research companies', desc: 'Identify reputable debt relief companies by reading reviews.' },
-    { title: 'Verify credentials', desc: 'Check accreditation with the BBB or AFCC.' },
-    { title: 'Schedule a consultation', desc: 'Most companies offer free initial consultations.' },
+    { title: 'Research providers', desc: 'Identify reputable companies by reading reviews and checking credentials.' },
+    { title: 'Verify credentials', desc: 'Check accreditation with industry bodies like the BBB.' },
+    { title: 'Schedule a consultation', desc: 'Most providers offer free initial consultations.' },
   ]
   return (
-    <Specimen id="educational-steps" title="Educational Steps" description="Numbered ordered list with circled step numbers. From ResultsPage.">
+    <Specimen id="educational-steps" title="Educational Steps" description="Numbered ordered list with circled step numbers. Used on results pages.">
       <div className="max-w-lg">
         <ol className="divide-y divide-neutral-100">
           {steps.map((step, i) => (
@@ -1823,13 +1823,13 @@ function EducationalStepsSpecimen() {
 
 function CallCTACardSpecimen() {
   return (
-    <Specimen id="call-cta-card" title="Call CTA Card" description="Phone link button with mini trust badges. From ResultsPage.">
+    <Specimen id="call-cta-card" title="Call CTA Card" description="Phone link button with mini trust badges. Used on results pages.">
       <div className="bg-white rounded-2xl border border-neutral-200 p-5 max-w-xs">
         <h4 className="font-semibold text-neutral-900 mb-3">Can&apos;t wait for the call?</h4>
         <a href="#" className="flex items-center justify-center gap-2 w-full bg-primary-700 text-white py-3 rounded-[8px] font-semibold hover:bg-primary-750 transition">
           <Phone className="w-5 h-5" />Call Now: 800-808-6539
         </a>
-        <p className="text-xs text-neutral-500 text-center mt-3">Speak with a debt specialist immediately</p>
+        <p className="text-xs text-neutral-500 text-center mt-3">Speak with a specialist immediately</p>
         <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-neutral-100">
           <div className="text-center"><Shield className="w-5 h-5 text-neutral-500 mx-auto" /><p className="text-xs text-neutral-500 mt-1">30-Day Guarantee</p></div>
           <div className="text-center"><Clock className="w-5 h-5 text-neutral-500 mx-auto" /><p className="text-xs text-neutral-500 mt-1">24/7 Support</p></div>
@@ -1850,7 +1850,7 @@ function PatternCard({ title, description, screens, children }: { title: string;
       <div>
         <h4 className="font-semibold text-neutral-900">{title}</h4>
         <p className="text-sm text-neutral-500 mt-1">{description}</p>
-        <p className="text-xs text-neutral-400 mt-2">Screens: {screens.join(', ')}</p>
+        <p className="text-xs text-neutral-400 mt-2">Used by: {screens.join(', ')}</p>
       </div>
       <div className="border border-neutral-200 rounded-lg bg-neutral-50 p-4 overflow-hidden">
         {children}
@@ -1865,7 +1865,7 @@ function FormCapturePatternSpecimen() {
       <PatternCard
         title="Form Capture Pattern"
         description="FormLayout wraps content. Centered content well (640px). Headline + description at top, input fields in middle, sticky CTA at bottom. Optional side content (Context Card) on desktop."
-        screens={['LocationScreen', 'DebtAmountScreen', 'IncomeScreen', 'DateOfBirthScreen', 'NameScreen', 'EmailScreen', 'PhoneScreen', 'AddressScreen']}
+        screens={['Location', 'Amount Selection', 'Income', 'Date of Birth', 'Name', 'Email', 'Phone', 'Address']}
       >
         <div className="max-w-xs mx-auto space-y-3">
           <div className="h-6 bg-neutral-200 rounded w-3/4 mx-auto" />
@@ -1892,7 +1892,7 @@ function InterstitialPatternSpecimen() {
       <PatternCard
         title="Interstitial Pattern"
         description="Centered layout, no text inputs. Either card-based selections (auto-advance on click), animated loading states (auto-advance on timer), or educational content with a simple CTA."
-        screens={['DebtTypeScreen', 'DidYouKnowScreen', 'ResultsPreviewScreen', 'ProcessingScreen', 'PartnerMatchingScreen']}
+        screens={['Category Selection', 'Did You Know', 'Results Preview', 'Processing', 'Partner Matching']}
       >
         <div className="max-w-xs mx-auto space-y-3 text-center">
           <div className="w-12 h-12 bg-primary-300 rounded-full mx-auto" />
@@ -1920,7 +1920,7 @@ function ResultsPatternSpecimen() {
         <PatternCard
           title="Results Pattern"
           description="Full-width layout. Left column: partner card with feature grid, educational content, FAQ. Right column: sticky recap sidebar, CTA card. Urgency banner at top."
-          screens={['DebtProfileScreen', 'ResultsPage']}
+          screens={['Profile', 'Results']}
         >
           <div className="space-y-2">
             <div className="h-6 bg-feedback-warning rounded w-full" />
@@ -1943,7 +1943,7 @@ function ResultsPatternSpecimen() {
           <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Feature Grid (embedded in partner cards)</p>
           <div className="border border-neutral-200 rounded-lg bg-neutral-50 p-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-md">
-              {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ debt resolved', 'Dedicated advisor'].map((f, i) => (
+              {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ resolved', 'Dedicated advisor'].map((f, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0" />
                   <span className="text-sm text-neutral-800">{f}</span>
