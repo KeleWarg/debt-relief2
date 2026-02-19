@@ -23,6 +23,9 @@ import {
   MapPin,
   ChevronDown,
   Info,
+  Lightbulb,
+  FileText,
+  TrendingUp,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/Button'
@@ -129,6 +132,18 @@ const NAV: NavSection[] = [
       { id: 'status-banner', label: 'Status Banner' },
       { id: 'approach-tags', label: 'Approach Tags' },
       { id: 'value-checklist', label: 'Value Checklist' },
+    ],
+  },
+  {
+    id: 'content-blocks',
+    label: 'Content Blocks',
+    children: [
+      { id: 'icon-stat-row', label: 'Icon + Stat Row' },
+      { id: 'did-you-know', label: '"Did You Know" Callout' },
+      { id: 'qualification-message', label: 'Qualification Message' },
+      { id: 'badge-banner', label: 'Badge Banner' },
+      { id: 'trust-stats-row', label: 'Trust Stats Row' },
+      { id: 'feature-grid', label: 'Feature Grid' },
     ],
   },
   {
@@ -369,6 +384,18 @@ export default function ShowcasePage() {
         <StatusBannerSpecimen />
         <ApproachTagsSpecimen />
         <ValueChecklistSpecimen />
+
+        {/* ================================================================ */}
+        {/* CONTENT BLOCKS                                                   */}
+        {/* ================================================================ */}
+        <SectionHeader id="content-blocks" label="Content Blocks" />
+
+        <IconStatRowSpecimen />
+        <DidYouKnowSpecimen />
+        <QualificationMessageSpecimen />
+        <BadgeBannerSpecimen />
+        <TrustStatsRowSpecimen />
+        <FeatureGridSpecimen />
 
         {/* ================================================================ */}
         {/* DISCLAIMERS                                                      */}
@@ -1262,6 +1289,274 @@ function ValueChecklistSpecimen() {
             <p className="text-sm text-neutral-800">{t}</p>
           </div>
         ))}
+      </div>
+    </Specimen>
+  )
+}
+
+// ===========================================================================
+// CONTENT BLOCKS
+// ===========================================================================
+
+function IconStatRowSpecimen() {
+  return (
+    <Specimen
+      id="icon-stat-row"
+      title="Icon + Stat Row"
+      description="Horizontal flex pairing a lucide icon with a stat label. Three variants by debt type. From DidYouKnowScreen."
+    >
+      <div className="space-y-6">
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Credit Card</p>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" />
+              <span className="text-neutral-800 text-sm">Avg balance: $4,180</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" />
+              <span className="text-neutral-800 text-sm">Avg APR: 24.7%</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Personal Loan</p>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <FileText className="w-5 h-5 text-primary-700 flex-shrink-0" />
+              <span className="text-neutral-800 text-sm">Avg balance: $11,676</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-primary-700 flex-shrink-0" />
+              <span className="text-neutral-800 text-sm">Avg APR: 13%–18%</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Both / Mixed</p>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <CreditCard className="w-5 h-5 text-primary-700 flex-shrink-0" />
+              <span className="text-neutral-800 text-sm">Avg CC balance: $4,180</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FileText className="w-5 h-5 text-primary-700 flex-shrink-0" />
+              <span className="text-neutral-800 text-sm">Avg loan: $11,676</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Specimen>
+  )
+}
+
+function DidYouKnowSpecimen() {
+  return (
+    <Specimen
+      id="did-you-know"
+      title={'"Did You Know" Callout'}
+      description="Left-border accent card with Lightbulb icon, bold title, message body, and source attribution. From DebtAmountScreen."
+    >
+      <div className="space-y-4 max-w-md">
+        <div className="bg-secondary-300 border-l-4 border-secondary-500 rounded-lg p-4 text-left">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="w-4 h-4 text-secondary-500" />
+            <p className="font-semibold text-neutral-800">Did you know?</p>
+          </div>
+          <p className="text-body-sm text-neutral-800">
+            The average American with $25K in credit card debt pays over $6,000 a year in interest alone — that&apos;s more than most car payments.
+          </p>
+          <p className="text-caption text-neutral-500 mt-2">
+            Source: Federal Reserve, 2024
+          </p>
+        </div>
+        <div className="bg-secondary-300 border-l-4 border-secondary-500 rounded-lg p-4 text-left">
+          <div className="flex items-center gap-2 mb-2">
+            <Lightbulb className="w-4 h-4 text-secondary-500" />
+            <p className="font-semibold text-neutral-800">Did you know?</p>
+          </div>
+          <p className="text-body-sm text-neutral-800">
+            Debt relief programs have helped over 5 million Americans resolve more than $10 billion in debt.
+          </p>
+          <p className="text-caption text-neutral-500 mt-2">
+            Source: AFCC Industry Report
+          </p>
+        </div>
+      </div>
+    </Specimen>
+  )
+}
+
+function QualificationMessageSpecimen() {
+  return (
+    <Specimen
+      id="qualification-message"
+      title="Qualification Message"
+      description="Inline CheckCircle2 icon with colored status text. Success (green) and neutral (grey) states. From DebtAmountScreen."
+    >
+      <div className="space-y-6 max-w-md">
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Qualified (success)</p>
+          <p className="text-feedback-success font-medium flex items-center justify-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4" />
+            This amount qualifies for most relief programs
+          </p>
+          <p className="text-sm text-neutral-500 text-center mt-1">
+            Based on quoted partner outcomes of up to 50% reduction in total debt
+          </p>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Not yet qualified (neutral)</p>
+          <p className="text-neutral-500 font-medium text-center">
+            Some programs may be available — let&apos;s check your options.
+          </p>
+          <p className="text-sm text-neutral-500 text-center mt-1">
+            Based on quoted partner outcomes of up to 50% reduction in total debt
+          </p>
+        </div>
+      </div>
+    </Specimen>
+  )
+}
+
+function BadgeBannerSpecimen() {
+  return (
+    <Specimen
+      id="badge-banner"
+      title="Badge Banner"
+      description="Compact horizontal pill with icon and bullet-separated text. Used as a reassurance strip above content areas. From LocationScreen / MapVisual."
+    >
+      <div className="space-y-4 flex flex-col items-center">
+        <div className="inline-flex items-center gap-2 rounded bg-secondary-500 px-2 py-1">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1L9.79 5.73L15 6.46L11.25 9.85L12.18 15L8 12.52L3.82 15L4.75 9.85L1 6.46L6.21 5.73L8 1Z" stroke="#000000" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span className="text-xs leading-4 text-neutral-900 font-medium whitespace-nowrap">
+            Healthier finances &bull; No obligations &bull; 3 minutes
+          </span>
+        </div>
+        <div className="inline-flex items-center gap-2 rounded bg-primary-300 px-3 py-1.5">
+          <Shield className="w-4 h-4 text-primary-700" />
+          <span className="text-xs leading-4 text-primary-700 font-medium whitespace-nowrap">
+            Secure &bull; Private &bull; No credit impact
+          </span>
+        </div>
+        <div className="inline-flex items-center gap-2 rounded bg-green-100 px-3 py-1.5">
+          <CheckCircle2 className="w-4 h-4 text-green-700" />
+          <span className="text-xs leading-4 text-green-700 font-medium whitespace-nowrap">
+            Free consultation &bull; No upfront fees &bull; 24/7 support
+          </span>
+        </div>
+      </div>
+    </Specimen>
+  )
+}
+
+function TrustStatsRowSpecimen() {
+  return (
+    <Specimen
+      id="trust-stats-row"
+      title="Trust Stats Row"
+      description="Divider-separated stat columns with numbers/icons and labels. Centered horizontally. From ProcessingScreen."
+    >
+      <div className="space-y-6">
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">4-column (ProcessingScreen)</p>
+          <div className="flex justify-center items-center gap-6">
+            <div className="text-center">
+              <p className="text-lg font-bold text-neutral-900">1M+</p>
+              <p className="text-xs text-neutral-500">Americans matched</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <p className="text-lg font-bold text-neutral-900">24/7</p>
+              <p className="text-xs text-neutral-500">US Support</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <p className="text-lg font-bold text-neutral-900">&#10003;</p>
+              <p className="text-xs text-neutral-500">No credit impact</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <Lock className="w-5 h-5 text-neutral-900 mx-auto" />
+              <p className="text-xs text-neutral-500">Info is secure</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">3-column (ResultsPage)</p>
+          <div className="flex justify-center items-center gap-6">
+            <div className="text-center">
+              <Shield className="w-5 h-5 text-neutral-500 mx-auto" />
+              <p className="text-xs text-neutral-500 mt-1">30-Day Guarantee</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <Clock className="w-5 h-5 text-neutral-500 mx-auto" />
+              <p className="text-xs text-neutral-500 mt-1">24/7 Support</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <MapPin className="w-5 h-5 text-neutral-500 mx-auto" />
+              <p className="text-xs text-neutral-500 mt-1">US-Based Team</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">3-column stats (PartnerMatchCard)</p>
+          <div className="flex justify-center items-center gap-6">
+            <div className="text-center">
+              <p className="text-lg font-bold text-neutral-900">15-25%</p>
+              <p className="text-xs text-neutral-500">Avg. Fee</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <p className="text-lg font-bold text-neutral-900">A+</p>
+              <p className="text-xs text-neutral-500">BBB Rating</p>
+            </div>
+            <div className="h-8 w-px bg-neutral-200" />
+            <div className="text-center">
+              <p className="text-lg font-bold text-neutral-900">24-48 mo</p>
+              <p className="text-xs text-neutral-500">Avg. Timeline</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Specimen>
+  )
+}
+
+function FeatureGridSpecimen() {
+  return (
+    <Specimen
+      id="feature-grid"
+      title="Feature Grid"
+      description="2-column grid of CheckCircle2 icon + feature text. Used inside partner cards for benefit lists. From ResultsPage."
+    >
+      <div className="space-y-6 max-w-md">
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Partner features (2-col)</p>
+          <div className="grid grid-cols-2 gap-3">
+            {['No upfront fees', 'Free consultation', 'A+ BBB rating', '24/7 support', '$10B+ debt resolved', 'Dedicated advisor'].map((f, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0" />
+                <span className="text-sm text-neutral-800">{f}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Value unlock list (single-col)</p>
+          <div className="space-y-2">
+            {['Personalized debt relief options', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-feedback-success flex-shrink-0" />
+                <span className="text-sm text-neutral-800">{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </Specimen>
   )
