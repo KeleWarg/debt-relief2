@@ -1593,113 +1593,84 @@ function ContextCardSpecimen() {
     <Specimen
       id="context-card"
       title="Context Card (Master Block)"
-      description="Master sidebar aggregator composing existing sub-components into a single side panel. Two variants depending on journey stage. Passed as sideContent to FormLayout."
+      description="Master sidebar aggregator composing all sub-components into a single side panel. Passed as sideContent to FormLayout."
     >
-      <div className="space-y-8">
-        {/* Two assembled variants side by side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Variant A: Profile stage (DebtProfileScreen) */}
-          <div>
-            <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Variant A — Profile stage</p>
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              {/* DTI header row */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-neutral-500" />
-                  <span className="text-sm text-neutral-800">Debt-to-Income Ratio</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-neutral-900">53%</span>
-                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Elevated</span>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Assembled card */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">Based on what you told us</p>
 
-              {/* Snapshot rows */}
-              <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-200">
-                <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Debt Type</span><span className="text-sm font-semibold text-neutral-900">Personal Loan</span></div>
-                <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Debt</span><span className="text-sm font-semibold text-neutral-900">$72,000</span></div>
-                <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Annual Income</span><span className="text-sm font-semibold text-neutral-900">$135,000</span></div>
-              </div>
+          {/* Potential Savings */}
+          <div className="bg-secondary-300 rounded-lg p-4 mb-5">
+            <p className="text-xs text-neutral-600">Potential Savings</p>
+            <p className="text-2xl font-bold text-feedback-success">$28,800*</p>
+            <p className="text-xs text-neutral-600 mt-0.5">Timeline: 24-36 months</p>
+          </div>
 
-              {/* Approach Tags */}
-              <div className="mt-5">
-                <p className="text-xs uppercase tracking-wide text-neutral-500 mb-2">Recommended Approach</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Handshake className="w-3.5 h-3.5" />Debt Negotiation</span>
-                  <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5" />Lower Interest</span>
-                  <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />Payment Plan</span>
-                </div>
-              </div>
-
-              {/* Potential Savings */}
-              <div className="bg-secondary-300 rounded-lg p-4 mt-5">
-                <p className="text-xs text-neutral-600">Potential Savings</p>
-                <p className="text-2xl font-bold text-feedback-success">$28,800</p>
-                <p className="text-xs text-neutral-600 mt-0.5">Timeline: 24-36 months</p>
-              </div>
-
-              {/* Partner Logos */}
-              <div className="mt-5">
-                <p className="text-xs uppercase tracking-wide text-neutral-500 text-center mb-2">Trusted Partners</p>
-                <div className="flex justify-center gap-6">
-                  {PARTNER_LOGOS.slice(0, 3).map((logo, i) => (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img key={i} src={logo.src} alt={logo.alt} className="h-6 w-auto object-contain grayscale opacity-60" />
-                  ))}
-                </div>
-              </div>
+          {/* DTI header row */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-neutral-500" />
+              <span className="text-sm text-neutral-800">Debt-to-Income Ratio</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-neutral-900">53%</span>
+              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Elevated</span>
             </div>
           </div>
 
-          {/* Variant B: Verify stage (EmailScreen / PhoneScreen) */}
-          <div>
-            <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Variant B — Verify stage</p>
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              <p className="text-xs uppercase tracking-wide text-neutral-500 mb-4">Based on what you told us</p>
+          {/* Snapshot rows */}
+          <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-200 mb-5">
+            <div className="flex justify-between items-center px-4 py-3">
+              <span className="text-sm text-neutral-500 flex items-center gap-1">Debt Type <HelpCircle className="w-3.5 h-3.5 text-neutral-400" /></span>
+              <span className="text-sm font-semibold text-neutral-900">Personal Loan</span>
+            </div>
+            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Debt</span><span className="text-sm font-semibold text-neutral-900">$72,000</span></div>
+            <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Annual Income</span><span className="text-sm font-semibold text-neutral-900">$135,000</span></div>
+          </div>
 
-              {/* Potential Savings (prominent) */}
-              <div className="bg-secondary-300 rounded-lg p-4 mb-5">
-                <p className="text-xs text-neutral-600">Potential Savings</p>
-                <p className="text-2xl font-bold text-feedback-success">$28,800*</p>
-                <p className="text-xs text-neutral-600 mt-0.5">Timeline: 24-36 months</p>
-              </div>
-
-              {/* Compact snapshot */}
-              <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-200 mb-5">
-                <div className="flex justify-between items-center px-4 py-3"><span className="text-sm text-neutral-500">Total Debt</span><span className="text-sm font-semibold text-neutral-900">$72,000</span></div>
-                <div className="flex justify-between items-center px-4 py-3">
-                  <span className="text-sm text-neutral-500 flex items-center gap-1">Debt Type <HelpCircle className="w-3.5 h-3.5 text-neutral-400" /></span>
-                  <span className="text-sm font-semibold text-neutral-900">Personal Loan</span>
-                </div>
-                <div className="flex justify-between items-center px-4 py-3">
-                  <span className="text-sm text-neutral-500 flex items-center gap-1">DTI Ratio <HelpCircle className="w-3.5 h-3.5 text-neutral-400" /></span>
-                  <div className="flex items-center gap-2"><span className="text-sm font-semibold text-neutral-900">53%</span><span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Elevated</span></div>
-                </div>
-              </div>
-
-              {/* Value Checklist */}
-              <div className="mb-4">
-                <p className="text-sm font-semibold text-neutral-900 mb-2">Verify to unlock:</p>
-                <div className="space-y-1.5">
-                  {['Personalized debt relief options', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0" />
-                      <span className="text-sm text-neutral-800">{t}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Source attribution */}
-              <p className="text-xs text-neutral-400">*Estimated savings. Results vary.</p>
+          {/* Approach Tags */}
+          <div className="mb-5">
+            <p className="text-xs uppercase tracking-wide text-neutral-500 mb-2">Recommended Approach</p>
+            <div className="flex flex-wrap gap-2">
+              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Handshake className="w-3.5 h-3.5" />Debt Negotiation</span>
+              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5" />Lower Interest</span>
+              <span className="bg-primary-300 text-primary-700 px-3 py-1 rounded-full text-xs flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />Payment Plan</span>
             </div>
           </div>
+
+          {/* Value Checklist */}
+          <div className="mb-5">
+            <p className="text-sm font-semibold text-neutral-900 mb-2">Verify to unlock:</p>
+            <div className="space-y-1.5">
+              {['Personalized debt relief options', 'Side-by-side partner comparison', 'No obligation — compare and decide'].map((t, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-feedback-success flex-shrink-0" />
+                  <span className="text-sm text-neutral-800">{t}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Partner Logos */}
+          <div className="mb-4">
+            <p className="text-xs uppercase tracking-wide text-neutral-500 text-center mb-2">Trusted Partners</p>
+            <div className="flex justify-center gap-6">
+              {PARTNER_LOGOS.slice(0, 3).map((logo, i) => (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img key={i} src={logo.src} alt={logo.alt} className="h-6 w-auto object-contain grayscale opacity-60" />
+              ))}
+            </div>
+          </div>
+
+          {/* Source attribution */}
+          <p className="text-xs text-neutral-400">*Estimated savings. Results vary.</p>
         </div>
 
         {/* Sub-component inventory */}
         <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Sub-components (all exist as standalone specimens above)</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Sub-components</p>
+          <div className="space-y-2">
             {[
               { ref: '#debt-snapshot', label: 'Debt Snapshot Card', desc: 'Key-value rows: debt, income, type, DTI' },
               { ref: '#dti-badge', label: 'DTI Ratio Badge', desc: 'Colored pill: Low / Moderate / Elevated' },
@@ -1707,17 +1678,17 @@ function ContextCardSpecimen() {
               { ref: '#value-checklist', label: 'Value Checklist', desc: 'Check icons + unlock benefit text' },
               { ref: '#partner-logo-carousel', label: 'Partner Logos', desc: 'Scrolling or static logo strip' },
               { ref: '#source-attribution', label: 'Source Attribution', desc: 'Disclaimer / footnote text' },
-              { ref: '#testimonial-carousel', label: 'Testimonial Card', desc: 'Quote, stars, attribution (some variants)' },
+              { ref: '#testimonial-carousel', label: 'Testimonial Card', desc: 'Quote, stars, attribution (optional)' },
             ].map((sub) => (
-              <a key={sub.ref} href={sub.ref} className="border border-dashed border-primary-700/30 rounded-lg p-3 bg-primary-300/10 hover:bg-primary-300/20 transition-colors block">
-                <p className="text-xs font-semibold text-primary-700 mb-0.5">{sub.label}</p>
-                <p className="text-[11px] text-neutral-500 leading-tight">{sub.desc}</p>
+              <a key={sub.ref} href={sub.ref} className="border border-dashed border-primary-700/30 rounded-lg p-2.5 bg-primary-300/10 hover:bg-primary-300/20 transition-colors flex items-baseline justify-between gap-2">
+                <p className="text-xs font-semibold text-primary-700">{sub.label}</p>
+                <p className="text-[11px] text-neutral-500 text-right">{sub.desc}</p>
               </a>
             ))}
           </div>
           <div className="mt-4 bg-neutral-100 rounded-lg p-3">
             <p className="text-xs text-neutral-600">
-              The Context Card composes these sub-components into a single sidebar panel. <strong>Variant A</strong> is used on profile/results screens (includes DTI header, approach tags, savings projection, partner logos). <strong>Variant B</strong> is used on verify screens (savings prominent, compact snapshot, value checklist, disclaimer). Passed as <code className="bg-neutral-200 px-1 rounded text-xs">sideContent</code> to <code className="bg-neutral-200 px-1 rounded text-xs">FormLayout</code>.
+              The Context Card composes these sub-components under a &ldquo;Based on what you told us&rdquo; header. Passed as <code className="bg-neutral-200 px-1 rounded text-xs">sideContent</code> to <code className="bg-neutral-200 px-1 rounded text-xs">FormLayout</code>, appearing in the right column on desktop and below the form on mobile.
             </p>
           </div>
         </div>
