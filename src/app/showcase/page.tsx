@@ -119,7 +119,7 @@ const NAV: NavSection[] = [
       { id: 'partner-logo-carousel', label: 'Partner Logo Carousel' },
       { id: 'social-proof-overlay', label: 'Social Proof Overlay' },
       { id: 'trust-indicators', label: 'Trust Indicators' },
-      { id: 'how-it-works', label: 'How it Works Card' },
+      { id: 'support-box', label: 'Support Box' },
     ],
   },
   {
@@ -377,7 +377,7 @@ export default function ShowcasePage() {
         <PartnerLogoCarouselSpecimen />
         <SocialProofOverlaySpecimen />
         <TrustIndicatorsSpecimen />
-        <HowItWorksSpecimen />
+        <SupportBoxSpecimen />
 
         {/* ================================================================ */}
         {/* LOADERS                                                          */}
@@ -1200,24 +1200,106 @@ function TrustIndicatorsSpecimen() {
   )
 }
 
-function HowItWorksSpecimen() {
+function SupportBoxSpecimen() {
+  const [expanded, setExpanded] = React.useState(false)
   return (
     <Specimen
-      id="how-it-works"
-      title="How it Works Card"
-      description="Warm-background explainer with icon + text bullets. Used on selection screens."
+      id="support-box"
+      title="Support Box"
+      description="Contextual helper that sits below CTAs on form pages or within interstitials. Four layout variants."
     >
-      <div className="max-w-lg">
-        <h2 className="text-center text-xl font-bold text-neutral-900 mb-4">How it works</h2>
-        <div className="w-full bg-[#FEF9EF] rounded-lg p-4 flex flex-col sm:flex-row items-stretch gap-4">
-          <div className="flex-1 flex items-center gap-4">
-            <Star className="w-6 h-6 text-neutral-900 flex-shrink-0" />
-            <p className="text-sm text-neutral-900">Get matched with specialists who work on your behalf to find the best options</p>
+      <div className="space-y-8">
+        {/* Plain text */}
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Plain text (expandable)</p>
+          <div className="max-w-lg">
+            <button
+              type="button"
+              onClick={() => setExpanded(!expanded)}
+              className="inline-flex items-center gap-2 text-primary-700 text-sm font-medium hover:underline"
+            >
+              Why we ask for this information
+              <ChevronDown className={cn('w-4 h-4 transition-transform', expanded && 'rotate-180')} />
+            </button>
+            {expanded && (
+              <div className="w-full bg-neutral-100 rounded-lg p-4 mt-2">
+                <p className="text-sm text-neutral-800">
+                  This information helps us determine the best options for your situation.
+                  Providers use this data to create a personalized plan that fits your needs.
+                </p>
+                <p className="text-sm text-neutral-500 mt-2">
+                  Your information is kept confidential and only shared with potential partners.
+                </p>
+              </div>
+            )}
           </div>
-          <div className="h-px sm:h-auto sm:w-px bg-[#C0C0C0]" />
-          <div className="flex-1 flex items-center gap-4">
-            <CreditCard className="w-6 h-6 text-neutral-900 flex-shrink-0" />
-            <p className="text-sm text-neutral-900">Simplify the process — work with one partner instead of juggling multiple providers</p>
+        </div>
+
+        {/* Text with icons */}
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">Icon + text rows</p>
+          <div className="max-w-lg bg-neutral-100 rounded-lg p-4 space-y-3">
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-primary-700 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-neutral-900">Your data is secure</p>
+                <p className="text-xs text-neutral-500">256-bit encryption protects all personal information.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Clock className="w-5 h-5 text-primary-700 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-neutral-900">Takes about 3 minutes</p>
+                <p className="text-xs text-neutral-500">A few quick questions to match you with the right options.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-primary-700 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-neutral-900">No obligation</p>
+                <p className="text-xs text-neutral-500">Compare options and decide what works best for you.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 2-column grid */}
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">2-column grid (How it works)</p>
+          <div className="max-w-lg">
+            <h3 className="text-center text-lg font-bold text-neutral-900 mb-3">How it works</h3>
+            <div className="w-full bg-[#FEF9EF] rounded-lg p-4 flex flex-col sm:flex-row items-stretch gap-4">
+              <div className="flex-1 flex items-center gap-4">
+                <Star className="w-6 h-6 text-neutral-900 flex-shrink-0" />
+                <p className="text-sm text-neutral-900">Get matched with specialists who work on your behalf to find the best options</p>
+              </div>
+              <div className="h-px sm:h-auto sm:w-px bg-[#C0C0C0]" />
+              <div className="flex-1 flex items-center gap-4">
+                <CreditCard className="w-6 h-6 text-neutral-900 flex-shrink-0" />
+                <p className="text-sm text-neutral-900">Simplify the process — work with one partner instead of juggling multiple providers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3-column grid */}
+        <div>
+          <p className="text-xs font-medium text-neutral-400 uppercase mb-3">3-column grid</p>
+          <div className="max-w-lg">
+            <div className="w-full bg-[#FEF9EF] rounded-lg p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex items-start gap-3">
+                <Users className="w-5 h-5 text-neutral-900 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-neutral-900">XM+ people matched with a partner</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-neutral-900 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-neutral-900">Vetted, accredited provider network</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Gift className="w-5 h-5 text-neutral-900 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-neutral-900">Free consultation, no upfront fees</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
