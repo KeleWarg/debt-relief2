@@ -32,14 +32,17 @@ export function LongevityResultsScreen({ budget }: LongevityResultsScreenProps) 
           {/* Provider Card */}
           <div className="bg-white rounded-lg border border-[#EDEDED] shadow-sm overflow-hidden">
             <div className="px-6 pt-6 pb-0">
-              {/* Badge + Logo row */}
-              <div className="flex items-start justify-between mb-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF1FF] text-[#007AC8] text-xs font-semibold">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  {FEATURED_PROVIDER.tagline}
-                </span>
+              {/* Badge */}
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF1FF] text-[#007AC8] text-xs font-semibold mb-4">
+                <CheckCircle className="w-3.5 h-3.5" />
+                {FEATURED_PROVIDER.tagline}
+              </span>
 
-                {/* Provider logo */}
+              {/* Provider name + Logo row */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-semibold text-[#171717]">
+                  {FEATURED_PROVIDER.name}
+                </h2>
                 <Image
                   src="/longevity/cenegenics-logo.png"
                   alt={FEATURED_PROVIDER.name}
@@ -48,11 +51,6 @@ export function LongevityResultsScreen({ budget }: LongevityResultsScreenProps) 
                   className="object-contain"
                 />
               </div>
-
-              {/* Provider name */}
-              <h2 className="text-2xl font-semibold text-[#171717] mb-4">
-                {FEATURED_PROVIDER.name}
-              </h2>
 
               <hr className="border-t border-[#EDEDED]" />
             </div>
@@ -95,7 +93,7 @@ export function LongevityResultsScreen({ budget }: LongevityResultsScreenProps) 
               {/* CTA Button */}
               <a
                 href={FEATURED_PROVIDER.ctaUrl}
-                className="block w-full text-center py-4 px-6 rounded-[4px] bg-[#007AC8] hover:bg-[#1E72A8] active:bg-[#0B5F95] text-white text-lg font-semibold leading-[26px] transition-colors duration-200"
+                className="block w-full text-center py-4 px-4 sm:px-6 rounded-[4px] bg-[#007AC8] hover:bg-[#1E72A8] active:bg-[#0B5F95] text-white text-base sm:text-lg font-semibold leading-snug transition-colors duration-200"
               >
                 {FEATURED_PROVIDER.ctaText}
               </a>
