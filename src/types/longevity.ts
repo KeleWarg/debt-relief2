@@ -221,15 +221,17 @@ export const LONGEVITY_TRUST_BADGES = [
 // --- Featured provider ---
 
 export const FEATURED_PROVIDER = {
-  name: 'Superpower',
+  name: 'Cenegenics',
   tagline: 'Our Pick For You',
-  matchText: 'Based upon your budget we have matched you with Superpower Biomarker Testing',
+  description:
+    'Since 1997 Cenegenics have redefined healthcare to maximise health span with 20 centres in major cities across the US.',
   nextSteps: [
-    'Book your lab test',
-    'Detect early signs of 1,000+ conditions',
-    'All for only $17/month',
+    'Click below to schedule your complimentary consultation',
+    'Develop an effective plan understanding your individual needs',
+    'Start the program remotely, no need to visit a lab or office',
   ],
-  ctaText: 'Join Superpower Today >',
+  nextStepCallout: 'Expect a call within 24 hours',
+  ctaText: 'Schedule Your Consultation Now >',
   ctaUrl: '#',
 }
 
