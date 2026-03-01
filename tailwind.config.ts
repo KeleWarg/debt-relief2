@@ -82,7 +82,7 @@ const config: Config = {
         'legal': ['11px', { lineHeight: '1.4', fontWeight: '400' }],
       },
       maxWidth: {
-        content: '640px',
+        content: '740px',
       },
       container: {
         center: true,

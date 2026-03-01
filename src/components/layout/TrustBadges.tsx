@@ -47,14 +47,17 @@ export function TrustBadges({ className, badges, variant = 'default' }: TrustBad
         'w-full',
         isLongevity
           ? 'bg-[#0C7663] py-2.5 px-20 shadow-[0_4px_8px_-1px_rgba(0,0,0,0.10),0_0_1px_rgba(0,0,0,0.05)]'
-          : 'border-t border-neutral-200 bg-white py-4',
+          : 'relative overflow-hidden bg-black py-4 border-t border-white/[0.06]',
         className
       )}
+      style={!isLongevity ? {
+        backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, transparent 100%), linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%)',
+      } : undefined}
     >
       <div className={cn(
         isLongevity
           ? 'flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10'
-          : 'max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
+          : 'relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
       )}>
         {!isLongevity && (
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
@@ -62,8 +65,8 @@ export function TrustBadges({ className, badges, variant = 'default' }: TrustBad
               const Icon = badge.icon
               return (
                 <div key={index} className="flex items-center gap-2">
-                  {Icon && <Icon className="w-4 h-4 text-primary-700" />}
-                  <span className="text-body-sm text-neutral-800">{badge.text}</span>
+                  {Icon && <Icon className="w-4 h-4 text-white/70" />}
+                  <span className="text-body-sm text-white/80">{badge.text}</span>
                 </div>
               )
             })}

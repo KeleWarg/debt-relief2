@@ -1,54 +1,49 @@
 import * as React from 'react'
 import Image from 'next/image'
-import { ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+const HEADER_LINKS = [
+  { label: 'Advertiser Disclosure', href: '#' },
+  { label: 'Privacy Policy', href: '#' },
+  { label: 'Contact Us', href: '#' },
+]
 
 interface HeaderProps {
   className?: string
-  /** Optional trust text shown on the right side of the header (e.g., "Trusted by 100k+ people") */
-  trustText?: string
+  /** When true, hides the right-side links */
+  minimal?: boolean
 }
 
-/**
- * Header Component
- * 
- * Forbes Advisor branded header with logo
- * Optionally shows trust text on the right side
- * 
- * @example
- * <Header />
- * <Header trustText="Trusted by 100k+ people" />
- */
-export function Header({ className, trustText }: HeaderProps) {
+export function Header({ className, minimal }: HeaderProps) {
   return (
-    <header 
+    <header
       className={cn(
         'w-full bg-white sticky top-0 z-50',
         className
       )}
-      style={{
-        boxShadow: '0 0 1px 0 rgba(0, 0, 0, 0.05), 0 4px 8px -1px rgba(0, 0, 0, 0.10)'
-      }}
     >
-      <div className={cn(
-        'w-full max-w-[1440px] mx-auto h-12 px-4 sm:px-20 flex items-center gap-2.5',
-        trustText ? 'justify-between' : 'justify-center'
-      )}>
-        {/* Forbes Advisor Logo */}
+      <div className="w-full h-14 pl-[80px] pr-[80px] flex items-center gap-6">
         <Image
           src="/forbes-advisor-logo.svg"
           alt="Forbes Advisor"
           width={167}
           height={21}
           priority
+          className="flex-shrink-0"
         />
 
-        {/* Optional trust badge */}
-        {trustText && (
-          <div className="hidden sm:flex items-center gap-1.5 text-[#333333]">
-            <ShieldCheck className="w-4 h-4 text-[#333333]" />
-            <span className="text-sm font-normal leading-5">{trustText}</span>
-          </div>
+        {!minimal && (
+          <nav className="hidden sm:flex items-center gap-5 ml-auto">
+            {HEADER_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
         )}
       </div>
     </header>

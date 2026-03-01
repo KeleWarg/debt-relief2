@@ -20,7 +20,9 @@
   --color-secondary-500: #F3C060;
   
   /* Neutrals */
+  --color-white-solid: #FFFFFF;
   --color-white: #FFFFFF;
+  --color-grey-96: #F5F5F7;
   --color-light-grey: #F8F8FA;
   --color-light-neutral: #F3F5FB;
   --color-divider: #EDEDED;
@@ -84,6 +86,12 @@
 /* ============================================
    COMPONENT UTILITIES
    ============================================ */
+
+@layer utilities {
+  .bg-page-gradient {
+    background: linear-gradient(180deg, var(--color-white-solid, #FFF) 0%, var(--color-grey-96, #F5F5F7) 100%);
+  }
+}
 
 @layer components {
   /* Primary Button */
@@ -531,6 +539,12 @@
   animation: fadeInUp 0.5s ease-out forwards;
 }
 
+.stagger-1 { animation-delay: 60ms; }
+.stagger-2 { animation-delay: 140ms; }
+.stagger-3 { animation-delay: 220ms; }
+.stagger-4 { animation-delay: 300ms; }
+.stagger-5 { animation-delay: 380ms; }
+
 /* ============================================
    PARTNER LOGO CAROUSEL
    ============================================ */
@@ -579,3 +593,47 @@
 .has-sticky-button {
   @apply pb-24 sm:pb-0;
 }
+
+/* ============================================
+   HERO → FORM TRANSITION
+   ============================================ */
+
+@keyframes heroExit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+.animate-hero-exit {
+  animation: heroExit 0.35s ease-in forwards;
+}
+
+/* ============================================
+   AFFIRMATION CHART PULSE
+   ============================================ */
+
+@keyframes affirmPulse {
+  0% {
+    r: 5;
+    opacity: 0.4;
+  }
+  70% {
+    r: 14;
+    opacity: 0;
+  }
+  100% {
+    r: 14;
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   TYPEFORM SCREEN TRANSITIONS
+   Opacity-based crossfade between screens.
+   Staggered entrance via animate-fade-in-up + stagger-N.
+   ============================================ */
