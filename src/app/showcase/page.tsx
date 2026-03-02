@@ -758,7 +758,7 @@ function FormLayoutSpecimen() {
             </div>
             <div>
               <p className="text-xs font-medium text-neutral-400 uppercase mb-2 px-4">With trust text</p>
-              <Header trustText="Trusted by XXk+ people" />
+              <Header />
             </div>
           </div>
         </SubComponentDropdown>
