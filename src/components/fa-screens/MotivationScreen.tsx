@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { HeroLayout } from '@/components/layout/HeroLayout'
 import { MOTIVATION_OPTIONS, AGE_OPTIONS } from '@/types/fa-funnel'
 import type { MotivationDriver, AgeRange } from '@/types/fa-funnel'
@@ -301,12 +302,21 @@ function MotivationOptions({
         })}
       </div>
 
-      <div className="mt-6 bg-neutral-100 rounded-lg p-4">
-        <p className="text-sm text-neutral-800 leading-relaxed">
-          Behind on retirement? Managing a windfall? Just want a second opinion?
-          The right advisor handles all of it&nbsp;&mdash; the cost of waiting is the
-          only thing they can&rsquo;t fix.
-        </p>
+      <div className="mt-6 border-t border-neutral-200 pt-4">
+        <div className="flex items-start gap-3">
+          <Image
+            src="/clock-icon.png"
+            alt="Clock"
+            width={64}
+            height={64}
+            unoptimized
+            className="flex-shrink-0 animate-float"
+          />
+          <p className="text-sm text-neutral-800 leading-relaxed">
+            Behind on retirement savings? Managing a windfall? Just want a second opinion from a professional?
+            The right advisor handles all of it for you.
+          </p>
+        </div>
       </div>
 
     </>

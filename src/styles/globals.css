@@ -238,6 +238,20 @@
   animation: slideOutToBottom 0.5s ease-in;
 }
 
+/* Gentle floating animation */
+.animate-float {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 /* Map Pin Floating Animation */
 @keyframes float {
   0%, 100% {

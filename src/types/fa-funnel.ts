@@ -223,11 +223,11 @@ export const FA_SECTION_LABELS: Record<FAStep, string> = {
 // ---------------------------------------------------------------------------
 
 export const MOTIVATION_OPTIONS = [
-  { value: 'behind_retirement', label: "I'm worried I'm behind on retirement" },
+  { value: 'behind_retirement', label: "I'm worried I'm behind on retirement savings" },
   { value: 'family_protection', label: 'I want to make sure my family is protected' },
   { value: 'windfall', label: "I've come into money and need guidance" },
   { value: 'optimization', label: 'I want to stop leaving money on the table' },
-  { value: 'plan_review', label: 'I just want a professional to review my plan' },
+  { value: 'plan_review', label: 'I want professional 2nd opinion to review my plan' },
 ] as const
 
 export const AGE_OPTIONS = [
