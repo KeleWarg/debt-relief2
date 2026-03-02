@@ -1,7 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { CheckCircle2, Shield, Users, Clock } from 'lucide-react'
+import Image from 'next/image'
+import { CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 import { MOTIVATION_LABELS } from '@/types/fa-funnel'
@@ -325,12 +326,12 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
         >
           <div className="grid grid-cols-3 divide-x divide-neutral-200">
             {[
-              { icon: Shield, value: '100%', label: 'Free & confidential' },
-              { icon: Users, value: '100K+', label: 'People matched' },
-              { icon: Clock, value: '~3 min', label: 'To complete' },
+              { src: '/icon-shield.png', alt: 'Shield', value: '100%', label: 'Free & confidential' },
+              { src: '/icon-people.png', alt: 'People', value: '100K+', label: 'People matched' },
+              { src: '/icon-clock.png', alt: 'Clock', value: '~3 min', label: 'To complete' },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center gap-1.5 px-2">
-                <stat.icon className="w-5 h-5 text-neutral-400" />
+                <Image src={stat.src} alt={stat.alt} width={32} height={32} unoptimized />
                 <p className="text-sm font-bold text-neutral-900">{stat.value}</p>
                 <p className="text-xs text-neutral-500">{stat.label}</p>
               </div>

@@ -1,26 +1,37 @@
 'use client'
 
 import * as React from 'react'
-import { SAVINGS_OPTIONS } from '@/types/fa-funnel'
 import type { SavingsRange, MotivationDriver } from '@/types/fa-funnel'
-import { cn } from '@/lib/utils'
+import { Slider } from '@/components/ui/Slider'
+import { Button } from '@/components/ui/Button'
+import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 
-const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F']
+const BLUE = '#0066CC'
 
-const SAVINGS_CONFIRMATION: Record<MotivationDriver, string> = {
-  behind_retirement: 'Your income is locked in. Now, how much have you saved?',
-  family_protection: 'Your income is locked in. Now, how much have you set aside?',
-  windfall: "Your income is locked in. Now let's look at what you've saved alongside it.",
-  optimization: "Your income is locked in. Now let's see what you've accumulated.",
-  plan_review: "Your income is locked in. Now let's add your savings to the picture.",
-}
-
-const SAVINGS_REASSURANCE: Record<MotivationDriver, string> = {
-  behind_retirement: 'A rough estimate is fine. This helps your advisor understand the gap and how aggressively to plan.',
-  family_protection: 'Your total assets shape the scope of protection planning your advisor will recommend.',
-  windfall: 'This helps us find advisors experienced at your level of wealth. A ballpark is all we need.',
-  optimization: 'Asset level determines which optimization strategies are available to you. A rough number works.',
-  plan_review: 'This gives your advisor a sense of scale before they review your plan. Estimates are fine.',
+const SAVINGS_CONTENT: Record<MotivationDriver, {
+  headline: React.ReactNode
+  subCopy: string
+}> = {
+  behind_retirement: {
+    headline: <>Now let{'\u2019'}s look at what you{'\u2019'}ve saved. <span style={{ color: BLUE }}>Your savings shape how aggressively your advisor can plan</span> your catch-up strategy.</>,
+    subCopy: 'A rough estimate is fine. This helps your advisor understand the gap and how aggressively to plan.',
+  },
+  family_protection: {
+    headline: <>Now let{'\u2019'}s look at what you{'\u2019'}ve set aside. <span style={{ color: BLUE }}>Your savings shape the scope of protection</span> your advisor will recommend.</>,
+    subCopy: 'Your total assets shape the scope of protection planning your advisor will recommend.',
+  },
+  windfall: {
+    headline: <>Now let{'\u2019'}s look at what you{'\u2019'}ve saved alongside your new wealth. <span style={{ color: BLUE }}>Your baseline shapes how your advisor positions everything</span>.</>,
+    subCopy: "This helps us find advisors experienced at your level of wealth. A ballpark is all we need.",
+  },
+  optimization: {
+    headline: <>Now let{'\u2019'}s see what you{'\u2019'}ve accumulated. <span style={{ color: BLUE }}>Your asset level determines which optimization strategies</span> are available to you.</>,
+    subCopy: 'Asset level determines which optimization strategies are available to you. A rough number works.',
+  },
+  plan_review: {
+    headline: <>Now let{'\u2019'}s add your savings to the picture. <span style={{ color: BLUE }}>This gives your advisor a sense of scale</span> before they review your plan.</>,
+    subCopy: 'This gives your advisor a sense of scale before they review your plan. Estimates are fine.',
+  },
 }
 
 interface SavingsRangeScreenProps {
@@ -36,106 +47,102 @@ export function SavingsRangeScreen({
   onBack,
   onSubmit,
 }: SavingsRangeScreenProps) {
-  const [selected, setSelected] = React.useState<string>(initialValue ?? '')
+  const SLIDER_STEPS = [
+    { amount: 25000, label: '$25K', range: 'under_50k' as SavingsRange },
+    { amount: 100000, label: '$100K', range: '50k_150k' as SavingsRange },
+    { amount: 250000, label: '$250K', range: '150k_350k' as SavingsRange },
+    { amount: 550000, label: '$550K', range: '350k_750k' as SavingsRange },
+    { amount: 1000000, label: '$1M', range: '750k_1.5m' as SavingsRange },
+    { amount: 1500000, label: '$1.5M+', range: '1.5m_plus' as SavingsRange },
+  ]
 
-  const handleSelect = (value: string) => {
-    setSelected(value)
-    setTimeout(() => onSubmit?.(value as SavingsRange), 400)
+  const initialAmount = initialValue
+    ? SLIDER_STEPS.find((s) => s.range === initialValue)?.amount ?? 150000
+    : 150000
+
+  const [sliderValue, setSliderValue] = React.useState([initialAmount])
+
+  const currentRange = React.useMemo(() => {
+    const val = sliderValue[0]
+    if (val < 50000) return 'under_50k' as SavingsRange
+    if (val < 150000) return '50k_150k' as SavingsRange
+    if (val < 350000) return '150k_350k' as SavingsRange
+    if (val >= 350000) return '350k_750k' as SavingsRange
+    return '350k_750k' as SavingsRange
+  }, [sliderValue])
+
+  const formatSavings = (v: number) => {
+    if (v >= 500000) return '$500K+'
+    return `$${Math.round(v / 1000)}K`
   }
 
-  const confirmation = motivationDriver ? SAVINGS_CONFIRMATION[motivationDriver] : undefined
-  const reassurance = motivationDriver ? SAVINGS_REASSURANCE[motivationDriver] : undefined
+  const handleSubmit = () => {
+    onSubmit?.(currentRange)
+  }
+
+  const content = motivationDriver ? SAVINGS_CONTENT[motivationDriver] : null
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="flex flex-col items-start w-full">
-        {/* Zone 1: Confirmation */}
-        <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
-            {confirmation ?? "Now let's look at what you've built so far."}
-          </p>
-        </div>
-
-        {/* Divider */}
-        <div
-          className="animate-fade-in-up w-full border-t mb-6 mt-4"
-          style={{ animationDelay: '300ms', borderColor: '#E0E0E0' }}
-        />
-
-        {/* Zone 2: Question */}
+        {/* Section label */}
         <p
           className="animate-fade-in-up text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3"
           style={{ animationDelay: '400ms' }}
         >
           Building your financial profile
         </p>
+
+        {/* Headline */}
         <h1
-          className="animate-fade-in-up font-display text-display sm:text-display-md lg:text-display-lg mb-3"
+          className="animate-fade-in-up font-display text-headline-lg sm:text-display lg:text-display-md mb-3"
           style={{ animationDelay: '400ms', color: '#1B2A4A' }}
         >
-          Whatever you&apos;ve saved, it&apos;s workable.{' '}
-          <span style={{ color: '#0066CC' }}>That&apos;s what advisors do.</span>
+          {content?.headline ?? <>Whatever you{'\u2019'}ve saved, it{'\u2019'}s workable. <span style={{ color: BLUE }}>That{'\u2019'}s what advisors do.</span></>}
         </h1>
+
+        {/* Sub-copy */}
         <p
           className="animate-fade-in-up leading-relaxed mb-8"
           style={{ animationDelay: '500ms', fontSize: '15px', color: '#666666' }}
         >
-          Estimate your total savings and assets, including cash, investments, retirement accounts, and home equity.
+          {content?.subCopy ?? "Estimate your total savings and assets, including cash, investments, retirement accounts, and home equity."}
         </p>
 
-        {/* Options */}
-        <div className="w-full flex flex-col" style={{ gap: '12px' }}>
-          {SAVINGS_OPTIONS.map((opt, i) => {
-            const isSelected = selected === opt.value
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => handleSelect(opt.value)}
-                className={cn(
-                  'animate-fade-in-up flex items-center gap-3 w-full bg-white border rounded-lg text-left',
-                  'cursor-pointer transition-all duration-200',
-                  isSelected
-                    ? 'border-[#0066CC] bg-[#F0F7FF] shadow-sm'
-                    : 'border-[#E8E8E8] hover:bg-[#F0F7FF]'
-                )}
-                style={{ animationDelay: `${500 + i * 100}ms`, height: '56px', paddingLeft: '16px', paddingRight: '16px' }}
-              >
-                <div
-                  className={cn(
-                    'flex items-center justify-center rounded-full flex-shrink-0 text-sm font-semibold transition-colors duration-200',
-                    isSelected
-                      ? 'bg-[#0066CC] text-white'
-                      : 'bg-[#F2F2F2] text-neutral-500'
-                  )}
-                  style={{ width: '28px', height: '28px' }}
-                >
-                  {LETTERS[i]}
-                </div>
-                <span style={{ fontSize: '16px', color: '#1B2A4A' }}>
-                  {opt.label}
-                </span>
-              </button>
-            )
-          })}
+        {/* Display value */}
+        <div className="animate-fade-in-up w-full text-center py-4" style={{ animationDelay: '500ms' }}>
+          <p className="text-[56px] font-display leading-none text-neutral-900">
+            {formatSavings(sliderValue[0])}
+          </p>
         </div>
 
-        {/* Advisor reassurance */}
-        {reassurance && (
-          <div
-            className="animate-fade-in-up w-full mt-4 rounded-lg"
-            style={{ animationDelay: '1100ms', backgroundColor: '#F8F8FA', padding: '12px', borderRadius: '8px' }}
-          >
-            <p style={{ fontSize: '13px', color: '#999999' }}>
-              {reassurance}
-            </p>
-          </div>
-        )}
+        {/* Slider */}
+        <div className="animate-fade-in-up w-full" style={{ animationDelay: '600ms' }}>
+          <Slider
+            min={0}
+            max={500000}
+            step={5000}
+            value={sliderValue}
+            onValueChange={setSliderValue}
+            showValue={false}
+            markers={[
+              { value: 0, label: '$0' },
+              { value: 125000, label: '$125K' },
+              { value: 250000, label: '$250K' },
+              { value: 375000, label: '$375K' },
+              { value: 500000, label: '$500K+' },
+            ]}
+          />
+        </div>
+
+        {/* CTA */}
+        <div className="animate-fade-in-up w-full mt-8" style={{ animationDelay: '700ms' }}>
+          <StickyButtonContainer>
+            <Button variant="primary" fullWidth showTrailingIcon onClick={handleSubmit}>
+              Continue
+            </Button>
+          </StickyButtonContainer>
+        </div>
       </div>
     </div>
   )

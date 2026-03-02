@@ -10,6 +10,7 @@ import { TrustBadges } from './TrustBadges'
 const DEFAULT_CAROUSEL: CarouselSlide[] = [
   { src: '/hero-4.png', alt: 'Man celebrating a financial milestone' },
   { src: '/hero-5.png', alt: 'Retired couple enjoying life together' },
+  { src: '/image.png', alt: 'Woman reviewing Forbes Advisor savings dashboard on phone', fit: 'contain' },
 ]
 
 const SLIDE_INTERVAL = 5000
@@ -18,6 +19,7 @@ const FADE_DURATION = 800
 interface CarouselSlide {
   src: string
   alt: string
+  fit?: 'cover' | 'contain'
 }
 
 interface HeroLayoutProps {
@@ -126,7 +128,8 @@ function HeroCarousel({ slides }: { slides: CarouselSlide[] }) {
           src={slide.src}
           alt={slide.alt}
           fill
-          className="object-cover"
+          unoptimized
+          className={slide.fit === 'contain' ? 'object-contain' : 'object-cover'}
           priority={i === 0}
           sizes="50vw"
           style={{
