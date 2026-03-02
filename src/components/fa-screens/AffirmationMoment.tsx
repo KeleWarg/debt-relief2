@@ -211,7 +211,7 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
   if (!gapData) return null
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-8">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
       <FAProgressBar stepName="affirmation" onBack={onBack} />
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Bar chart */}

@@ -24,7 +24,7 @@ export function AgeRangeScreen({ initialValue, onBack, onSubmit }: AgeRangeScree
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
       <FAProgressBar currentStep={FA_AGE_PHASE_STEP} onBack={onBack} />
 
       <div className="animate-slide-up mt-8">

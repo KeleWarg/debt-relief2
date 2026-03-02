@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 
 interface StickyButtonContainerProps {
@@ -8,48 +9,31 @@ interface StickyButtonContainerProps {
   className?: string
 }
 
-/**
- * StickyButtonContainer Component
- * 
- * Wraps a button (typically the form submit button) and makes it sticky/fixed 
- * at the bottom of the screen on mobile devices. On tablet and desktop, 
- * the button renders inline as normal.
- * 
- * Features:
- * - Fixed position on mobile (< 640px)
- * - White background with subtle top shadow
- * - Safe area padding for iOS devices with home indicator
- * - Normal inline flow on tablet/desktop
- * - Moves up when mobile keyboard appears (using Visual Viewport API)
- * 
- * @example
- * <StickyButtonContainer>
- *   <Button type="submit" fullWidth>Continue</Button>
- * </StickyButtonContainer>
- */
 export function StickyButtonContainer({ 
   children, 
   className 
 }: StickyButtonContainerProps) {
   const [keyboardOffset, setKeyboardOffset] = React.useState(0)
+  const [isMobile, setIsMobile] = React.useState(false)
+  const anchorRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
-    // Only run on mobile (check if it's a touch device and small screen)
-    const isMobile = window.matchMedia('(max-width: 639px)').matches
+    const mq = window.matchMedia('(max-width: 639px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  React.useEffect(() => {
     if (!isMobile) return
 
     const visualViewport = window.visualViewport
     if (!visualViewport) return
 
     const handleResize = () => {
-      // Calculate the difference between the layout viewport and visual viewport
-      // This difference represents the keyboard height
       const keyboardHeight = window.innerHeight - visualViewport.height
-      
-      // Only apply offset if keyboard is likely open (height > 100px threshold)
-      // and the visual viewport has scrolled (keyboard pushed content up)
       if (keyboardHeight > 100) {
-        // Account for the viewport offset (scroll position within visual viewport)
         const offset = keyboardHeight - visualViewport.offsetTop
         setKeyboardOffset(Math.max(0, offset))
       } else {
@@ -57,42 +41,59 @@ export function StickyButtonContainer({
       }
     }
 
-    // Listen to both resize and scroll events on visual viewport
     visualViewport.addEventListener('resize', handleResize)
     visualViewport.addEventListener('scroll', handleResize)
-
-    // Initial check
     handleResize()
 
     return () => {
       visualViewport.removeEventListener('resize', handleResize)
       visualViewport.removeEventListener('scroll', handleResize)
     }
-  }, [])
+  }, [isMobile])
+
+  const handlePortalClick = (e: React.MouseEvent) => {
+    const button = (e.target as HTMLElement).closest('button')
+    if (!button || button.disabled) return
+    if (button.type === 'submit') {
+      e.preventDefault()
+      const form = anchorRef.current?.closest('form')
+      if (form) {
+        form.requestSubmit()
+      }
+    }
+  }
+
+  const mobileBar = (
+    <div
+      className={cn(
+        'fixed left-0 right-0 bg-white border-t border-neutral-200 px-4 pt-4 pb-6 z-[9999] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]',
+        'transition-[bottom] duration-150 ease-out',
+        className
+      )}
+      style={{ bottom: keyboardOffset > 0 ? `${keyboardOffset}px` : 0 }}
+    >
+      <div
+        className="[&_.btn-continue-wrapper]:w-full [&_button]:w-full"
+        onClick={handlePortalClick}
+      >
+        {children}
+      </div>
+    </div>
+  )
+
+  if (isMobile) {
+    return (
+      <>
+        <div ref={anchorRef} className="hidden" />
+        {createPortal(mobileBar, document.body)}
+      </>
+    )
+  }
 
   return (
-    <>
-      {/* Button container - sticky on mobile, normal on desktop */}
-      <div
-        className={cn(
-          // Mobile: fixed at bottom with styling
-          'fixed left-0 right-0 bg-white border-t border-neutral-200 px-4 pt-4 pb-6 z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]',
-          // Tablet/Desktop: normal positioning
-          'sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:bg-transparent sm:border-0 sm:p-0 sm:shadow-none',
-          // Smooth transition for keyboard appearance
-          'transition-[bottom] duration-150 ease-out',
-          className
-        )}
-        style={{
-          // Apply keyboard offset on mobile, use bottom: 0 as base
-          bottom: keyboardOffset > 0 ? `${keyboardOffset}px` : 0,
-        }}
-      >
-        <div className="max-w-[410px] mx-auto sm:max-w-none">
-          {children}
-        </div>
-      </div>
-    </>
+    <div className={cn('sm:relative sm:bg-transparent sm:border-0 sm:p-0 sm:shadow-none', className)}>
+      {children}
+    </div>
   )
 }
 

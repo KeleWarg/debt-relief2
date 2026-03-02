@@ -22,7 +22,7 @@ export function Header({ className, minimal }: HeaderProps) {
         className
       )}
     >
-      <div className="w-full h-14 pl-[80px] pr-[80px] flex items-center gap-6">
+      <div className="w-full h-14 px-4 sm:pl-[80px] sm:pr-[80px] flex items-center justify-center sm:justify-start gap-6">
         <Image
           src="/forbes-advisor-logo.svg"
           alt="Forbes Advisor"

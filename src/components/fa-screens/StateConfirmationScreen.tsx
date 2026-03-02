@@ -76,7 +76,7 @@ export function StateConfirmationScreen({
       : `Your advisor will be licensed in ${displayName} and familiar with local regulations.`
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-8">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
       <FAProgressBar stepName="zipCode" onBack={onBack} />
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Confirmed badge */}

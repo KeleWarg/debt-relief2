@@ -248,9 +248,9 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
 
   return (
     <div style={opacityStyle} className="h-full w-full">
-      <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-8">
+      <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
         <FAProgressBar stepName="age" onBack={handleBack} />
-        <div className="mt-6">
+        <div className="mt-3 sm:mt-6">
           {ageContent}
         </div>
       </div>

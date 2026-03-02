@@ -137,7 +137,7 @@ export function ObjectivesScreen({
   const reassurance = motivationDriver ? OBJ_REASSURANCE[motivationDriver] : undefined
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-8">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
       <FAProgressBar stepName="objectives" onBack={onBack} />
       <div className="flex flex-col items-start w-full mt-6">
         {/* Zone 1: Confirmation */}

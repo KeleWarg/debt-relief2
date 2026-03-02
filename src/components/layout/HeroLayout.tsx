@@ -75,7 +75,7 @@ function StatIcon({ type }: { type: string }) {
 
 function GlassTrustOverlay() {
   return (
-    <div className="absolute bottom-10 left-4 right-4 z-10 flex flex-col items-center gap-2">
+    <div className="absolute bottom-10 left-4 right-4 z-10 hidden lg:flex flex-col items-center gap-2">
       <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/50">
         As seen on
       </span>
@@ -208,12 +208,10 @@ export function HeroLayout({
 
       {/* Mobile: stacked layout with carousel */}
       <div className="lg:hidden flex-1 flex flex-col min-h-0 overflow-y-auto">
-        <div className="flex items-center justify-center px-6 pt-6 pb-4">
-          <div className="relative w-full aspect-[4/3] max-h-[40vh] rounded-2xl overflow-hidden">
-            <HeroCarousel slides={slides} />
-          </div>
+        <div className="relative w-full aspect-[5/2] max-h-[23vh] overflow-hidden flex-shrink-0">
+          <HeroCarousel slides={slides} />
         </div>
-        <main className="flex-1 flex flex-col justify-center px-6 sm:px-10 py-8">
+        <main className="flex-1 flex flex-col justify-center px-6 sm:px-10 py-8 pb-24 sm:pb-8">
           <div className="w-full max-w-[520px] mx-auto">
             {children}
           </div>

@@ -354,7 +354,7 @@ export function GrowthHorizonScreen({
   ]
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-8">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
       <FAProgressBar stepName="growthHorizon" onBack={onBack} />
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Headline */}

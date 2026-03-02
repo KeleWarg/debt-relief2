@@ -115,7 +115,7 @@ export function FAEmailScreen({
   if (hasSavedEmail && !hasTcpaConsent) {
     const savedEmail = funnelData.savedEmail ?? initialValue ?? ''
     return (
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 flex items-center">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8 flex items-center">
         <FAProgressBar currentStep={FA_STEP_NUMBER.email} onBack={onBack} />
         <div className="animate-slide-up has-sticky-button mt-8">
           <div className="max-w-content mx-auto text-center">
@@ -149,7 +149,7 @@ export function FAEmailScreen({
   const subCopy = EMAIL_SUB_COPY[motivationDriver as MotivationDriver]
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 flex items-center">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8 flex items-center">
       <FAProgressBar currentStep={FA_STEP_NUMBER.email} onBack={onBack} />
           <div className="animate-slide-up has-sticky-button mt-8">
             <div className="max-w-content mx-auto text-center">
