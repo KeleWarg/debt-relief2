@@ -10,11 +10,12 @@
 | Fields | `first_name`, `last_name`, `phone` |
 | Type | Text inputs |
 | Auto-advance | No. Requires "Find My Advisor" |
-| Phase label | FINAL DETAILS |
+| Phase label | FINDING YOUR MATCH |
 | Progress | ~92% |
 | Data available | Full profile |
 | Layout | Centered single-column with profile dropdown (see **profile-dropdown.md**) |
-| Special feature | Confidence builders + security trust alongside PII capture |
+| Preceded by | Step 11 (email) or Loader — Finding Your Match if Step 11 was skipped |
+| Special feature | "What we heard" summary + match count alongside PII capture |
 | Condition | Only shown if `phone` is null |
 
 ---
@@ -24,7 +25,7 @@
 Final step before Screen B. Confidence builders and security trust reinforce the value exchange. "Find My Advisor" is the only non-Continue CTA in the funnel.
 
 ```
-FINAL DETAILS
+FINDING YOUR MATCH
 =================================--
 
   Your Profile                            v
@@ -51,12 +52,17 @@ FINAL DETAILS
 
   [TCPA consent if not yet captured]
 
-  [check] Your profile qualifies for a
-          free consultation
-  [check] Advisors in New York are
-          accepting new clients
-  [check] Average first call is scheduled
-          within 48 hours
+  Here's what we heard from you:
+
+  [check] You want to catch up on retirement
+  [check] You're in New York
+  [check] You prefer a phone consultation
+  [check] You're in your 50s
+  [check] You own your home
+
+  Based on this, we've found 5 advisors
+  who specialize in retirement catch-up
+  planning.
 
         [ Find My Advisor -> ]
 
@@ -210,28 +216,15 @@ with your matched advisor.
 | Element | Spec |
 |---------|------|
 | Style | Regular weight, 12px, muted (#999999) |
-| Spacing | 16px above confidence builders |
+| Spacing | 16px above "What We Heard" section |
 
 ---
 
-## Confidence Builders
+## What We Heard
 
-Above the CTA. Same as Step 11.
+Same pattern as Step 11. Reflects the user's answers back with match count. See Step 11 spec for the complete field mappings, bullet templates, and match line logic.
 
-```
-[check] Your profile qualifies for a free consultation
-[check] Advisors in [State] are accepting new clients
-[check] Average first call is scheduled within 48 hours
-```
-
-`[State]` is the full state name from `derived_state`.
-
-| Element | Spec |
-|---------|------|
-| Icon | Green checkmark, 16px |
-| Text | Regular weight, 14px, dark (#1B2A4A) |
-| Row height | 32px |
-| Spacing | 16px above, 16px below |
+If the user already saw this on Step 11, it still appears here. Reinforces the value exchange at the final ask.
 
 ---
 
@@ -294,7 +287,7 @@ Step 10 modal skipped
 
 1. Two-zone layout loads with confirmation
 2. User enters name and phone
-3. Confidence builders visible above CTA
+3. "What we heard" summary reflects their answers back with match count
 4. Taps "Find My Advisor"
 5. Validates all fields
 6. Submits lead

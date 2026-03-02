@@ -1,14 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen } from '@/components/fa-screens'
+import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen, ScreenB } from '@/components/fa-screens'
 import { getStateFromZip } from '@/lib/zip-lookup'
 import type { FAFunnelData, MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective, RelationshipPreference } from '@/types/fa-funnel'
 import { Header } from '@/components/layout/Header'
 import { FAProgressBar } from '@/components/fa-screens/FAProgressBar'
 import { cn } from '@/lib/utils'
 
-type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'relationship' | 'email' | 'namePhone'
+type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'relationship' | 'growthHorizon2' | 'email' | 'namePhone' | 'growthHorizon3' | 'screenB'
 
 const STEP_TO_PROGRESS: Record<Step, string> = {
   motivation: 'age',
@@ -22,14 +22,18 @@ const STEP_TO_PROGRESS: Record<Step, string> = {
   home: 'home',
   zip: 'zipCode',
   relationship: 'relationship',
+  growthHorizon2: 'growthHorizon2',
   email: 'email',
   namePhone: 'namePhone',
+  growthHorizon3: 'growthHorizon2',
+  screenB: 'namePhone',
 }
 
 export default function FinancialAdvisorsPage() {
   const [funnelData, setFunnelData] = React.useState<FAFunnelData>({})
   const [step, setStep] = React.useState<Step>('motivation')
   const [motivationPhase, setMotivationPhase] = React.useState<'motivation' | 'age'>('motivation')
+  const [isModalFastTrack, setIsModalFastTrack] = React.useState(false)
 
   const update = (data: Partial<FAFunnelData>) => {
     setFunnelData((prev) => ({ ...prev, ...data }))
@@ -40,7 +44,7 @@ export default function FinancialAdvisorsPage() {
   }, [step])
 
   const isHero = step === 'motivation' && motivationPhase === 'motivation'
-  const isDarkStep = step === 'growthHorizon'
+  const isDarkStep = step === 'growthHorizon' || step === 'growthHorizon2' || step === 'growthHorizon3'
 
   const handleBack = React.useCallback(() => {
     switch (step) {
@@ -55,10 +59,24 @@ export default function FinancialAdvisorsPage() {
       case 'home': setStep('marital'); break
       case 'zip': setStep('home'); break
       case 'relationship': setStep('zip'); break
+      case 'growthHorizon2': setStep('relationship'); break
       case 'email': setStep('relationship'); break
-      case 'namePhone': funnelData.email ? setStep('email') : setStep('relationship'); break
+      case 'namePhone':
+        if (isModalFastTrack) {
+          setStep('relationship')
+        } else if (funnelData.email) {
+          setStep('email')
+        } else {
+          setStep('growthHorizon2')
+        }
+        break
+      case 'growthHorizon3': setStep('namePhone'); break
+      case 'screenB': setStep('namePhone'); break
     }
-  }, [step, funnelData.email])
+  }, [step, funnelData.email, isModalFastTrack])
+  const loaderCompletionStep: Step | null =
+    step === 'growthHorizon2' ? 'email' : step === 'growthHorizon3' ? 'screenB' : null
+
 
 
   if (isHero) {
@@ -89,7 +107,13 @@ export default function FinancialAdvisorsPage() {
       </div>
       <div className={cn('sticky top-[56px] z-40', isDarkStep ? 'bg-transparent' : 'bg-white')}>
         <div className="max-w-content mx-auto px-4 sm:px-6">
-          <FAProgressBar stepName={STEP_TO_PROGRESS[step]} onBack={handleBack} dark={isDarkStep} />
+          <FAProgressBar
+            stepName={STEP_TO_PROGRESS[step]}
+            onBack={handleBack}
+            dark={isDarkStep}
+            loaderDuration={loaderCompletionStep ? 10000 : undefined}
+            onLoaderComplete={loaderCompletionStep ? () => setStep(loaderCompletionStep) : undefined}
+          />
         </div>
       </div>
 
@@ -156,6 +180,7 @@ export default function FinancialAdvisorsPage() {
 
         {step === 'growthHorizon' && (
           <GrowthHorizonScreen
+            variant="original"
             motivationDriver={funnelData.motivationDriver}
             ageRange={funnelData.ageRange}
             incomeRange={funnelData.incomeRange}
@@ -245,23 +270,33 @@ export default function FinancialAdvisorsPage() {
                 }
                 update(updates)
 
-                const hasEmail = !!(data.email || funnelData.email || funnelData.savedEmail)
-                const hasPhone = !!data.phone
+                const hasEmail = Boolean(data.email || funnelData.email || funnelData.savedEmail)
+                const hasPhone = Boolean(data.phone || funnelData.phone)
+                const canSkipToName = hasEmail && hasPhone
 
-                if (hasEmail && hasPhone) {
-                  // TODO: advance to Screen B / loading
-                  setStep('namePhone')
-                } else if (hasEmail) {
-                  setStep('namePhone')
-                } else if (hasPhone) {
-                  setStep('email')
-                } else {
-                  setStep('email')
-                }
+                setIsModalFastTrack(canSkipToName)
+                setStep(canSkipToName ? 'namePhone' : 'growthHorizon2')
               }}
             />
           )
         })()}
+
+        {step === 'growthHorizon2' && (
+          <GrowthHorizonScreen
+            variant="duplicate"
+            motivationDriver={funnelData.motivationDriver}
+            ageRange={funnelData.ageRange}
+            incomeRange={funnelData.incomeRange}
+            savingsRange={funnelData.savingsRange}
+            investmentObjective={funnelData.investmentObjective}
+            showSaveProgressModal={false}
+            onBack={() => setStep('relationship')}
+            onNext={(email?: string) => {
+              if (email) update({ savedEmail: email } as Partial<FAFunnelData>)
+              setStep('email')
+            }}
+          />
+        )}
 
         {step === 'email' && (
           <EmailWithReviewScreen
@@ -288,11 +323,18 @@ export default function FinancialAdvisorsPage() {
           <NamePhoneWithReviewScreen
             motivationDriver={funnelData.motivationDriver}
             existingPhone={funnelData.phone}
+            nameOnlyMode={isModalFastTrack}
             hasTcpaConsent={funnelData.tcpaConsent}
             hasEmailFromPrevious={!!(funnelData.savedEmail && !funnelData.email)}
             stateName={funnelData.zipCode ? getStateFromZip(funnelData.zipCode)?.name : undefined}
             funnelData={funnelData}
-            onBack={() => funnelData.email ? setStep('email') : setStep('relationship')}
+            onBack={() => {
+              if (isModalFastTrack) {
+                setStep('relationship')
+                return
+              }
+              funnelData.email ? setStep('email') : setStep('growthHorizon2')
+            }}
             onSubmit={(data: { firstName: string; lastName: string; phone: string; tcpaConsent: boolean }) => {
               update({
                 firstName: data.firstName,
@@ -301,9 +343,26 @@ export default function FinancialAdvisorsPage() {
                 tcpaConsent: data.tcpaConsent,
                 tcpaConsentTimestamp: data.tcpaConsent ? new Date().toISOString() : undefined,
               })
-              // TODO: advance to Screen B / loading
+              setStep(isModalFastTrack ? 'growthHorizon3' : 'screenB')
             }}
           />
+        )}
+
+        {step === 'growthHorizon3' && (
+          <GrowthHorizonScreen
+            variant="duplicate"
+            motivationDriver={funnelData.motivationDriver}
+            ageRange={funnelData.ageRange}
+            incomeRange={funnelData.incomeRange}
+            savingsRange={funnelData.savingsRange}
+            investmentObjective={funnelData.investmentObjective}
+            showSaveProgressModal={false}
+            onBack={() => setStep('namePhone')}
+          />
+        )}
+
+        {step === 'screenB' && (
+          <ScreenB funnelData={funnelData} onBack={() => setStep('namePhone')} />
         )}
       </div>
 

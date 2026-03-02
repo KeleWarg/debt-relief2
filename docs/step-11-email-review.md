@@ -10,11 +10,11 @@
 | Field | `email` |
 | Type | Text input (email) |
 | Auto-advance | No. Requires Continue |
-| Phase label | FINAL DETAILS |
+| Phase label | FINDING YOUR MATCH |
 | Progress | ~85% |
 | Data available | Full profile |
 | Layout | Centered single-column with profile dropdown (see **profile-dropdown.md**) |
-| Special feature | Confidence builders + security trust alongside email capture |
+| Special feature | "What we heard" summary + match count alongside email capture |
 | Condition | Only shown if `email` is null |
 
 ---
@@ -24,7 +24,7 @@
 Profile data lives in the dropdown. Confidence builders and security trust sit between the email input and CTA.
 
 ```
-FINAL DETAILS
+FINDING YOUR MATCH
 ==============================--
 
   Your Profile                            v
@@ -46,12 +46,19 @@ FINAL DETAILS
   We'll send your match details and
   profile summary to this email.
 
-  [check] Your profile qualifies for a
-          free consultation
-  [check] Advisors in New York are
-          accepting new clients
-  [check] Average first call is scheduled
-          within 48 hours
+  [TCPA consent]
+
+  Here's what we heard from you:
+
+  [check] You want to protect your family
+  [check] You're in Kentucky
+  [check] You prefer a virtual first meeting
+  [check] You're in your 30s
+  [check] You're renting
+
+  Based on this, we've found 3 advisors
+  who specialize in family protection
+  planning.
 
            [ Continue -> ]
 
@@ -199,24 +206,101 @@ No additional consent needed. Sub copy above is sufficient.
 
 ---
 
-## Confidence Builders
+## What We Heard
 
-Above the CTA. Green checkmarks.
+Reflects the user's own answers back in plain language. Proves we were listening. Each bullet maps to a collected data point.
+
+### Header
 
 ```
-[check] Your profile qualifies for a free consultation
-[check] Advisors in [State] are accepting new clients
-[check] Average first call is scheduled within 48 hours
+Here's what we heard from you:
 ```
 
-`[State]` is the full state name from `derived_state`.
+| Element | Spec |
+|---------|------|
+| Style | Medium weight, 14px, dark (#1B2A4A) |
+| Spacing | 16px above |
+
+### Bullets
+
+Five items, each derived from stored data. Green checkmarks. Written as "you" statements, not field labels.
+
+| Order | Source field | Template | Example |
+|-------|-------------|----------|---------|
+| 1 | `motivation_driver` | See mapping below | You want to protect your family |
+| 2 | `derived_state` | You're in [State] | You're in Kentucky |
+| 3 | `relationship_preference` | See mapping below | You prefer a virtual first meeting |
+| 4 | `age_range` | You're in your [age] | You're in your 30s |
+| 5 | `homeownership` | See mapping below | You're renting |
+
+#### Motivation mapping
+
+| `motivation_driver` | Bullet |
+|---------------------|--------|
+| `behind_retirement` | You want to catch up on retirement |
+| `family_protection` | You want to protect your family |
+| `windfall` | You're managing new wealth |
+| `optimization` | You want to optimize your finances |
+| `plan_review` | You want a professional review |
+
+#### Relationship mapping
+
+| `relationship_preference` | Bullet |
+|---------------------------|--------|
+| `phone` | You prefer a phone consultation |
+| `virtual` | You prefer a virtual first meeting |
+| `in_person` | You prefer to meet in person |
+| `no_preference` | You're open to any format |
+
+#### Homeownership mapping
+
+| `homeownership` | Bullet |
+|-----------------|--------|
+| `own` | You own your home |
+| `rent` | You're renting |
+| `other` | (omit this bullet) |
+
+If `homeownership` is `other`, show only 4 bullets.
+
+#### Age mapping
+
+| `age_range` | Bullet |
+|-------------|--------|
+| `under_30` | You're under 30 |
+| `30s` | You're in your 30s |
+| `40s` | You're in your 40s |
+| `50s` | You're in your 50s |
+| `60s_plus` | You're 60+ |
 
 | Element | Spec |
 |---------|------|
 | Icon | Green checkmark, 16px |
 | Text | Regular weight, 14px, dark (#1B2A4A) |
 | Row height | 32px |
-| Spacing | 16px above, 16px below |
+| Indent | 0px (flush left with checkmark) |
+
+### Match Line
+
+Below the bullets. The payoff. Uses `motivation_driver` to name the specialty and a match count from `derived_state` data.
+
+```
+Based on this, we've found [N] advisors who specialize in [specialty].
+```
+
+| `motivation_driver` | Specialty label |
+|---------------------|-----------------|
+| `behind_retirement` | retirement catch-up planning |
+| `family_protection` | family protection planning |
+| `windfall` | wealth management |
+| `optimization` | financial optimization |
+| `plan_review` | comprehensive financial reviews |
+
+`[N]` comes from the state match count in the state confirmation data. Display as the actual number (e.g., "3 advisors", "5 advisors"). If match count unavailable, use "multiple advisors".
+
+| Element | Spec |
+|---------|------|
+| Style | Medium weight, 14px, Forbes blue (#0066CC) |
+| Spacing | 12px above, 16px below |
 
 ---
 
@@ -249,7 +333,7 @@ Below the CTA.
 
 1. Two-zone layout loads with relationship x motivation confirmation
 2. User enters email (or confirms pre-filled)
-3. Confidence builders visible above CTA
+3. "What we heard" summary reflects their answers back with match count
 4. Taps Continue
 5. Advances to Step 12 (if phone not yet provided) or Screen B (if all data collected)
 
@@ -267,6 +351,7 @@ Below the CTA.
 
 ## Notes
 
-- Profile data lives in the dropdown, not a review card. The dropdown is available on every step from Step 6 onward.
-- Confidence builders do the heavy lifting that the review card used to do. Three green checkmarks build trust right before the CTA.
+- "What we heard" replaces confidence builders. Instead of generic trust statements, we reflect the user's own words back. Much stronger — proves we were listening, not selling.
+- Match count line is the payoff: "Based on this, we've found 3 advisors who specialize in family protection planning." Turns the email ask into a gate to a real result.
+- Profile data lives in the dropdown, not repeated here. The "what we heard" bullets are curated highlights, not a full data dump.
 - Security trust indicator below CTA addresses PII hesitation.

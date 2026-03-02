@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 const ALL_STEPS = [
   'motivation', 'age', 'affirmation', 'income', 'savings', 'objectives',
   'growthHorizon', 'specialties', 'married', 'home', 'zipCode',
-  'relationship', 'email', 'namePhone',
+  'relationship', 'growthHorizon2', 'email', 'namePhone',
 ] as const
 
 const SECTION_LABELS: Record<string, string> = {
@@ -22,6 +22,7 @@ const SECTION_LABELS: Record<string, string> = {
   home: 'Your life situation',
   zipCode: 'Finding Your Match',
   relationship: 'Finding Your Match',
+  growthHorizon2: 'Finding Your Match',
   email: 'Finding Your Match',
   namePhone: 'Finding Your Match',
 }
@@ -52,15 +53,60 @@ export function faSectionLabel(stepName: string): string {
   return SECTION_LABELS[stepName] ?? ''
 }
 
+const LOADER_TICK_MS = 50
+
 interface FAProgressBarProps {
   stepName: string
   onBack?: () => void
   dark?: boolean
   className?: string
+  /** When set with dark, shows a filling loader for this duration (ms) then calls onLoaderComplete. */
+  loaderDuration?: number
+  onLoaderComplete?: () => void
 }
 
-export function FAProgressBar({ stepName, onBack, dark, className }: FAProgressBarProps) {
+export function FAProgressBar({ stepName, onBack, dark, className, loaderDuration = 10000, onLoaderComplete }: FAProgressBarProps) {
   const progress = faProgressPercent(stepName)
+  const [loaderProgress, setLoaderProgress] = React.useState(0)
+  const showLoader = Boolean(dark && loaderDuration && onLoaderComplete)
+
+  React.useEffect(() => {
+    if (!showLoader) return
+    setLoaderProgress(0)
+    const increment = (LOADER_TICK_MS / loaderDuration) * 100
+    const interval = setInterval(() => {
+      setLoaderProgress((p) => {
+        const next = Math.min(100, p + increment)
+        if (next >= 100) {
+          clearInterval(interval)
+          onLoaderComplete?.()
+        }
+        return next
+      })
+    }, LOADER_TICK_MS)
+    return () => clearInterval(interval)
+  }, [showLoader, loaderDuration, onLoaderComplete])
+
+  if (showLoader) {
+    return (
+      <div className={cn('w-full py-3', className)}>
+        <div className="flex items-center gap-3">
+          <div
+            className="flex-1 h-[6px] rounded-full overflow-hidden"
+            style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+          >
+            <div
+              className="h-full rounded-full transition-all duration-[50ms] ease-linear"
+              style={{
+                width: `${loaderProgress}%`,
+                backgroundColor: '#FFB934',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={cn('w-full py-3', className)}>

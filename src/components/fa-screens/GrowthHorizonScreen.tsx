@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Shield, Users, Clock } from 'lucide-react'
+import { Shield, Users, Clock, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { Input } from '@/components/ui'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
@@ -47,6 +47,15 @@ const OBJECTIVE_LABELS: Record<InvestmentObjective, string> = {
   growth: 'Long-term growth', preservation: 'Wealth preservation',
   income_generation: 'Income generation', balanced: 'Balanced growth and safety',
 }
+
+const ROTATING_HEADLINES: { line1: string; line2?: string; accent?: string }[] = [
+  { line1: 'Vetted Fiduciary Advisors', line2: 'At Your Fingertips', accent: 'At Your Fingertips' },
+  { line1: 'Matched to Your Goals', accent: 'Your Goals' },
+  { line1: 'Free Consultation', line2: 'No Obligation', accent: 'No Obligation' },
+]
+
+const HEADLINE_ROTATE_MS = 2500
+const LOADER_DURATION_MS = 10000
 
 function calcFV(principal: number, monthlyRate: number, months: number, monthlyContrib: number): number {
   const compounded = principal * Math.pow(1 + monthlyRate, months)
@@ -299,30 +308,67 @@ interface GrowthHorizonScreenProps {
   investmentObjective?: InvestmentObjective
   onBack?: () => void
   onNext?: (email?: string) => void
+  /** When false, the "Save your progress?" email modal is not shown. Use for the duplicate step before email. */
+  showSaveProgressModal?: boolean
+  /** 'original' = first step (graph + static profile). 'duplicate' = step before email (loader-style: rotating headlines, media placeholder, animated checklist). */
+  variant?: 'original' | 'duplicate'
+  /** Optional image or video URL for the media container (duplicate variant only). */
+  mediaSrc?: string
+  /** 'image' | 'video' — how to render mediaSrc. Default 'image'. */
+  mediaType?: 'image' | 'video'
 }
 
 export function GrowthHorizonScreen({
   motivationDriver, ageRange, incomeRange, savingsRange, investmentObjective, onBack, onNext,
+  showSaveProgressModal = true,
+  variant = 'original',
+  mediaSrc,
+  mediaType = 'image',
 }: GrowthHorizonScreenProps) {
   const [stage, setStage] = React.useState(0)
+  const [headlineIndex, setHeadlineIndex] = React.useState(0)
+  const [checklistStep, setChecklistStep] = React.useState(0)
   const [showModal, setShowModal] = React.useState(false)
   const [email, setEmail] = React.useState('')
   const [emailError, setEmailError] = React.useState<string | null>(null)
+
+  const isDuplicate = variant === 'duplicate'
 
   React.useEffect(() => {
     const timers = [
       setTimeout(() => setStage(1), 100),
       setTimeout(() => setStage(2), 1800),
       setTimeout(() => setStage(3), 2100),
-      setTimeout(() => setShowModal(true), 4000),
+      ...(showSaveProgressModal ? [setTimeout(() => setShowModal(true), 4000)] : []),
     ]
     return () => timers.forEach(clearTimeout)
-  }, [])
+  }, [showSaveProgressModal])
 
-  const handleContinue = () => {
-    setShowModal(false)
-    onNext?.()
-  }
+  // Rotating headline (duplicate only): show each line once, then hold until loader completes.
+  React.useEffect(() => {
+    if (!isDuplicate || stage < 1) return
+    const interval = setInterval(() => {
+      setHeadlineIndex((prev) => {
+        const next = Math.min(prev + 1, ROTATING_HEADLINES.length - 1)
+        if (next === ROTATING_HEADLINES.length - 1) {
+          clearInterval(interval)
+        }
+        return next
+      })
+    }, HEADLINE_ROTATE_MS)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [isDuplicate, stage])
+
+  // Animated checklist (duplicate only): advance every 1.2s when profile section is visible (stage >= 2)
+  React.useEffect(() => {
+    if (!isDuplicate || stage < 2) return
+    const interval = setInterval(() => {
+      setChecklistStep((prev) => (prev >= 4 ? prev : prev + 1))
+    }, 1200)
+    return () => clearInterval(interval)
+  }, [isDuplicate, stage])
 
   const handleSaveEmail = () => {
     const trimmed = email.trim()
@@ -335,6 +381,11 @@ export function GrowthHorizonScreen({
 
   const handleSkip = () => {
     setShowModal(false)
+  }
+
+  const handleContinue = () => {
+    setShowModal(false)
+    onNext?.()
   }
 
   const goalLabel = motivationDriver ? MOTIVATION_LABELS[motivationDriver] : ''
@@ -352,6 +403,14 @@ export function GrowthHorizonScreen({
     { label: 'Objective', value: objectiveLabel },
   ]
 
+  const checklistCopy = [
+    `Matching advisors to your goal — ${goalLabel || '...'}`,
+    `Confirming availability for your age — ${getAgeLabel(ageRange) || '...'}`,
+    `Aligning with your income profile — ${getIncomeLabel(incomeRange) || '...'}`,
+    `Reviewing your savings profile — ${getSavingsLabel(savingsRange) || '...'}`,
+    `Matching your investment objective — ${objectiveLabel || '...'}`,
+  ]
+
   return (
     <div
       className="relative min-h-screen -mt-[120px] pt-[120px] overflow-hidden"
@@ -366,43 +425,133 @@ export function GrowthHorizonScreen({
       />
     <div className="relative z-10 w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="space-y-6 has-sticky-button mt-6">
-        {/* Headline */}
+        {/* Headline: original = static; duplicate = rotating */}
         <h1
           className={cn(
-            'font-display text-headline-lg sm:text-display lg:text-display-md transition-opacity duration-200',
+            'font-display text-headline-lg sm:text-display lg:text-display-md transition-opacity duration-300',
             stage >= 1 ? 'opacity-100' : 'opacity-0'
           )}
           style={{ color: 'white' }}
         >
-          From your profile so far, and your goals, here is your{' '}
-          <span style={{ color: '#FFB934' }}>growth horizon with an advisor.</span>
+          {isDuplicate ? (
+            (() => {
+              const h = ROTATING_HEADLINES[headlineIndex]
+              if (h.line2) {
+                return (
+                  <>
+                    {h.line1}
+                    <br />
+                    <span style={{ color: '#FFB934' }}>{h.line2}</span>
+                  </>
+                )
+              }
+              return (
+                <>
+                  {h.accent ? (
+                    <>
+                      {h.line1.replace(h.accent, '').trim()}{' '}
+                      <span style={{ color: '#FFB934' }}>{h.accent}</span>
+                    </>
+                  ) : (
+                    h.line1
+                  )}
+                </>
+              )
+            })()
+          ) : (
+            <>
+              From your profile so far, and your goals, here is your{' '}
+              <span style={{ color: '#FFB934' }}>growth horizon with an advisor.</span>
+            </>
+          )}
         </h1>
 
-        {/* Graph */}
-        {graphData && (
-          <div className={cn('transition-opacity duration-200', stage >= 1 ? 'opacity-100' : 'opacity-0')}>
-            <HorizonGraph data={graphData} animate={stage >= 1} />
+        {/* Original: graph. Duplicate: image/video placeholder */}
+        {isDuplicate ? (
+          <div
+            className={cn(
+              'w-full flex items-center justify-center overflow-hidden transition-opacity duration-200',
+              stage >= 1 ? 'opacity-100' : 'opacity-0'
+            )}
+            style={{ minHeight: 320 }}
+          >
+            <div className="w-full aspect-video max-w-3xl rounded-lg bg-white/5 flex items-center justify-center overflow-hidden">
+              {mediaSrc ? (
+                mediaType === 'video' ? (
+                  <video
+                    src={mediaSrc}
+                    className="w-full h-full object-cover"
+                    playsInline
+                    muted
+                    loop
+                    autoPlay
+                  />
+                ) : (
+                  <img src={mediaSrc} alt="" className="w-full h-full object-cover" />
+                )
+              ) : (
+                <span className="text-sm text-white/40">Image or video placeholder</span>
+              )}
+            </div>
           </div>
+        ) : (
+          graphData && (
+            <div className={cn('transition-opacity duration-200', stage >= 1 ? 'opacity-100' : 'opacity-0')}>
+              <HorizonGraph data={graphData} animate={stage >= 1} />
+            </div>
+          )
         )}
 
-        {/* Profile summary */}
-        <div className={cn('transition-opacity duration-300', stage >= 2 ? 'opacity-100' : 'opacity-0')}>
-          <p className="text-sm font-medium uppercase tracking-wider" style={{ color: 'white' }}>
-            Your financial profile
-          </p>
-          <div
-            className="w-full border-t my-4"
-            style={{ borderColor: 'white' }}
-          />
-          <div className="space-y-3">
-            {profileRows.map((row) => (
-              <div key={row.label} className="flex justify-between">
-                <span style={{ fontSize: '16px', color: 'white' }}>{row.label}</span>
-                <span style={{ fontSize: '16px', fontWeight: 500, color: 'white' }}>{row.value}</span>
-              </div>
-            ))}
+        {/* Original: static profile. Duplicate: animated checklist */}
+        {isDuplicate ? (
+          <div className={cn('transition-opacity duration-300', stage >= 2 ? 'opacity-100' : 'opacity-0')}>
+            <p className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: 'white' }}>
+              Finding your match
+            </p>
+            <div className="space-y-3 flex flex-col items-start">
+              {checklistCopy.map((text, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  {i < checklistStep ? (
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: '#22C55E', fill: '#22C55E' }} />
+                  ) : i === checklistStep ? (
+                    <div
+                      className="w-5 h-5 rounded-full border-2 flex-shrink-0 animate-spin"
+                      style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#FFB934' }}
+                    />
+                  ) : (
+                    <div
+                      className="w-5 h-5 rounded-full border-2 flex-shrink-0"
+                      style={{ borderColor: 'rgba(255,255,255,0.2)' }}
+                    />
+                  )}
+                  <span
+                    style={{
+                      fontSize: '16px',
+                      color: i > checklistStep ? 'rgba(255,255,255,0.5)' : 'white',
+                    }}
+                  >
+                    {text}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={cn('transition-opacity duration-300', stage >= 2 ? 'opacity-100' : 'opacity-0')}>
+            <p className="text-sm font-medium uppercase tracking-wider" style={{ color: 'white' }}>
+              Your financial profile
+            </p>
+            <div className="w-full border-t my-4" style={{ borderColor: 'white' }} />
+            <div className="space-y-3">
+              {profileRows.map((row) => (
+                <div key={row.label} className="flex justify-between">
+                  <span style={{ fontSize: '16px', color: 'white' }}>{row.label}</span>
+                  <span style={{ fontSize: '16px', fontWeight: 500, color: 'white' }}>{row.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Divider */}
         <div
@@ -410,18 +559,20 @@ export function GrowthHorizonScreen({
           style={{ borderColor: 'white' }}
         />
 
-        {/* CTA */}
-        <div className={cn('transition-opacity duration-200', stage >= 3 ? 'opacity-100' : 'opacity-0')}>
-          <StickyButtonContainer>
-            <Button variant="primary" fullWidth showTrailingIcon onClick={handleContinue}>
-              Continue
-            </Button>
-          </StickyButtonContainer>
-        </div>
+        {/* Continue button — original only; duplicate relies on progress bar loader */}
+        {!isDuplicate && (
+          <div className={cn('transition-opacity duration-200', stage >= 3 ? 'opacity-100' : 'opacity-0')}>
+            <StickyButtonContainer>
+              <Button variant="primary" fullWidth showTrailingIcon onClick={handleContinue}>
+                Continue
+              </Button>
+            </StickyButtonContainer>
+          </div>
+        )}
       </div>
 
-      {/* Email Save Modal */}
-      {showModal && (
+      {/* Email Save Modal — only on original growth horizon, not the duplicate before email */}
+      {showSaveProgressModal && showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50" onClick={handleSkip} />
           <div
