@@ -1,44 +1,40 @@
 'use client'
 
 import * as React from 'react'
-import { ProfileDropdown } from './ProfileDropdown'
 import { Button } from '@/components/ui/Button'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
+import { USMap } from '@/components/ui/USMap'
 import type { MotivationDriver, Homeownership, FAFunnelData } from '@/types/fa-funnel'
 import { getStateFromZip } from '@/lib/zip-lookup'
 import { getAdvisorContext } from '@/data/stateAdvisorContext'
 import { cn } from '@/lib/utils'
 
-const CONFIRMATION: Record<string, Record<MotivationDriver, string>> = {
-  own: {
-    behind_retirement: 'You own. Your advisor can factor home equity into the catch-up math from day one.',
-    family_protection: 'You own. That means mortgage protection, property trusts, and insurance are all in play.',
-    windfall: 'You own. Your advisor will position new wealth alongside existing property.',
-    optimization: 'You own. Mortgage interest and property tax deductions are already working for you.',
-    plan_review: 'You own. Your advisor will include home equity in the full picture.',
-  },
-  rent: {
-    behind_retirement: 'You rent. That frees up more cash flow for catch-up contributions. Your advisor will use that.',
-    family_protection: 'You rent. Your advisor can focus protection around income and dependents without mortgage complexity.',
-    windfall: 'You rent. Your advisor can focus entirely on positioning your new wealth.',
-    optimization: 'You rent. Your advisor will look at where your money is working hardest without a mortgage in the mix.',
-    plan_review: 'You rent. That simplifies part of the review. Your advisor will focus on where your assets are.',
-  },
-  other: {
-    behind_retirement: 'Noted. Your advisor will sort out the housing picture in your first conversation.',
-    family_protection: 'Noted. Your advisor will sort out the housing picture in your first conversation.',
-    windfall: 'Noted. Your advisor will sort out the housing picture in your first conversation.',
-    optimization: 'Noted. Your advisor will sort out the housing picture in your first conversation.',
-    plan_review: 'Noted. Your advisor will sort out the housing picture in your first conversation.',
-  },
-}
+const BLUE = '#0066CC'
 
-const REASSURANCE: Record<MotivationDriver, string> = {
-  behind_retirement: 'State tax rules affect your catch-up strategy. Your location helps us match smarter.',
-  family_protection: 'Estate and insurance laws vary by state. Your location ensures we match you with a licensed advisor.',
-  windfall: 'State tax rules can significantly impact how new wealth is positioned. Your ZIP helps us account for that.',
-  optimization: 'State tax rules affect your optimization strategy. Your ZIP helps us find the right fit.',
-  plan_review: 'This ensures your advisor is licensed in your state and easy to reach when you need them.',
+const ZIP_CONTENT: Record<MotivationDriver, {
+  headline: React.ReactNode
+  subCopy: string
+}> = {
+  behind_retirement: {
+    headline: <>Two more to go (3/4).<br /><span style={{ color: BLUE }}>Let{'\u2019'}s check advisor availability</span> in your area.</>,
+    subCopy: 'State tax rules affect your catch-up strategy. Your location helps us match smarter.',
+  },
+  family_protection: {
+    headline: <>Two more to go (3/4).<br /><span style={{ color: BLUE }}>Let{'\u2019'}s check advisor availability</span> in your area.</>,
+    subCopy: 'Estate and insurance laws vary by state. Your location ensures we match you with a licensed advisor.',
+  },
+  windfall: {
+    headline: <>Two more to go (3/4).<br /><span style={{ color: BLUE }}>Let{'\u2019'}s check advisor availability</span> in your area.</>,
+    subCopy: 'State tax rules can significantly impact how new wealth is positioned. Your ZIP helps us account for that.',
+  },
+  optimization: {
+    headline: <>Two more to go (3/4).<br /><span style={{ color: BLUE }}>Let{'\u2019'}s check advisor availability</span> in your area.</>,
+    subCopy: 'State tax rules affect your optimization strategy. Your ZIP helps us find the right fit.',
+  },
+  plan_review: {
+    headline: <>Two more to go (3/4).<br /><span style={{ color: BLUE }}>Let{'\u2019'}s check advisor availability</span> in your area.</>,
+    subCopy: 'This ensures your advisor is licensed in your state and easy to reach when you need them.',
+  },
 }
 
 function ZipStateBadge({ zip }: { zip: string }) {
@@ -135,54 +131,34 @@ export function ZipCodeScreen({
     onSubmit?.(zip, state.abbr)
   }
 
-  const confirmation =
-    homeownership && motivationDriver
-      ? CONFIRMATION[homeownership]?.[motivationDriver] ?? ''
-      : ''
-
-  const defaultReassurance = motivationDriver ? REASSURANCE[motivationDriver] : ''
+  const content = motivationDriver ? ZIP_CONTENT[motivationDriver] : null
   const isStateResolved = zip.length === 5 && resolvedState !== null
   const advisorContext = isStateResolved ? getAdvisorContext(resolvedState!.abbr) : null
-  const guidanceText = advisorContext ? advisorContext.guidance : defaultReassurance
+  const guidanceText = advisorContext ? advisorContext.guidance : content?.subCopy ?? ''
   const guidanceKey = isStateResolved ? resolvedState!.abbr : 'default'
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="flex flex-col items-start w-full">
-        {/* Zone 1: Confirmation */}
-        {confirmation && (
-          <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
-              {confirmation}
-            </p>
-          </div>
-        )}
-
-        {funnelData && <ProfileDropdown data={funnelData} className="animate-fade-in-up w-full mb-4" />}
-
-        {/* Divider */}
-        <div
-          className="animate-fade-in-up w-full border-t my-4"
-          style={{ animationDelay: '200ms', borderColor: '#E0E0E0' }}
-        />
-
-        {/* Zone 2: Headline + Input */}
-        <h1
-          className="animate-fade-in-up font-display text-display sm:text-display-md lg:text-display-lg mb-4"
-          style={{ animationDelay: '300ms', color: '#1B2A4A' }}
+        {/* Section label */}
+        <p
+          className="animate-fade-in-up text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3"
+          style={{ animationDelay: '400ms' }}
         >
-          Let&rsquo;s check advisor availability{' '}
-          <span style={{ color: '#0066CC' }}>in your area.</span>
+          Your life situation
+        </p>
+
+        {/* Headline */}
+        <h1
+          className="animate-fade-in-up font-display text-headline-lg sm:text-display lg:text-display-md mb-3"
+          style={{ animationDelay: '400ms', color: '#1B2A4A' }}
+        >
+          {content?.headline ?? <>Two more to go (3/4).<br /><span style={{ color: BLUE }}>Let{'\u2019'}s check advisor availability in your area.</span></>}
         </h1>
 
         {/* Input */}
         <form onSubmit={handleSubmit} className="w-full">
-          <div className="animate-fade-in-up relative" style={{ animationDelay: '400ms' }}>
+          <div className="animate-fade-in-up relative" style={{ animationDelay: '500ms' }}>
             <input
               ref={inputRef}
               type="text"
@@ -218,25 +194,35 @@ export function ZipCodeScreen({
             )}
           </div>
 
-          {/* Dynamic guidance — state-specific when resolved, motivation-based default otherwise */}
           {guidanceText && (
             <p
               key={guidanceKey}
               className={cn('mt-4', isStateResolved ? 'animate-fade-in' : 'animate-fade-in-up')}
-              style={{ animationDelay: isStateResolved ? '0ms' : '500ms', fontSize: '14px', color: '#666666' }}
+              style={{ animationDelay: isStateResolved ? '0ms' : '600ms', fontSize: '14px', color: '#666666' }}
             >
               {guidanceText}
             </p>
           )}
 
-          {/* Continue */}
-          <div className="animate-fade-in-up mt-6" style={{ animationDelay: '500ms' }}>
+          <div className="animate-fade-in-up mt-6" style={{ animationDelay: '600ms' }}>
             <StickyButtonContainer>
               <Button type="submit" fullWidth showTrailingIcon disabled={zip.length !== 5}>
                 Continue
               </Button>
             </StickyButtonContainer>
           </div>
+
+          {isStateResolved && resolvedState && (
+            <div className="mt-8 animate-fade-in">
+              <USMap
+                selectedState={resolvedState.name}
+                hoveredState={null}
+                onStateSelect={() => {}}
+                onStateHover={() => {}}
+                className="w-full max-w-[560px]"
+              />
+            </div>
+          )}
         </form>
       </div>
     </div>

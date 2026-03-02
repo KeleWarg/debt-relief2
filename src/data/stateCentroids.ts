@@ -15,6 +15,8 @@ export const stateCentroids: Record<string, [number, number]> = {
   'Colorado': [-105.3111, 39.0598],
   'Connecticut': [-72.7554, 41.6032],
   'Delaware': [-75.5277, 38.9108],
+  'District of Columbia': [-77.0369, 38.9072],
+  'Washington DC': [-77.0369, 38.9072],
   'Florida': [-81.5158, 27.6648],
   'Georgia': [-83.6431, 32.1656],
   'Hawaii': [-155.5828, 19.8968],

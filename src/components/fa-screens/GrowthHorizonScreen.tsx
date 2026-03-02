@@ -204,7 +204,7 @@ function HorizonGraph({ data, animate }: GraphProps) {
   }, [animate])
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg p-4 sm:p-6">
+    <div className="p-4 sm:p-6 rounded-lg" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
       <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="w-full">
         <defs>
           <clipPath id={clipId}>
@@ -221,41 +221,41 @@ function HorizonGraph({ data, animate }: GraphProps) {
         {/* Gap fill between lines */}
         <path
           d={areaPath}
-          fill="#0066CC"
-          style={{ opacity: showLabels ? 0.08 : 0, transition: 'opacity 200ms ease-out' }}
+          fill="#FFB934"
+          style={{ opacity: showLabels ? 0.12 : 0, transition: 'opacity 200ms ease-out' }}
         />
 
         {/* Lines */}
         <g clipPath={`url(#${clipId})`}>
-          <path d={current.path} fill="none" stroke="#B0B0B0" strokeWidth="2" strokeDasharray="6 4" />
-          <path d={advisor.path} fill="none" stroke="#0066CC" strokeWidth="3" />
+          <path d={current.path} fill="none" stroke="white" strokeWidth="2" strokeDasharray="6 4" />
+          <path d={advisor.path} fill="none" stroke="#FFB934" strokeWidth="3" />
         </g>
 
         {/* X-axis */}
-        <line x1={PAD.left} y1={PAD.top + INNER_H} x2={PAD.left + INNER_W} y2={PAD.top + INNER_H} stroke="#E0E0E0" strokeWidth="1" />
-        <text x={PAD.left} y={PAD.top + INNER_H + 20} fontSize="11" fill="#999">Now</text>
-        <text x={PAD.left + INNER_W} y={PAD.top + INNER_H + 20} textAnchor="end" fontSize="11" fill="#999">
+        <line x1={PAD.left} y1={PAD.top + INNER_H} x2={PAD.left + INNER_W} y2={PAD.top + INNER_H} stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        <text x={PAD.left} y={PAD.top + INNER_H + 20} fontSize="11" fill="rgba(255,255,255,0.5)">Now</text>
+        <text x={PAD.left + INNER_W} y={PAD.top + INNER_H + 20} textAnchor="end" fontSize="11" fill="rgba(255,255,255,0.5)">
           {data.horizonYears} years
         </text>
 
         {/* Endpoint labels */}
         <g style={{ opacity: showLabels ? 1 : 0, transition: 'opacity 200ms ease-out' }}>
-          <text x={PAD.left + INNER_W + 8} y={advisor.endY + 4} fontSize="12" fontWeight="600" fill="#0066CC">
+          <text x={PAD.left + INNER_W + 8} y={advisor.endY + 4} fontSize="12" fontWeight="600" fill="#FFB934">
             {data.advisorEndLabel}
           </text>
-          <text x={PAD.left + INNER_W + 8} y={current.endY + 4} fontSize="11" fill="#B0B0B0">
+          <text x={PAD.left + INNER_W + 8} y={current.endY + 4} fontSize="11" fill="white">
             {data.currentEndLabel}
           </text>
         </g>
 
         {/* Legend */}
-        <line x1={PAD.left} y1={PAD.top - 14} x2={PAD.left + 20} y2={PAD.top - 14} stroke="#0066CC" strokeWidth="3" />
-        <text x={PAD.left + 24} y={PAD.top - 10} fontSize="10" fill="#0066CC">With advisor</text>
-        <line x1={PAD.left + 120} y1={PAD.top - 14} x2={PAD.left + 140} y2={PAD.top - 14} stroke="#B0B0B0" strokeWidth="2" strokeDasharray="4 3" />
-        <text x={PAD.left + 144} y={PAD.top - 10} fontSize="10" fill="#B0B0B0">Current path</text>
+        <line x1={PAD.left} y1={PAD.top - 14} x2={PAD.left + 20} y2={PAD.top - 14} stroke="#FFB934" strokeWidth="3" />
+        <text x={PAD.left + 24} y={PAD.top - 10} fontSize="10" fill="#FFB934">With advisor</text>
+        <line x1={PAD.left + 120} y1={PAD.top - 14} x2={PAD.left + 140} y2={PAD.top - 14} stroke="white" strokeWidth="2" strokeDasharray="4 3" />
+        <text x={PAD.left + 144} y={PAD.top - 10} fontSize="10" fill="white">Current path</text>
       </svg>
 
-      <p className="text-xs mt-2" style={{ color: '#999999', fontStyle: 'italic' }}>
+      <p className="text-xs mt-2" style={{ color: 'white', fontStyle: 'italic' }}>
         Based on your inputs and published averages for savings rates and historical returns. Not a projection or guarantee. Individual results vary.
       </p>
     </div>
@@ -353,18 +353,29 @@ export function GrowthHorizonScreen({
   ]
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
+    <div
+      className="relative min-h-screen -mt-[120px] pt-[120px] overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #203070 0%, #1A3B9A 100%)' }}
+    >
+      {/* Grid pattern overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 96px,rgba(255,255,255,0.03) 96px,rgba(255,255,255,0.03) 97px),repeating-linear-gradient(90deg,transparent,transparent 96px,rgba(255,255,255,0.03) 96px,rgba(255,255,255,0.03) 97px)`,
+        }}
+      />
+    <div className="relative z-10 w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Headline */}
         <h1
           className={cn(
-            'font-display text-display sm:text-display-md lg:text-display-lg transition-opacity duration-200',
+            'font-display text-headline-lg sm:text-display lg:text-display-md transition-opacity duration-200',
             stage >= 1 ? 'opacity-100' : 'opacity-0'
           )}
-          style={{ color: '#1B2A4A' }}
+          style={{ color: 'white' }}
         >
-          Based on your profile, here&apos;s your{' '}
-          <span style={{ color: '#0066CC' }}>growth horizon with an advisor.</span>
+          From your profile so far, and your goals, here is your{' '}
+          <span style={{ color: '#FFB934' }}>growth horizon with an advisor.</span>
         </h1>
 
         {/* Graph */}
@@ -374,22 +385,20 @@ export function GrowthHorizonScreen({
           </div>
         )}
 
-        {/* Divider */}
-        <div
-          className={cn('w-full border-t transition-opacity duration-200', stage >= 2 ? 'opacity-100' : 'opacity-0')}
-          style={{ borderColor: '#E0E0E0' }}
-        />
-
         {/* Profile summary */}
         <div className={cn('transition-opacity duration-300', stage >= 2 ? 'opacity-100' : 'opacity-0')}>
-          <p className="text-xs font-medium uppercase tracking-wider mb-4" style={{ color: '#999999' }}>
+          <p className="text-sm font-medium uppercase tracking-wider" style={{ color: 'white' }}>
             Your financial profile
           </p>
-          <div className="space-y-2">
+          <div
+            className="w-full border-t my-4"
+            style={{ borderColor: 'white' }}
+          />
+          <div className="space-y-3">
             {profileRows.map((row) => (
               <div key={row.label} className="flex justify-between">
-                <span style={{ fontSize: '14px', color: '#999999' }}>{row.label}</span>
-                <span style={{ fontSize: '14px', fontWeight: 500, color: '#1B2A4A' }}>{row.value}</span>
+                <span style={{ fontSize: '16px', color: 'white' }}>{row.label}</span>
+                <span style={{ fontSize: '16px', fontWeight: 500, color: 'white' }}>{row.value}</span>
               </div>
             ))}
           </div>
@@ -398,7 +407,7 @@ export function GrowthHorizonScreen({
         {/* Divider */}
         <div
           className={cn('w-full border-t transition-opacity duration-200', stage >= 2 ? 'opacity-100' : 'opacity-0')}
-          style={{ borderColor: '#E0E0E0' }}
+          style={{ borderColor: 'white' }}
         />
 
         {/* CTA */}
@@ -485,6 +494,7 @@ export function GrowthHorizonScreen({
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }

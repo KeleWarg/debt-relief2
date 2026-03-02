@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils'
 
 const ALL_STEPS = [
   'motivation', 'age', 'affirmation', 'income', 'savings', 'objectives',
-  'savingsInterstitial', 'growthHorizon', 'specialties', 'married', 'home', 'zipCode',
-  'stateConfirmation', 'relationship', 'email', 'namePhone',
+  'growthHorizon', 'specialties', 'married', 'home', 'zipCode',
+  'relationship', 'email', 'namePhone',
 ] as const
 
 const SECTION_LABELS: Record<string, string> = {
@@ -21,7 +21,6 @@ const SECTION_LABELS: Record<string, string> = {
   married: 'Your life situation',
   home: 'Your life situation',
   zipCode: 'Finding Your Match',
-  stateConfirmation: 'Finding Your Match',
   relationship: 'Finding Your Match',
   email: 'Finding Your Match',
   namePhone: 'Finding Your Match',

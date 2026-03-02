@@ -1,14 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, SavingsInterstitialScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, StateConfirmationScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen } from '@/components/fa-screens'
+import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen } from '@/components/fa-screens'
 import { getStateFromZip } from '@/lib/zip-lookup'
 import type { FAFunnelData, MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective, RelationshipPreference } from '@/types/fa-funnel'
 import { Header } from '@/components/layout/Header'
 import { FAProgressBar } from '@/components/fa-screens/FAProgressBar'
 import { cn } from '@/lib/utils'
 
-type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'savingsInterstitial' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'stateConfirmation' | 'relationship' | 'email' | 'namePhone'
+type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'relationship' | 'email' | 'namePhone'
 
 const STEP_TO_PROGRESS: Record<Step, string> = {
   motivation: 'age',
@@ -16,13 +16,11 @@ const STEP_TO_PROGRESS: Record<Step, string> = {
   income: 'income',
   savings: 'savings',
   objectives: 'objectives',
-  savingsInterstitial: 'savingsInterstitial',
   growthHorizon: 'growthHorizon',
   specialties: 'specialties',
   marital: 'married',
   home: 'home',
   zip: 'zipCode',
-  stateConfirmation: 'stateConfirmation',
   relationship: 'relationship',
   email: 'email',
   namePhone: 'namePhone',
@@ -42,7 +40,7 @@ export default function FinancialAdvisorsPage() {
   }, [step])
 
   const isHero = step === 'motivation' && motivationPhase === 'motivation'
-  const isDarkStep = step === 'savingsInterstitial'
+  const isDarkStep = step === 'growthHorizon'
 
   const handleBack = React.useCallback(() => {
     switch (step) {
@@ -51,14 +49,12 @@ export default function FinancialAdvisorsPage() {
       case 'income': setStep('affirmation'); break
       case 'savings': setStep('income'); break
       case 'objectives': setStep('savings'); break
-      case 'savingsInterstitial': setStep('objectives'); break
-      case 'growthHorizon': setStep('savingsInterstitial'); break
+      case 'growthHorizon': setStep('objectives'); break
       case 'specialties': setStep('growthHorizon'); break
       case 'marital': setStep('specialties'); break
       case 'home': setStep('marital'); break
       case 'zip': setStep('home'); break
-      case 'stateConfirmation': setStep('zip'); break
-      case 'relationship': setStep('stateConfirmation'); break
+      case 'relationship': setStep('zip'); break
       case 'email': setStep('relationship'); break
       case 'namePhone': funnelData.email ? setStep('email') : setStep('relationship'); break
     }
@@ -137,8 +133,8 @@ export default function FinancialAdvisorsPage() {
             initialValue={funnelData.savingsRange}
             motivationDriver={funnelData.motivationDriver}
             onBack={() => setStep('income')}
-            onSubmit={(value: SavingsRange) => {
-              update({ savingsRange: value })
+            onSubmit={(value: SavingsRange, amount: number) => {
+              update({ savingsRange: value, savingsAmount: amount })
               setStep('objectives')
             }}
           />
@@ -153,19 +149,8 @@ export default function FinancialAdvisorsPage() {
             onBack={() => setStep('savings')}
             onSubmit={(value: InvestmentObjective) => {
               update({ investmentObjective: value })
-              setStep('savingsInterstitial')
+              setStep('growthHorizon')
             }}
-          />
-        )}
-
-        {step === 'savingsInterstitial' && (
-          <SavingsInterstitialScreen
-            savingsRange={funnelData.savingsRange}
-            motivationDriver={funnelData.motivationDriver}
-            ageRange={funnelData.ageRange}
-            incomeRange={funnelData.incomeRange}
-            onBack={() => setStep('objectives')}
-            onNext={() => setStep('growthHorizon')}
           />
         )}
 
@@ -234,23 +219,10 @@ export default function FinancialAdvisorsPage() {
             onBack={() => setStep('home')}
             onSubmit={(zip: string, derivedState?: string) => {
               update({ zipCode: zip, state: derivedState })
-              setStep('stateConfirmation')
+              setStep('relationship')
             }}
           />
         )}
-
-        {step === 'stateConfirmation' && (() => {
-          const stateInfo = funnelData.zipCode ? getStateFromZip(funnelData.zipCode) : null
-          return (
-            <StateConfirmationScreen
-              stateAbbr={stateInfo?.abbr}
-              stateName={stateInfo?.name}
-              motivationDriver={funnelData.motivationDriver}
-              onBack={() => setStep('zip')}
-              onNext={() => setStep('relationship')}
-            />
-          )
-        })()}
 
         {step === 'relationship' && (() => {
           const stateInfo = funnelData.zipCode ? getStateFromZip(funnelData.zipCode) : null
@@ -260,7 +232,7 @@ export default function FinancialAdvisorsPage() {
               stateName={stateInfo?.name}
               savedEmail={funnelData.savedEmail ?? funnelData.email}
               funnelData={funnelData}
-              onBack={() => setStep('stateConfirmation')}
+              onBack={() => setStep('zip')}
               onSubmit={(data: { preference: RelationshipPreference; phone?: string; email?: string; tcpaConsent?: boolean }) => {
                 const updates: Partial<FAFunnelData> = {
                   relationshipPreference: data.preference,

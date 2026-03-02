@@ -66,7 +66,7 @@ interface SavingsRangeScreenProps {
   initialValue?: SavingsRange
   motivationDriver?: MotivationDriver
   onBack?: () => void
-  onSubmit?: (value: SavingsRange) => void
+  onSubmit?: (value: SavingsRange, amount: number) => void
 }
 
 export function SavingsRangeScreen({
@@ -105,7 +105,7 @@ export function SavingsRangeScreen({
   }
 
   const handleSubmit = () => {
-    onSubmit?.(currentRange)
+    onSubmit?.(currentRange, sliderValue[0])
   }
 
   const content = motivationDriver ? SAVINGS_CONTENT[motivationDriver] : null

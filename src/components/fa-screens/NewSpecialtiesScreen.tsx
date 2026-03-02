@@ -4,7 +4,6 @@ import * as React from 'react'
 import { Button } from '@/components/ui'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 import type { MotivationDriver, AgeRange, SavingsRange, IncomeRange, FAFunnelData } from '@/types/fa-funnel'
-import { ProfileDropdown } from './ProfileDropdown'
 import { cn } from '@/lib/utils'
 
 const BLUE = '#0066CC'
@@ -14,24 +13,24 @@ const SPEC_CONTENT: Record<MotivationDriver, {
   subCopy: string
 }> = {
   behind_retirement: {
-    headline: <>Now let{'\u2019'}s match you with the right expertise. <span style={{ color: BLUE }}>The right specialties shape your catch-up plan</span> and how quickly you close the gap.</>,
-    subCopy: 'Most people catching up benefit from retirement planning, tax strategy, and catch-up expertise working together.',
+    headline: <><span style={{ color: BLUE }}>The right financial advisor is one step closer.</span> They will guide the conversation, so we don{'\u2019'}t expect you to have all the answers.</>,
+    subCopy: 'What would you like help with?',
   },
   family_protection: {
-    headline: <>Now let{'\u2019'}s match you with the right protection. <span style={{ color: BLUE }}>The right specialties ensure your family is covered</span> from every angle.</>,
-    subCopy: 'Protection planning often involves insurance, estate documents, and education funding working together.',
+    headline: <><span style={{ color: BLUE }}>The right financial advisor is one step closer.</span> They will guide the conversation, so we don{'\u2019'}t expect you to have all the answers.</>,
+    subCopy: 'What would you like help with?',
   },
   windfall: {
-    headline: <>Now let{'\u2019'}s find the right expertise for your new wealth. <span style={{ color: BLUE }}>The right specialties position your money</span> for long-term growth.</>,
-    subCopy: 'New wealth typically requires tax strategy, investment management, and asset protection as a starting point.',
+    headline: <><span style={{ color: BLUE }}>The right financial advisor is one step closer.</span> They will guide the conversation, so we don{'\u2019'}t expect you to have all the answers.</>,
+    subCopy: 'What would you like help with?',
   },
   optimization: {
-    headline: <>Now let{'\u2019'}s find the right optimization mix. <span style={{ color: BLUE }}>The right specialties unlock the biggest levers</span> in your financial picture.</>,
-    subCopy: 'Optimization touches tax strategy, investment management, and fee reduction. Most people benefit from all three.',
+    headline: <><span style={{ color: BLUE }}>The right financial advisor is one step closer.</span> They will guide the conversation, so we don{'\u2019'}t expect you to have all the answers.</>,
+    subCopy: 'What would you like help with?',
   },
   plan_review: {
-    headline: <>Now let{'\u2019'}s make sure your reviewer covers everything. <span style={{ color: BLUE }}>The right specialties ensure a thorough review</span> of your plan.</>,
-    subCopy: 'A good review covers retirement readiness, tax strategy, and whatever else surfaces. Cast a wide net.',
+    headline: <><span style={{ color: BLUE }}>The right financial advisor is one step closer.</span> They will guide the conversation, so we don{'\u2019'}t expect you to have all the answers.</>,
+    subCopy: 'What would you like help with?',
   },
 }
 
@@ -162,13 +161,12 @@ export function NewSpecialtiesScreen({
           {content?.subCopy ?? 'What would you like help with?'}
         </p>
 
-        {/* Profile dropdown */}
-        {funnelData && <ProfileDropdown data={funnelData} className="animate-fade-in-up w-full mb-6" />}
+
 
         {/* Primary options */}
         <div className="w-full flex flex-col animate-fade-in-up" style={{ gap: '12px', animationDelay: '500ms' }}>
           {[
-            { value: 'all', letter: 'A', title: 'All of the above', desc: 'Match me with a full-service advisor' },
+            { value: 'all', letter: 'A', title: 'Everything', desc: 'Match me with a full-service advisor' },
             { value: 'not_sure', letter: 'B', title: 'Not sure yet', desc: 'Help me figure it out' },
           ].map((opt) => (
             <button

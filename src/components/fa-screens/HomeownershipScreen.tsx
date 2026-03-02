@@ -2,10 +2,11 @@
 
 import * as React from 'react'
 import type { MotivationDriver, MaritalStatus, FAFunnelData } from '@/types/fa-funnel'
-import { ProfileDropdown } from './ProfileDropdown'
 import { cn } from '@/lib/utils'
 
 const LETTERS = ['A', 'B', 'C']
+
+const BLUE = '#0066CC'
 
 const HOME_OPTIONS = [
   { value: 'own', label: 'Yes, I own' },
@@ -13,50 +14,30 @@ const HOME_OPTIONS = [
   { value: 'other', label: 'Other' },
 ] as const
 
-const CONFIRMATION: Record<MaritalStatus, Record<MotivationDriver, string>> = {
-  married: {
-    behind_retirement: 'Married. Joint home equity can be one of the biggest catch-up tools available to couples.',
-    family_protection: 'Married. If you own together, your advisor will need to know for mortgage protection and titling.',
-    windfall: 'Married. Whether you own jointly affects how new wealth fits alongside existing property.',
-    optimization: 'Married. Joint property ownership opens up deduction strategies your advisor can layer in.',
-    plan_review: 'Married. Your advisor will want to see how property fits into the picture for both of you.',
+const HOME_CONTENT: Record<MotivationDriver, {
+  headline: React.ReactNode
+  subCopy: string
+}> = {
+  behind_retirement: {
+    headline: <>Almost there (2/4).<br /><span style={{ color: BLUE }}>Home equity can be a significant lever</span> in your catch-up plan.</>,
+    subCopy: 'Do you own your home?',
   },
-  single: {
-    behind_retirement: 'Single. If you own, that equity could be a meaningful part of your catch-up plan.',
-    family_protection: 'Single. Whether you own affects how your advisor structures coverage for dependents.',
-    windfall: 'Single. No co-owner simplifies things. Your advisor will want to know if property is in the mix.',
-    optimization: 'Single. Property tax and mortgage interest are some of the biggest deduction levers for solo filers.',
-    plan_review: 'Single. Your advisor will want to see whether property is part of the overall picture.',
+  family_protection: {
+    headline: <>Almost there (2/4).<br /><span style={{ color: BLUE }}>Homeownership changes the scope of protection</span> your advisor will recommend.</>,
+    subCopy: 'Do you own your home?',
   },
-  divorced: {
-    behind_retirement: 'Divorced. If property was part of the settlement, it changes your catch-up math.',
-    family_protection: 'Divorced. Whether you kept the home affects what your advisor needs to protect.',
-    windfall: 'Divorced. Property from a settlement and new wealth need to be structured carefully together.',
-    optimization: 'Divorced. If your housing situation changed, so did your deduction landscape.',
-    plan_review: 'Divorced. Your housing situation may have changed. Your advisor will factor that in.',
+  windfall: {
+    headline: <>Almost there (2/4).<br /><span style={{ color: BLUE }}>Whether you own or rent affects how your advisor positions</span> your new wealth.</>,
+    subCopy: 'Do you own your home?',
   },
-  widowed: {
-    behind_retirement: 'Widowed. If you inherited the home, that equity changes your catch-up options.',
-    family_protection: 'Widowed. Whether the home transferred to you affects your protection plan going forward.',
-    windfall: 'Widowed. Inherited property alongside new wealth needs careful structuring.',
-    optimization: 'Widowed. Inherited property comes with a stepped-up basis your advisor can use.',
-    plan_review: 'Widowed. Your advisor will want to know if the home is still part of your financial picture.',
+  optimization: {
+    headline: <>Almost there (2/4).<br /><span style={{ color: BLUE }}>Property opens up deduction strategies</span> your advisor can layer in.</>,
+    subCopy: 'Do you own your home?',
   },
-  prefer_not_to_say: {
-    behind_retirement: 'No problem. Your advisor will cover the details in your first conversation.',
-    family_protection: 'No problem. Your advisor will cover the details in your first conversation.',
-    windfall: 'No problem. Your advisor will cover the details in your first conversation.',
-    optimization: 'No problem. Your advisor will cover the details in your first conversation.',
-    plan_review: 'No problem. Your advisor will cover the details in your first conversation.',
+  plan_review: {
+    headline: <>Almost there (2/4).<br /><span style={{ color: BLUE }}>Home equity is one of the first things</span> an advisor looks at during a review.</>,
+    subCopy: 'Do you own your home?',
   },
-}
-
-const REASSURANCE: Record<MotivationDriver, string> = {
-  behind_retirement: 'Home equity is often overlooked in catch-up planning. It can be a significant lever.',
-  family_protection: 'Homeownership changes the scope of protection: mortgage coverage, property trusts, insurance.',
-  windfall: 'Whether you own or rent affects how your advisor positions new wealth.',
-  optimization: 'Mortgage interest, property tax deductions, home equity lines. Your advisor needs to know.',
-  plan_review: 'Home equity is one of the first things an advisor looks at during a review.',
 }
 
 interface HomeownershipScreenProps {
@@ -83,59 +64,37 @@ export function HomeownershipScreen({
     setTimeout(() => onSubmit?.(value), 400)
   }
 
-  const confirmation =
-    maritalStatus && motivationDriver
-      ? CONFIRMATION[maritalStatus][motivationDriver]
-      : ''
-
-  const reassurance = motivationDriver ? REASSURANCE[motivationDriver] : ''
+  const content = motivationDriver ? HOME_CONTENT[motivationDriver] : null
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="flex flex-col items-start w-full">
-        {/* Zone 1: Confirmation */}
-        {confirmation && (
-          <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
-              {confirmation}
-            </p>
-          </div>
-        )}
-
-        {funnelData && <ProfileDropdown data={funnelData} className="animate-fade-in-up w-full mb-4" />}
-
-        {/* Divider */}
-        <div
-          className="animate-fade-in-up w-full border-t my-4"
-          style={{ animationDelay: '200ms', borderColor: '#E0E0E0' }}
-        />
-
-        {/* Zone 2: Headline + Options */}
-        <h1
-          className="animate-fade-in-up font-display text-display sm:text-display-md lg:text-display-lg mb-2"
-          style={{ animationDelay: '300ms', color: '#1B2A4A' }}
+        {/* Section label */}
+        <p
+          className="animate-fade-in-up text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3"
+          style={{ animationDelay: '400ms' }}
         >
-          It&rsquo;s not about the house.{' '}
-          <span style={{ color: '#0066CC' }}>
-            It&rsquo;s about what it unlocks in your plan.
-          </span>
+          Your life situation
+        </p>
+
+        {/* Headline */}
+        <h1
+          className="animate-fade-in-up font-display text-headline-lg sm:text-display lg:text-display-md mb-3"
+          style={{ animationDelay: '400ms', color: '#1B2A4A' }}
+        >
+          {content?.headline ?? <>Almost there (2/4).<br /><span style={{ color: BLUE }}>It{'\u2019'}s about what your home unlocks in your plan.</span></>}
         </h1>
 
-        {/* Instruction */}
+        {/* Sub-copy */}
         <p
-          className="animate-fade-in-up leading-relaxed mb-4"
-          style={{ animationDelay: '400ms', fontSize: '15px', color: '#666666' }}
+          className="animate-fade-in-up leading-relaxed mb-8"
+          style={{ animationDelay: '500ms', fontSize: '15px', color: '#666666' }}
         >
-          Do you own your home?
+          {content?.subCopy ?? 'Do you own your home?'}
         </p>
 
         {/* Options */}
-        <div className="w-full flex flex-col" style={{ gap: '10px' }}>
+        <div className="w-full grid grid-cols-2 gap-3">
           {HOME_OPTIONS.map((opt, i) => {
             const isSelected = selected === opt.value
             return (
@@ -150,7 +109,7 @@ export function HomeownershipScreen({
                     ? 'border-[#0066CC] bg-[#F0F7FF] shadow-sm'
                     : 'border-[#E8E8E8] hover:bg-[#F0F7FF]'
                 )}
-                style={{ animationDelay: `${450 + i * 100}ms`, height: '52px', paddingLeft: '16px', paddingRight: '16px' }}
+                style={{ animationDelay: `${500 + i * 100}ms`, height: '52px', paddingLeft: '16px', paddingRight: '16px' }}
               >
                 <div
                   className={cn(
@@ -170,16 +129,6 @@ export function HomeownershipScreen({
             )
           })}
         </div>
-
-        {/* Advisor reassurance */}
-        {reassurance && (
-          <p
-            className="animate-fade-in-up mt-4"
-            style={{ animationDelay: '750ms', fontSize: '14px', color: '#666666' }}
-          >
-            {reassurance}
-          </p>
-        )}
       </div>
     </div>
   )

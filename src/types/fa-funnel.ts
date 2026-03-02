@@ -51,6 +51,7 @@ export interface FAFunnelData {
   ageRange?: AgeRange
   incomeRange?: IncomeRange
   savingsRange?: SavingsRange
+  savingsAmount?: number
   investmentObjective?: InvestmentObjective
   specialties?: string[]
   maritalStatus?: MaritalStatus
