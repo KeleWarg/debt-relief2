@@ -210,7 +210,7 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
   if (!gapData) return null
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Bar chart */}
         <GapBarChart data={gapData} stage={stage} />

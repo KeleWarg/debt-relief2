@@ -100,7 +100,7 @@ export function FormLayout({
       
       {/* Main Content */}
       <main className="flex-1 flex flex-col">
-        <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8 flex-1">
+        <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8 flex-1">
           {/* Content Area */}
           <div
             className={cn(

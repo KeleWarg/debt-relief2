@@ -84,8 +84,8 @@ export function NamePhoneWithReviewScreen({
   }
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <div className="flex flex-col items-start w-full mt-6">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
+      <div className="flex flex-col items-start w-full">
         <div className="animate-fade-in-up flex items-start gap-2 mb-4">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0 mt-0.5">
             <circle cx="9" cy="9" r="9" fill="#0B6E4F" />

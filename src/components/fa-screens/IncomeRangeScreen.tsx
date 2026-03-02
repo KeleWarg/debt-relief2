@@ -47,8 +47,8 @@ export function IncomeRangeScreen({
   const confirmation = motivationDriver ? INCOME_CONFIRMATION[motivationDriver] : undefined
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <div className="flex flex-col items-start w-full mt-6">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
+      <div className="flex flex-col items-start w-full">
         {/* Zone 1: Confirmation */}
         <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
           <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
@@ -56,7 +56,7 @@ export function IncomeRangeScreen({
               <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <p className="font-sans text-lg font-bold" style={{ color: '#1B2A4A' }}>
+          <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
             {confirmation ?? "Got it! We'll factor that into your match."}
           </p>
         </div>

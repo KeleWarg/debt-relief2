@@ -147,7 +147,7 @@ export function ScreenB({
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <FAProgressBar stepName="assets" onBack={onBack} />
           <div
             className={`animate-slide-up has-sticky-button mt-8 space-y-6 text-center transition-all duration-700 ${

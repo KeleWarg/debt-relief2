@@ -55,7 +55,7 @@ export function SpecialtiesScreen({ initialValue, onBack, onSubmit }: Specialtie
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <FAProgressBar stepName="specialties" onBack={onBack} />
       <div className="animate-slide-up has-sticky-button mt-8">
         <div className="max-w-content mx-auto text-center">

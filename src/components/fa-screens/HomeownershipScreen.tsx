@@ -91,8 +91,8 @@ export function HomeownershipScreen({
   const reassurance = motivationDriver ? REASSURANCE[motivationDriver] : ''
 
   return (
-    <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <div className="flex flex-col items-start w-full mt-6">
+    <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
+      <div className="flex flex-col items-start w-full">
         {/* Zone 1: Confirmation */}
         {confirmation && (
           <div className="animate-fade-in-up flex items-start gap-2 mb-4">

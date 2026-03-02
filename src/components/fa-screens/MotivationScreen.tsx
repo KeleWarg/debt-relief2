@@ -183,7 +183,7 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
               </svg>
             </div>
             <p
-              className="font-sans text-lg font-bold"
+              className="font-sans text-base font-bold"
               style={{ color: '#1B2A4A' }}
             >
               {ageData.confirmation}
@@ -247,10 +247,8 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
 
   return (
     <div style={opacityStyle} className="h-full w-full">
-      <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        <div className="mt-3 sm:mt-6">
-          {ageContent}
-        </div>
+      <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
+        {ageContent}
       </div>
     </div>
   )
