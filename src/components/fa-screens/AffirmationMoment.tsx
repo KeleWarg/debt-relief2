@@ -16,6 +16,29 @@ import { cn } from '@/lib/utils'
 
 const GOLD = '#F3C060'
 const BLUE = '#007AC8'
+const ACCENT = '#0066CC'
+
+const HIGHLIGHT_PHRASES: Record<string, string> = {
+  behind_retirement: 'catching up on retirement',
+  family_protection: 'protecting their family',
+  windfall: 'managing new wealth',
+  optimization: 'optimizing their finances',
+  plan_review: 'getting a plan review',
+}
+
+function highlightPhrase(text: string, motivation?: string): React.ReactNode {
+  const phrase = motivation ? HIGHLIGHT_PHRASES[motivation] : null
+  if (!phrase) return text
+  const idx = text.indexOf(phrase)
+  if (idx === -1) return text
+  return (
+    <>
+      {text.slice(0, idx)}
+      <span style={{ color: ACCENT }}>{phrase}</span>
+      {text.slice(idx + phrase.length)}
+    </>
+  )
+}
 const BAR_MAX_H = 220
 const BAR_W = 72
 const BAR_GAP = 44
@@ -209,9 +232,33 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
 
   if (!gapData) return null
 
+  const dotIdx = gapData.narrative.indexOf('. ')
+  const headlineSentence = dotIdx !== -1 ? gapData.narrative.slice(0, dotIdx + 1) : gapData.narrative
+  const subCopySentence = dotIdx !== -1 ? gapData.narrative.slice(dotIdx + 2) : ''
+
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="space-y-6 has-sticky-button mt-6">
+        {/* Headline — first sentence */}
+        <div
+          className={cn(
+            'transition-opacity duration-200',
+            stage >= 1 ? 'opacity-100' : 'opacity-0'
+          )}
+        >
+          <h1
+            className="font-display text-headline-md sm:text-headline-lg lg:text-display leading-snug"
+            style={{ color: '#1B2A4A' }}
+          >
+            {highlightPhrase(headlineSentence, motivationDriver)}
+          </h1>
+          {subCopySentence && (
+            <p className="text-body text-neutral-500 mt-3 leading-relaxed">
+              {subCopySentence}
+            </p>
+          )}
+        </div>
+
         {/* Bar chart */}
         <GapBarChart data={gapData} stage={stage} />
 
@@ -225,18 +272,6 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
           {gapData.source}
         </p>
 
-        {/* Headline */}
-        <h1
-          className={cn(
-            'font-display text-display sm:text-display-md lg:text-display-lg transition-opacity duration-200',
-            stage >= 1 ? 'opacity-100' : 'opacity-0'
-          )}
-          style={{ color: '#1B2A4A' }}
-        >
-          Here&apos;s what we see for{' '}
-          <span style={{ color: '#0066CC' }}>people like you.</span>
-        </h1>
-
         {/* Your goal */}
         <div
           className={cn(
@@ -249,16 +284,6 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
             Your goal: {goalLabel}
           </p>
         </div>
-
-        {/* Narrative */}
-        <p
-          className={cn(
-            'text-sm text-neutral-700 leading-relaxed transition-opacity duration-200',
-            stage >= 1 ? 'opacity-100' : 'opacity-0'
-          )}
-        >
-          {gapData.narrative}
-        </p>
 
         {/* Goal paragraph */}
         <div

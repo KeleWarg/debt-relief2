@@ -74,7 +74,7 @@ const AGE_CONTENT: Record<string, {
 }> = {
   behind_retirement: {
     confirmation: 'Got it! You want to catch up on retirement.',
-    headline: <>You mentioned being worried about being behind on retirement savings. <span style={{ color: BLUE }}>Your age shapes your plan</span>, let{'\u2019'}s work together.</>,
+    headline: <>You mentioned being worried about your retirement savings. <span style={{ color: BLUE }}>Your age shapes your plan</span>, let{'\u2019'}s work together.</>,
     subCopy: 'Your age tells an advisor how much runway you have, and which strategies will close the gap fastest.',
   },
   family_protection: {
