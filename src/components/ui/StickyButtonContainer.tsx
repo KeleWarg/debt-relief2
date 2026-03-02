@@ -14,34 +14,36 @@ export function StickyButtonContainer({
   className 
 }: StickyButtonContainerProps) {
   const [keyboardOffset, setKeyboardOffset] = React.useState(0)
-  const [isSticky, setIsSticky] = React.useState(false)
+  const [isMobile, setIsMobile] = React.useState(false)
+  const [desktopSticky, setDesktopSticky] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
   const sentinelRef = React.useRef<HTMLDivElement>(null)
   const anchorRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
     setMounted(true)
+    const mq = window.matchMedia('(max-width: 639px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
   }, [])
 
   React.useEffect(() => {
+    if (isMobile || !mounted) return
     const sentinel = sentinelRef.current
     if (!sentinel) return
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsSticky(!entry.isIntersecting)
-      },
-      { threshold: 0.1 }
+      ([entry]) => setDesktopSticky(!entry.isIntersecting),
+      { threshold: 0 }
     )
-
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [mounted])
+  }, [isMobile, mounted])
 
   React.useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 639px)').matches
     if (!isMobile) return
-
     const visualViewport = window.visualViewport
     if (!visualViewport) return
 
@@ -63,7 +65,7 @@ export function StickyButtonContainer({
       visualViewport.removeEventListener('resize', handleResize)
       visualViewport.removeEventListener('scroll', handleResize)
     }
-  }, [])
+  }, [isMobile])
 
   const handlePortalClick = (e: React.MouseEvent) => {
     const button = (e.target as HTMLElement).closest('button')
@@ -76,6 +78,8 @@ export function StickyButtonContainer({
       }
     }
   }
+
+  const shouldPortal = isMobile || desktopSticky
 
   const fixedBar = (
     <div
@@ -96,12 +100,12 @@ export function StickyButtonContainer({
 
   return (
     <>
-      <div ref={anchorRef} className={cn(isSticky ? 'invisible' : '', className)}>
+      <div ref={anchorRef} className={cn(shouldPortal ? 'invisible' : '', className)}>
         <div ref={sentinelRef}>
           {children}
         </div>
       </div>
-      {mounted && isSticky && createPortal(fixedBar, document.body)}
+      {mounted && shouldPortal && createPortal(fixedBar, document.body)}
     </>
   )
 }

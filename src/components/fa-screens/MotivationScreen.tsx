@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { HeroLayout } from '@/components/layout/HeroLayout'
-import { Button } from '@/components/ui/Button'
 import { MOTIVATION_OPTIONS, AGE_OPTIONS } from '@/types/fa-funnel'
 import type { MotivationDriver, AgeRange } from '@/types/fa-funnel'
 import { cn } from '@/lib/utils'
@@ -308,14 +307,6 @@ function MotivationOptions({
         </p>
       </div>
 
-      <div className="mt-8">
-        <Button
-          onClick={onContinue}
-          className="min-w-[180px]"
-        >
-          Continue
-        </Button>
-      </div>
     </>
   )
 }
