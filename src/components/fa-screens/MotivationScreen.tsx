@@ -65,34 +65,36 @@ function RotatingTypewriter() {
   )
 }
 
+const BLUE = '#0066CC'
+
 const AGE_CONTENT: Record<string, {
   confirmation: string
-  headline: string
+  headline: React.ReactNode
   subCopy: string
 }> = {
   behind_retirement: {
     confirmation: 'Got it! You want to catch up on retirement.',
-    headline: "You mentioned being worried about being behind on retirement savings. Your age shapes your plan, let\u2019s work together.",
+    headline: <>You mentioned being worried about <span style={{ color: BLUE }}>being behind on retirement savings</span>. <span style={{ color: BLUE }}>Your age shapes your plan</span>, let{'\u2019'}s work together.</>,
     subCopy: 'Your age tells an advisor how much runway you have, and which strategies will close the gap fastest.',
   },
   family_protection: {
     confirmation: 'Got it! You want to protect your family.',
-    headline: "You said you want to protect your family. Your age shapes your plan and there\u2019s no better time than to act now.",
+    headline: <>You said you want to <span style={{ color: BLUE }}>protect your family</span>. <span style={{ color: BLUE }}>Your age shapes your plan</span> and there{'\u2019'}s no better time than to act now.</>,
     subCopy: 'Your age tells an advisor what type of coverage and estate planning makes the most sense right now.',
   },
   windfall: {
     confirmation: "Got it! You're managing new wealth.",
-    headline: "You mentioned you\u2019ve received an unexpected income. Your age shapes your plan and now\u2019s the time to put that money to work.",
+    headline: <>You mentioned you{'\u2019'}ve received <span style={{ color: BLUE }}>an unexpected income</span>. <span style={{ color: BLUE }}>Your age shapes your plan</span> and now{'\u2019'}s the time to put that money to work.</>,
     subCopy: 'Your age tells an advisor how to balance growing this money with protecting it.',
   },
   optimization: {
     confirmation: 'Got it! You want to optimize your finances.',
-    headline: "You mentioned wanting to stop leaving money on the table. Your age shapes your plan and the best time to start is now.",
+    headline: <>You mentioned wanting to <span style={{ color: BLUE }}>stop leaving money on the table</span>. <span style={{ color: BLUE }}>Your age shapes your plan</span> and the best time to start is now.</>,
     subCopy: 'Your age tells an advisor which tax and investment strategies will have the biggest impact.',
   },
   plan_review: {
     confirmation: 'Got it! You want a professional review.',
-    headline: "You mentioned wanting a 2nd opinion on your plan. Your age shapes that plan, let\u2019s see what we can do together.",
+    headline: <>You mentioned wanting <span style={{ color: BLUE }}>a 2nd opinion on your plan</span>. <span style={{ color: BLUE }}>Your age shapes that plan</span>, let{'\u2019'}s see what we can do together.</>,
     subCopy: 'Your age tells an advisor which parts of your plan to stress-test first.',
   },
 }
