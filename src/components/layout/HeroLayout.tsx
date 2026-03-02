@@ -10,7 +10,7 @@ import { TrustBadges } from './TrustBadges'
 const DEFAULT_CAROUSEL: CarouselSlide[] = [
   { src: '/hero-4.png', alt: 'Man celebrating a financial milestone' },
   { src: '/hero-5.png', alt: 'Retired couple enjoying life together' },
-  { src: '/image.png', alt: 'Woman reviewing Forbes Advisor savings dashboard on phone' },
+  { src: '/hero-phone-portrait.jpg', alt: 'Woman reviewing Forbes Advisor savings dashboard on phone' },
 ]
 
 const SLIDE_INTERVAL = 5000

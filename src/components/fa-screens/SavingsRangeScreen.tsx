@@ -8,6 +8,34 @@ import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 
 const BLUE = '#0066CC'
 
+function MoneyStack({ amount }: { amount: number }) {
+  const tier = amount < 50000 ? 1 : amount < 150000 ? 2 : amount < 300000 ? 3 : 4
+  const rows = Array.from({ length: tier }, (_, i) => i + 1)
+
+  return (
+    <div className="flex flex-col items-center -space-y-2">
+      {rows.map((count, rowIndex) => (
+        <div
+          key={`row-${rowIndex}-${tier}`}
+          className="flex -space-x-2 animate-money-fade-in"
+        >
+          {Array.from({ length: count }).map((_, iconIndex) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={`icon-${rowIndex}-${iconIndex}`}
+              src="/Money.svg"
+              alt=""
+              width={52}
+              height={40}
+              className="w-[52px] h-[40px] animate-money-fade-in"
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 const SAVINGS_CONTENT: Record<MotivationDriver, {
   headline: React.ReactNode
   subCopy: string
@@ -109,9 +137,10 @@ export function SavingsRangeScreen({
           {content?.subCopy ?? "Estimate your total savings and assets, including cash, investments, retirement accounts, and home equity."}
         </p>
 
-        {/* Display value */}
-        <div className="animate-fade-in-up w-full text-center py-4" style={{ animationDelay: '500ms' }}>
-          <p className="text-[56px] font-display leading-none text-neutral-900">
+        {/* Money stack + Display value */}
+        <div className="animate-fade-in-up w-full flex flex-col items-center py-4 mb-6" style={{ animationDelay: '500ms' }}>
+          <MoneyStack amount={sliderValue[0]} />
+          <p className="text-[56px] font-display leading-none text-neutral-900 mt-6">
             {formatSavings(sliderValue[0])}
           </p>
         </div>
