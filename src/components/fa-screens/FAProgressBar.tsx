@@ -11,24 +11,32 @@ const QUESTION_STEPS = [
 const SECTION_LABELS: Record<string, string> = {
   motivation: "Let's understand you",
   age: "Let's understand you",
+  affirmation: 'Building your financial profile',
   income: 'Building your financial profile',
   savings: 'Building your financial profile',
-  objectives: 'Your Goals & Preferences',
+  objectives: 'Building your financial profile',
+  growthHorizon: 'Your Goals & Preferences',
   specialties: 'Your Goals & Preferences',
-  married: 'Your Financial Situation',
-  home: 'Your Financial Situation',
-  assets: 'Your Financial Situation',
+  married: 'Your life situation',
+  home: 'Your life situation',
+  assets: 'Your life situation',
   relationship: 'Finding Your Match',
   zipCode: 'Finding Your Match',
   email: 'Finding Your Match',
   namePhone: 'Finding Your Match',
 }
 
+const PROGRESS_ALIAS: Record<string, string> = {
+  affirmation: 'age',
+  growthHorizon: 'objectives',
+}
+
 /**
  * Returns overall progress (0–100) for a given question step name.
  */
 export function faProgressPercent(stepName: string): number {
-  const idx = QUESTION_STEPS.indexOf(stepName as typeof QUESTION_STEPS[number])
+  const resolved = PROGRESS_ALIAS[stepName] ?? stepName
+  const idx = QUESTION_STEPS.indexOf(resolved as typeof QUESTION_STEPS[number])
   if (idx === -1) return 0
   return Math.round(((idx + 1) / QUESTION_STEPS.length) * 100)
 }

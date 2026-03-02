@@ -7,7 +7,9 @@ export type MotivationDriver =
 
 export type AgeRange = 'under_30' | 'thirties' | 'forties' | 'fifties' | 'sixties'
 
-export type MaritalStatus = 'yes' | 'no' | 'prefer_not_to_say'
+export type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed' | 'prefer_not_to_say'
+
+export type Homeownership = 'own' | 'rent' | 'other'
 
 export type InvestmentObjective =
   | 'growth'
@@ -40,6 +42,8 @@ export type TotalAssetsRange =
   | '5m_plus'
   | 'not_sure'
 
+export type RelationshipPreference = 'phone_consultation' | 'virtual' | 'in_person' | 'no_preference'
+
 export type ContactPreference = 'email_only' | 'phone'
 
 export interface FAFunnelData {
@@ -50,7 +54,7 @@ export interface FAFunnelData {
   investmentObjective?: InvestmentObjective
   specialties?: string[]
   maritalStatus?: MaritalStatus
-  homeOwner?: boolean
+  homeownership?: Homeownership
   totalAssets?: TotalAssetsRange
   assetBreakdown?: {
     cash?: TotalAssetsRange
@@ -59,6 +63,8 @@ export interface FAFunnelData {
     realEstate?: TotalAssetsRange
   }
   advisorRelationship?: string[]
+  relationshipPreference?: RelationshipPreference
+  tcpaConsentTimestamp?: string
   zipCode?: string
   city?: string
   state?: string
@@ -270,9 +276,17 @@ export const RELATIONSHIP_OPTIONS = [
 ] as const
 
 export const MARITAL_OPTIONS = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
+  { value: 'single', label: 'Single' },
+  { value: 'married', label: 'Married' },
+  { value: 'divorced', label: 'Divorced' },
+  { value: 'widowed', label: 'Widowed' },
   { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+] as const
+
+export const HOMEOWNERSHIP_OPTIONS = [
+  { value: 'own', label: 'Yes, I own' },
+  { value: 'rent', label: 'No, I rent' },
+  { value: 'other', label: 'Other' },
 ] as const
 
 export const SAVINGS_OPTIONS = [
@@ -495,6 +509,10 @@ export function getAgeLabel(value?: AgeRange): string {
 
 export function getMaritalLabel(value?: MaritalStatus): string {
   return MARITAL_OPTIONS.find((o) => o.value === value)?.label ?? ''
+}
+
+export function getHomeownershipLabel(value?: Homeownership): string {
+  return HOMEOWNERSHIP_OPTIONS.find((o) => o.value === value)?.label ?? ''
 }
 
 export function getObjectiveLabel(value?: InvestmentObjective): string {

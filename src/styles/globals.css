@@ -252,6 +252,26 @@
   animation: float 1.5s ease-in-out infinite;
 }
 
+.pin-drop-in {
+  animation: pinDrop 300ms ease-out forwards;
+}
+
+.pin-glow {
+  animation: pinGlow 500ms ease-in-out 300ms forwards;
+}
+
+@keyframes pinDrop {
+  0% { opacity: 0; transform: translateY(-20px) scale(0.5); }
+  70% { opacity: 1; transform: translateY(2px) scale(1.1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pinGlow {
+  0% { r: 8; opacity: 0.25; }
+  50% { r: 14; opacity: 0.4; }
+  100% { r: 8; opacity: 0.25; }
+}
+
 /* Counter Shake Animation */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

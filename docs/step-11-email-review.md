@@ -1,4 +1,4 @@
-# Step 11 — Email + Financial Profile Review
+# Step 11 — Email
 
 > **Conditional:** This step is SKIPPED if the user already provided email in the Step 10 modal.
 
@@ -6,88 +6,145 @@
 
 | Property | Value |
 |----------|-------|
-| Screen name | `EmailWithReviewScreen` |
+| Screen name | `EmailScreen` |
 | Field | `email` |
 | Type | Text input (email) |
-| Auto-advance | No — requires Continue |
-| Phase label | YOUR ADVISOR MATCH |
+| Auto-advance | No. Requires Continue |
+| Phase label | FINAL DETAILS |
 | Progress | ~85% |
 | Data available | Full profile |
-| Special feature | Financial profile review with recommended strategies alongside email capture |
+| Layout | Centered single-column with profile dropdown (see **profile-dropdown.md**) |
+| Special feature | Confidence builders + security trust alongside email capture |
 | Condition | Only shown if `email` is null |
 
 ---
 
 ## Layout
 
-Financial profile review card alongside email capture.
+Profile data lives in the dropdown. Confidence builders and security trust sit between the email input and CTA.
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  YOUR ADVISOR MATCH                                      │
-│  ██████████████████████████████░░                        │
-│                                                          │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │  YOUR FINANCIAL PROFILE REVIEW                     │  │
-│  │                                                    │  │
-│  │  🎯 Goal          Catching up on retirement        │  │
-│  │  🎂 Age           50s                              │  │
-│  │  💼 Income        $100K–$150K                      │  │
-│  │  💰 Savings       $150K–$350K                      │  │
-│  │  📊 Objective     Long-term growth                 │  │
-│  │  👤 Status        Married                          │  │
-│  │  🏠 Home          Homeowner                        │  │
-│  │  📍 Location      New York                         │  │
-│  │                                                    │  │
-│  │  ─────────────────────────────────────────         │  │
-│  │                                                    │  │
-│  │  RECOMMENDED STRATEGIES                            │  │
-│  │                                                    │  │
-│  │  [ Catch-Up Contributions ]                        │  │
-│  │  Maximize your 401(k) to $30,500/year              │  │
-│  │  including catch-up provisions.                    │  │
-│  │                                                    │  │
-│  │  [ Roth Conversion Window ]                        │  │
-│  │  Evaluate converting pre-tax funds before          │  │
-│  │  RMDs begin — timing matters.                      │  │
-│  │                                                    │  │
-│  │  [ Tax-Loss Harvesting ]                           │  │
-│  │  Offset gains with strategic losses —              │  │
-│  │  especially effective in taxable accounts.         │  │
-│  │                                                    │  │
-│  │  Your matched advisor will walk through these      │  │
-│  │  with you during your first conversation.          │  │
-│  └────────────────────────────────────────────────────┘  │
-│                                                          │
-│  We're almost ready to match you.                        │
-│  Where should we send your advisor details?              │
-│                                                          │
-│  [Motivation-specific advisor line]                      │
-│                                                          │
-│  ┌────────────────────────────────────┐                  │
-│  │  📧 your@email.com                 │ [pre-filled if saved] │
-│  └────────────────────────────────────┘                  │
-│                                                          │
-│  We'll send your match details and profile               │
-│  summary to this email.                                  │
-│                                                          │
-│                  [ Continue → ]                           │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
+FINAL DETAILS
+==============================--
+
+  Your Profile                            v
+
+  [checkmark] [Relationship confirmation]
+
+  ------------------------------------
+
+  We're almost ready to match you.
+  Where should we send your
+  advisor details?
+
+  [Motivation-specific advisor line]
+
+  +------------------------+
+  |  your@email.com        |
+  +------------------------+
+
+  We'll send your match details and
+  profile summary to this email.
+
+  [check] Your profile qualifies for a
+          free consultation
+  [check] Advisors in New York are
+          accepting new clients
+  [check] Average first call is scheduled
+          within 48 hours
+
+           [ Continue -> ]
+
+  [lock] 256-Bit Encrypted • Never Sold or Shared
 ```
 
 ---
 
-## Headline
+## Zone 1: Confirmation
+
+Bridges from Step 10 (advisor relationship) to email capture.
+
+### Confirmation Variants (relationship_preference x motivation_driver)
+
+#### Phone consultation
+
+| `motivation_driver` | Confirmation |
+|---------------------|--------------|
+| `behind_retirement` | Phone consultation. Your catch-up specialist will call to walk through your strategy. |
+| `family_protection` | Phone consultation. Your protection advisor will call to review your family's coverage. |
+| `windfall` | Phone consultation. Your wealth advisor will call to discuss positioning. |
+| `optimization` | Phone consultation. Your optimization specialist will call to identify your biggest opportunities. |
+| `plan_review` | Phone consultation. Your advisor will call to schedule your comprehensive review. |
+
+#### Virtual
+
+| `motivation_driver` | Confirmation |
+|---------------------|--------------|
+| `behind_retirement` | Virtual meetings. Your advisor will set up video calls to work through your catch-up plan. |
+| `family_protection` | Virtual meetings. Your advisor will connect with you online to review your protection plan. |
+| `windfall` | Virtual meetings. Your advisor will set up video calls to discuss your new wealth strategy. |
+| `optimization` | Virtual meetings. Your advisor will connect with you online to review your optimization opportunities. |
+| `plan_review` | Virtual meetings. Your advisor will set up video calls for your comprehensive review. |
+
+#### In person
+
+| `motivation_driver` | Confirmation |
+|---------------------|--------------|
+| `behind_retirement` | In person. We'll match you with a catch-up specialist you can meet face-to-face near [State]. |
+| `family_protection` | In person. We'll match you with a protection advisor you can meet face-to-face near [State]. |
+| `windfall` | In person. We'll match you with a wealth advisor you can meet face-to-face near [State]. |
+| `optimization` | In person. We'll match you with an optimization specialist near [State]. |
+| `plan_review` | In person. We'll match you with an advisor near [State] for your face-to-face review. |
+
+#### No preference
+
+Universal across all motivations:
+
+```
+No preference on format. We'll match you with the best advisor for your situation.
+```
+
+`[State]` is the full state name derived from `zip_code`.
+
+### Confirmation Spec
+
+| Element | Spec |
+|---------|------|
+| Icon | Green checkmark, 18px |
+| Text | Regular weight, 15px, dark (#1B2A4A) |
+| Spacing | 16px below confirmation, before divider |
+
+---
+
+## Divider
+
+| Element | Spec |
+|---------|------|
+| Style | 1px solid, light grey (#E0E0E0) |
+| Width | Full content width |
+| Margin | 16px top and bottom |
+
+---
+
+## Zone 2: Headline + Review + Email
+
+### Emotional Headline
 
 ```
 We're almost ready to match you.
 Where should we send your advisor details?
 ```
 
+- **"We're almost ready to match you."** -- Dark (#1B2A4A), serif/display font, 24px
+- **"Where should we send your advisor details?"** -- Forbes blue (#0066CC), same font and size
+
+Direct ask. The reward (advisor details) is the reason to give the email.
+
 ---
 
-## Motivation-Specific Advisor Line (above email input)
+## Motivation-Specific Advisor Line
+
+Below the headline.
 
 | `motivation_driver` | Line |
 |---------------------|------|
@@ -97,106 +154,33 @@ Where should we send your advisor details?
 | `optimization` | Your optimization specialist will reach out to identify your biggest opportunities. |
 | `plan_review` | Your advisor will reach out to schedule your comprehensive review. |
 
-These name the advisor's role in terms of the user's motivation. "Your catch-up specialist" is more specific and reassuring than "your advisor."
-
----
-
-## Sub Copy (below email input)
-
-```
-We'll send your match details and profile summary to this email.
-```
-
----
-
-## Financial Profile Review Card
-
-### Profile Section
-
-All collected data in a clean summary:
-
-| Icon | Field | Value |
-|------|-------|-------|
-| 🎯 | Goal | [motivation label] |
-| 🎂 | Age | [age range] |
-| 💼 | Income | [income range] |
-| 💰 | Savings | [savings range] |
-| 📊 | Objective | [objective label] |
-| 👤 | Status | [marital status] |
-| 🏠 | Home | Homeowner / Renter |
-| 📍 | Location | [State derived from ZIP] |
-
-### Recommended Strategies Section
-
-Three strategy recommendations keyed to `motivation_driver` × `age_range`. Each has a pill tag and one-line description.
-
-#### Strategy Matrix
-
-**`behind_retirement`**
-
-| Age | Strategy 1 | Strategy 2 | Strategy 3 |
-|-----|-----------|-----------|-----------|
-| Under 30 | Automated Savings | Index Fund Strategy | Employer Match Max |
-| 30s | Contribution Ramp-Up | Asset Allocation | Tax-Advantaged Accounts |
-| 40s | Max Contributions | Roth Conversion | Portfolio Rebalance |
-| 50s | Catch-Up Contributions | Roth Conversion Window | Tax-Loss Harvesting |
-| 60s+ | Social Security Timing | Withdrawal Strategy | Medicare Planning |
-
-**`family_protection`**
-
-| Age | Strategy 1 | Strategy 2 | Strategy 3 |
-|-----|-----------|-----------|-----------|
-| Under 30 | Term Life Insurance | Emergency Fund Build | Will & Basic Trust |
-| 30s | Coverage Gap Analysis | Education Funding | Estate Documents |
-| 40s | Coverage Gap Analysis | Education Funding Strategy | Estate Document Review |
-| 50s | Estate Planning | Survivorship Strategy | Long-Term Care |
-| 60s+ | Wealth Transfer | Legacy Structure | Beneficiary Audit |
-
-**`windfall`**
-
-| Age | Strategy 1 | Strategy 2 | Strategy 3 |
-|-----|-----------|-----------|-----------|
-| Under 30 | Tax-Efficient Positioning | Growth Allocation | Wealth Structure |
-| 30s | Tax-Efficient Positioning | Diversified Growth | Asset Protection |
-| 40s | Tax-Efficient Placement | Retirement Acceleration | Estate Foundation |
-| 50s | Tax Mitigation | Retirement Gap Close | Preservation Strategy |
-| 60s+ | Tax-Efficient Transfer | Preservation First | Estate Structure |
-
-**`optimization`**
-
-| Age | Strategy 1 | Strategy 2 | Strategy 3 |
-|-----|-----------|-----------|-----------|
-| Under 30 | Fee Reduction | Tax-Advantaged Max | Asset Location |
-| 30s | Tax-Loss Harvesting | Account Consolidation | Fee Audit |
-| 40s | Tax Strategy Overhaul | Portfolio Rebalance | Fee Reduction Audit |
-| 50s | Catch-Up Max | Roth Conversion | Tax-Loss Harvesting |
-| 60s+ | Withdrawal Sequencing | RMD Strategy | Tax-Bracket Management |
-
-**`plan_review`**
-
-| Age | Strategy 1 | Strategy 2 | Strategy 3 |
-|-----|-----------|-----------|-----------|
-| Under 30 | Foundation Review | Account Optimization | Goal Alignment |
-| 30s | Allocation Review | Beneficiary Update | Gap Analysis |
-| 40s | Mid-Life Audit | Rebalance Assessment | Insurance Review |
-| 50s | Pre-Retirement Readiness | Social Security Analysis | Tax Projection |
-| 60s+ | Retirement Readiness | Drawdown Planning | Estate Alignment |
-
-Each strategy gets a pill tag + one-line plain-language description.
-
-### Closing Line
-
-```
-Your matched advisor will walk through these with you during your first conversation.
-```
+| Element | Spec |
+|---------|------|
+| Style | Regular weight, 14px, muted (#666666) |
+| Spacing | 8px below headline, 16px above input |
 
 ---
 
 ## Email Input
 
-- Pre-filled if user saved email on Screen A
-- Standard email validation
-- Placeholder: `your@email.com`
+| Element | Spec |
+|---------|------|
+| Placeholder | your@email.com |
+| Pre-fill | If user saved email on Screen A, pre-filled and editable |
+| Height | 48px |
+| Border | 1px solid #E0E0E0, 8px border radius |
+| Validation | Standard email format |
+
+### Sub Copy
+
+```
+We'll send your match details and profile summary to this email.
+```
+
+| Element | Spec |
+|---------|------|
+| Style | Regular weight, 13px, muted (#999999) |
+| Spacing | 8px below input |
 
 ---
 
@@ -211,23 +195,78 @@ from our network at the email you provide. [Terms] [Privacy Policy]
 
 If TCPA was already captured:
 
+No additional consent needed. Sub copy above is sufficient.
+
+---
+
+## Confidence Builders
+
+Above the CTA. Green checkmarks.
+
 ```
-We'll send your match details and profile summary to this email.
+[check] Your profile qualifies for a free consultation
+[check] Advisors in [State] are accepting new clients
+[check] Average first call is scheduled within 48 hours
 ```
+
+`[State]` is the full state name from `derived_state`.
+
+| Element | Spec |
+|---------|------|
+| Icon | Green checkmark, 16px |
+| Text | Regular weight, 14px, dark (#1B2A4A) |
+| Row height | 32px |
+| Spacing | 16px above, 16px below |
+
+---
+
+## Continue CTA
+
+```
+Continue ->
+```
+
+Full-width, Forbes blue, white text. Enabled when email is valid.
+
+### Security Trust Indicator
+
+Below the CTA.
+
+```
+[lock] 256-Bit Encrypted  •  Never Sold or Shared
+```
+
+| Element | Spec |
+|---------|------|
+| Icon | Lock icon, 14px, muted (#999999) |
+| Text | Regular weight, 12px, muted (#999999) |
+| Layout | Centered, inline |
+| Spacing | 12px above |
 
 ---
 
 ## Behavior
 
-1. Financial profile review card visible — all data + strategies
+1. Two-zone layout loads with relationship x motivation confirmation
 2. User enters email (or confirms pre-filled)
-3. Taps Continue → transitions to Step 12 (if phone not yet provided) or Screen B (if all data collected)
+3. Confidence builders visible above CTA
+4. Taps Continue
+5. Advances to Step 12 (if phone not yet provided) or Screen B (if all data collected)
+
+---
 
 ## What Gets Stored
 
 ```javascript
 {
-  // ...previous fields...
   email: "user@email.com"
 }
 ```
+
+---
+
+## Notes
+
+- Profile data lives in the dropdown, not a review card. The dropdown is available on every step from Step 6 onward.
+- Confidence builders do the heavy lifting that the review card used to do. Three green checkmarks build trust right before the CTA.
+- Security trust indicator below CTA addresses PII hesitation.

@@ -1,4 +1,4 @@
-# Step 12 — Name + Phone + Financial Profile Review
+# Step 12 — Name + Phone
 
 > **Conditional:** This step is SKIPPED if the user already provided phone in the Step 10 modal.
 
@@ -6,90 +6,132 @@
 
 | Property | Value |
 |----------|-------|
-| Screen name | `NamePhoneWithReviewScreen` |
+| Screen name | `NamePhoneScreen` |
 | Fields | `first_name`, `last_name`, `phone` |
 | Type | Text inputs |
-| Auto-advance | No — requires "Find My Advisor" |
-| Phase label | YOUR ADVISOR MATCH |
+| Auto-advance | No. Requires "Find My Advisor" |
+| Phase label | FINAL DETAILS |
 | Progress | ~92% |
 | Data available | Full profile |
-| Special feature | Financial profile review with recommended strategies alongside PII capture |
+| Layout | Centered single-column with profile dropdown (see **profile-dropdown.md**) |
+| Special feature | Confidence builders + security trust alongside PII capture |
 | Condition | Only shown if `phone` is null |
 
 ---
 
 ## Layout
 
-Financial profile review card alongside PII capture.
+Final step before Screen B. Confidence builders and security trust reinforce the value exchange. "Find My Advisor" is the only non-Continue CTA in the funnel.
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  YOUR ADVISOR MATCH                                      │
-│  █████████████████████████████████░                      │
-│                                                          │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │  YOUR FINANCIAL PROFILE REVIEW                     │  │
-│  │                                                    │  │
-│  │  🎯 Goal          Catching up on retirement        │  │
-│  │  🎂 Age           50s                              │  │
-│  │  💼 Income        $100K–$150K                      │  │
-│  │  💰 Savings       $150K–$350K                      │  │
-│  │  📊 Objective     Long-term growth                 │  │
-│  │  👤 Status        Married                          │  │
-│  │  🏠 Home          Homeowner                        │  │
-│  │  📍 Location      New York                         │  │
-│  │                                                    │  │
-│  │  ─────────────────────────────────────────         │  │
-│  │                                                    │  │
-│  │  RECOMMENDED STRATEGIES                            │  │
-│  │                                                    │  │
-│  │  [ Catch-Up Contributions ]                        │  │
-│  │  Maximize your 401(k) to $30,500/year              │  │
-│  │  including catch-up provisions.                    │  │
-│  │                                                    │  │
-│  │  [ Roth Conversion Window ]                        │  │
-│  │  Evaluate converting pre-tax funds before          │  │
-│  │  RMDs begin — timing matters.                      │  │
-│  │                                                    │  │
-│  │  [ Tax-Loss Harvesting ]                           │  │
-│  │  Offset gains with strategic losses —              │  │
-│  │  especially effective in taxable accounts.         │  │
-│  │                                                    │  │
-│  │  Your matched advisor will walk through these      │  │
-│  │  with you during your first conversation.          │  │
-│  └────────────────────────────────────────────────────┘  │
-│                                                          │
-│  Last step — your advisor needs to know                  │
-│  who they're meeting with.                               │
-│                                                          │
-│  [Motivation-specific advisor line]                      │
-│                                                          │
-│  ┌────────────────────┐ ┌────────────────────┐          │
-│  │  First name         │ │  Last name          │          │
-│  └────────────────────┘ └────────────────────┘          │
-│                                                          │
-│  ┌────────────────────────────────────┐                  │
-│  │  📞 (___) ___-____                 │                  │
-│  └────────────────────────────────────┘                  │
-│                                                          │
-│  [TCPA consent language if not yet captured]              │
-│                                                          │
-│              [ Find My Advisor → ]                       │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
+FINAL DETAILS
+=================================--
+
+  Your Profile                            v
+
+  [checkmark] [Email confirmation]
+
+  ------------------------------------
+
+  Last step. Your advisor match
+  is ready.
+
+  Just need your name and number so your
+  advisor knows who they're reaching out to.
+
+  [Motivation-specific advisor line]
+
+  +------------+  +------------+
+  |  First name |  |  Last name  |
+  +------------+  +------------+
+
+  +------------------------+
+  |  (___) ___-____        |
+  +------------------------+
+
+  [TCPA consent if not yet captured]
+
+  [check] Your profile qualifies for a
+          free consultation
+  [check] Advisors in New York are
+          accepting new clients
+  [check] Average first call is scheduled
+          within 48 hours
+
+        [ Find My Advisor -> ]
+
+  [lock] 256-Bit Encrypted • Never Sold or Shared
 ```
 
 ---
 
-## Headline
+## Zone 1: Confirmation
+
+Bridges from email (Step 11) to name + phone. If Step 11 was skipped, bridges from Step 10 modal.
+
+### Confirmation (universal)
 
 ```
-Last step — your advisor needs to know who they're meeting with.
+Email confirmed. One last thing and we'll find your match.
 ```
+
+If email was pre-filled from Screen A and Step 11 was skipped:
+
+```
+Email on file. One last thing and we'll find your match.
+```
+
+### Confirmation Spec
+
+| Element | Spec |
+|---------|------|
+| Icon | Green checkmark, 18px |
+| Text | Regular weight, 15px, dark (#1B2A4A) |
+| Spacing | 16px below confirmation, before divider |
 
 ---
 
-## Motivation-Specific Advisor Line (above inputs)
+## Divider
+
+| Element | Spec |
+|---------|------|
+| Style | 1px solid, light grey (#E0E0E0) |
+| Width | Full content width |
+| Margin | 16px top and bottom |
+
+---
+
+## Zone 2: Headline + Review + Inputs
+
+### Emotional Headline
+
+```
+Last step. Your advisor match is ready.
+```
+
+- **"Last step."** -- Dark (#1B2A4A), serif/display font, 24px
+- **"Your advisor match is ready."** -- Forbes blue (#0066CC), same font and size
+
+"Last step" closes the funnel. "Your advisor match is ready" puts the reward right there. Same framing as Remedy's "Your personalized plan is ready on the next page."
+
+### Sub Copy
+
+```
+Just need your name and number so your advisor knows who they're reaching out to.
+```
+
+| Element | Spec |
+|---------|------|
+| Style | Regular weight, 15px, muted (#666666) |
+| Spacing | 8px below headline, 16px above review card |
+
+One sentence. Explains why. No friction.
+
+---
+
+## Motivation-Specific Advisor Line
+
+Below the review card, above inputs. Adds the call expectation since this step captures phone.
 
 | `motivation_driver` | Line |
 |---------------------|------|
@@ -99,13 +141,10 @@ Last step — your advisor needs to know who they're meeting with.
 | `optimization` | Your optimization specialist will call you within 1-2 business days to identify your biggest opportunities. |
 | `plan_review` | Your advisor will call you within 1-2 business days to schedule your comprehensive review. |
 
-Same role-naming as Step 11, but adds the "call you within 1-2 business days" expectation since this step captures phone.
-
----
-
-## Financial Profile Review Card
-
-Identical content to Step 11's review card — same profile summary, same recommended strategies, same closing line. See Step 11 spec for the complete strategy matrix.
+| Element | Spec |
+|---------|------|
+| Style | Regular weight, 14px, muted (#666666) |
+| Spacing | 16px above, 16px below |
 
 ---
 
@@ -115,18 +154,37 @@ Identical content to Step 11's review card — same profile summary, same recomm
 
 | Field | Placeholder | Validation |
 |-------|-------------|------------|
-| First name | `First name` | Required, 1+ characters |
-| Last name | `Last name` | Required, 1+ characters |
+| First name | First name | Required, 1+ characters |
+| Last name | Last name | Required, 1+ characters |
+
+| Element | Spec |
+|---------|------|
+| Layout | Two columns, equal width, 12px gap |
+| Height | 48px each |
+| Border | 1px solid #E0E0E0, 8px border radius |
+| Auto-focus | First name field on load |
 
 ### Phone Field
 
 | Field | Placeholder | Validation |
 |-------|-------------|------------|
-| Phone | `(___) ___-____` | Required, 10-digit US phone |
+| Phone | (___) ___-____ | Required, 10-digit US phone |
 
-- Standard US phone mask
-- Numeric only
-- Auto-focus on first name field on load
+| Element | Spec |
+|---------|------|
+| Height | 48px |
+| Border | 1px solid #E0E0E0, 8px border radius |
+| Mask | US phone format, numeric only |
+| Spacing | 12px below name fields |
+
+### Conditional Phone Display
+
+| Condition | Phone field |
+|-----------|-------------|
+| Phone not yet captured | Empty, required |
+| Phone captured in Step 10 modal | Pre-filled, editable, not required |
+
+If phone was captured in Step 10, this step only needs name. But the phone field still appears (pre-filled) so the user can verify.
 
 ---
 
@@ -149,15 +207,64 @@ You've already agreed to be contacted. We'll share your profile
 with your matched advisor.
 ```
 
+| Element | Spec |
+|---------|------|
+| Style | Regular weight, 12px, muted (#999999) |
+| Spacing | 16px above confidence builders |
+
+---
+
+## Confidence Builders
+
+Above the CTA. Same as Step 11.
+
+```
+[check] Your profile qualifies for a free consultation
+[check] Advisors in [State] are accepting new clients
+[check] Average first call is scheduled within 48 hours
+```
+
+`[State]` is the full state name from `derived_state`.
+
+| Element | Spec |
+|---------|------|
+| Icon | Green checkmark, 16px |
+| Text | Regular weight, 14px, dark (#1B2A4A) |
+| Row height | 32px |
+| Spacing | 16px above, 16px below |
+
 ---
 
 ## CTA
 
 ```
-Find My Advisor →
+Find My Advisor ->
 ```
 
-The only non-"Continue" button in the funnel. Names the outcome.
+The only non-"Continue" CTA in the funnel. Names the outcome.
+
+| Element | Spec |
+|---------|------|
+| Style | Full-width, Forbes blue (#0066CC), white text, 16px medium weight |
+| Height | 52px |
+| Border radius | 8px |
+| Spacing | 16px above |
+| Enabled | When all required fields are valid |
+
+### Security Trust Indicator
+
+Below the CTA.
+
+```
+[lock] 256-Bit Encrypted  •  Never Sold or Shared
+```
+
+| Element | Spec |
+|---------|------|
+| Icon | Lock icon, 14px, muted (#999999) |
+| Text | Regular weight, 12px, muted (#999999) |
+| Layout | Centered, inline |
+| Spacing | 12px above |
 
 ---
 
@@ -165,37 +272,40 @@ The only non-"Continue" button in the funnel. Names the outcome.
 
 ```
 Step 10 modal provided phone + email
-  → This step is SKIPPED entirely
-  → User goes directly to Screen B
+  -> This step is SKIPPED entirely
+  -> User goes directly to Screen B
 
 Step 10 modal provided email only
-  → This step shows (need name + phone)
-  → Email field not shown
+  -> This step shows (need name + phone)
+  -> Email field not shown
 
 Step 10 modal provided phone only
-  → Step 11 shows (need email)
-  → This step shows for name only (phone pre-filled, editable)
+  -> Step 11 shows (need email)
+  -> This step shows for name only (phone pre-filled, editable)
 
 Step 10 modal skipped
-  → Step 11 shows (need email)
-  → This step shows (need name + phone)
+  -> Step 11 shows (need email)
+  -> This step shows (need name + phone)
 ```
 
 ---
 
 ## Behavior
 
-1. Financial profile review card visible — full data + strategies
+1. Two-zone layout loads with confirmation
 2. User enters name and phone
-3. Taps "Find My Advisor"
-4. Validates all fields
-5. Submits lead → transitions to Screen B
+3. Confidence builders visible above CTA
+4. Taps "Find My Advisor"
+5. Validates all fields
+6. Submits lead
+7. Transitions to Screen B
+
+---
 
 ## What Gets Stored
 
 ```javascript
 {
-  // ...all previous fields...
   first_name: "Jane",
   last_name: "Smith",
   phone: "2125551234",
@@ -212,5 +322,3 @@ Step 10 modal skipped
 - If phone was captured in Step 10 with TCPA, do not double-capture
 - "Find My Advisor" constitutes the consent action if TCPA text is displayed
 - Legal must approve final TCPA language
-- Strategy recommendations describe categories, not specific advice
-- Dollar amounts in strategy descriptions are general knowledge (IRS limits, etc.)

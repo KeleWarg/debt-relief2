@@ -104,7 +104,7 @@ export function ScreenC({ funnelData, onBack, onNext }: ScreenCProps) {
       title: 'Your Situation',
       rows: [
         { label: 'Marital status', value: getMaritalLabel(funnelData.maritalStatus) },
-        { label: 'Homeowner', value: funnelData.homeOwner === undefined ? '' : funnelData.homeOwner ? 'Yes' : 'No' },
+        { label: 'Homeowner', value: funnelData.homeownership === 'own' ? 'Yes' : funnelData.homeownership === 'rent' ? 'No' : funnelData.homeownership ? 'Other' : '' },
         { label: 'Assets', value: getAssetsLabel(funnelData.totalAssets) },
       ],
     },

@@ -47,15 +47,62 @@ const RECOMMENDATION_MATRIX: Record<MotivationDriver, Record<AgeRange, Investmen
   },
 }
 
+const RATIONALE_MATRIX: Record<MotivationDriver, Record<AgeRange, string>> = {
+  behind_retirement: {
+    under_30: 'With 30+ years ahead of you, growth-focused strategies have the most time to compound.',
+    thirties: 'Your timeline still favors growth. Most advisors recommend building aggressively at this stage.',
+    forties: 'With 20+ years to retirement, growth is still the strongest lever for closing the gap.',
+    fifties: 'Your timeline is shorter, so most advisors recommend growing your money while protecting against big losses.',
+    sixties: 'At this stage, most advisors focus on making your savings produce steady, reliable income.',
+  },
+  family_protection: {
+    under_30: "Growing your wealth now builds the foundation your family's protection plan draws from.",
+    thirties: 'With a growing household, most advisors recommend balancing both growth and security.',
+    forties: 'At this stage, your family depends on stability. Most advisors balance growth with downside protection.',
+    fifties: "Protection becomes the priority. Most advisors focus on preserving what you've built for your family.",
+    sixties: 'At this stage, most advisors focus on preserving your legacy and ensuring a smooth transfer.',
+  },
+  windfall: {
+    under_30: 'With decades ahead, your new wealth has the most room to grow through compounding.',
+    thirties: 'Your timeline favors structured growth. Most advisors recommend putting new wealth to work early.',
+    forties: 'With new wealth, most advisors recommend growing it while protecting against large losses.',
+    fifties: 'Your new wealth can still grow, but most advisors add downside protection at this stage.',
+    sixties: 'At this stage, most advisors focus on preserving your new wealth and positioning it for the long term.',
+  },
+  optimization: {
+    under_30: 'Growth-focused strategies give your advisor the widest range of optimization levers at your age.',
+    thirties: 'Your timeline still favors growth, which opens up the most optimization strategies.',
+    forties: 'Most optimization strategies, like tax-loss harvesting and rebalancing, work best with a growth mandate.',
+    fifties: 'At this stage, optimization shifts toward tax strategy and preservation. Balance captures both.',
+    sixties: 'In drawdown, most advisors optimize around income efficiency, tax brackets, and withdrawal sequencing.',
+  },
+  plan_review: {
+    under_30: 'With your timeline, most advisors start a review assuming growth as the default.',
+    thirties: 'Your age still favors growth. Your advisor will stress-test this during the review.',
+    forties: 'Mid-life reviews typically surface the need for more balance. Your advisor will confirm.',
+    fifties: 'Closer to retirement, most reviews recommend shifting toward balance and stability.',
+    sixties: 'At this stage, most reviews focus on whether your investments are producing enough income.',
+  },
+}
+
+const SAVINGS_OVERRIDE_RATIONALE: Record<string, string> = {
+  low_savings: 'Based on your savings level, most advisors recommend prioritizing growth to build a stronger foundation.',
+  high_savings: 'With substantial savings at your age, most advisors recommend balancing growth with some protection.',
+}
+
 function getRecommended(
   motivation?: MotivationDriver,
   age?: AgeRange,
   savings?: SavingsRange
-): InvestmentObjective | null {
+): { objective: InvestmentObjective; rationale: string } | null {
   if (!motivation || !age) return null
-  if (savings === 'under_50k' && (age === 'fifties' || age === 'sixties')) return 'growth'
-  if (savings === '1.5m_plus' && (age === 'under_30' || age === 'thirties')) return 'balanced'
-  return RECOMMENDATION_MATRIX[motivation][age]
+  if (savings === 'under_50k' && (age === 'fifties' || age === 'sixties')) {
+    return { objective: 'growth', rationale: SAVINGS_OVERRIDE_RATIONALE.low_savings }
+  }
+  if (savings === '1.5m_plus' && (age === 'under_30' || age === 'thirties')) {
+    return { objective: 'balanced', rationale: SAVINGS_OVERRIDE_RATIONALE.high_savings }
+  }
+  return { objective: RECOMMENDATION_MATRIX[motivation][age], rationale: RATIONALE_MATRIX[motivation][age] }
 }
 
 interface ObjectivesScreenProps {
@@ -82,7 +129,7 @@ export function ObjectivesScreen({
   const handleSelect = (value: string) => {
     setSelected(value)
     setTimeout(() => {
-      onSubmit?.(value as InvestmentObjective, value === recommended)
+      onSubmit?.(value as InvestmentObjective, value === recommended?.objective)
     }, 400)
   }
 
@@ -139,59 +186,57 @@ export function ObjectivesScreen({
         <div className="w-full flex flex-col" style={{ gap: '12px' }}>
           {OBJECTIVE_OPTIONS.map((opt, i) => {
             const isSelected = selected === opt.value
-            const isRecommended = opt.value === recommended
+            const isRecommended = opt.value === recommended?.objective
             return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => handleSelect(opt.value)}
-                className={cn(
-                  'animate-fade-in-up flex items-center gap-3 w-full bg-white border rounded-lg text-left',
-                  'cursor-pointer transition-all duration-200',
-                  isSelected
-                    ? 'border-[#0066CC] bg-[#F0F7FF] shadow-sm'
-                    : 'border-[#E8E8E8] hover:bg-[#F0F7FF]'
-                )}
-                style={{ animationDelay: `${500 + i * 100}ms`, height: '56px', paddingLeft: '16px', paddingRight: '16px' }}
-              >
-                <div
+              <div key={opt.value} className="animate-fade-in-up" style={{ animationDelay: `${500 + i * 100}ms` }}>
+                <button
+                  type="button"
+                  onClick={() => handleSelect(opt.value)}
                   className={cn(
-                    'flex items-center justify-center rounded-full flex-shrink-0 text-sm font-semibold transition-colors duration-200',
+                    'flex items-center gap-3 w-full bg-white border rounded-lg text-left',
+                    'cursor-pointer transition-all duration-200',
                     isSelected
-                      ? 'bg-[#0066CC] text-white'
-                      : 'bg-[#F2F2F2] text-neutral-500'
+                      ? 'border-[#0066CC] bg-[#F0F7FF] shadow-sm'
+                      : 'border-[#E8E8E8] hover:bg-[#F0F7FF]'
                   )}
-                  style={{ width: '28px', height: '28px' }}
+                  style={{ height: '56px', paddingLeft: '16px', paddingRight: '16px' }}
                 >
-                  {LETTERS[i]}
-                </div>
-                <span className="flex-1" style={{ fontSize: '16px', color: '#1B2A4A' }}>
-                  {opt.label}
-                </span>
-                {isRecommended && (
-                  <span
-                    className="flex-shrink-0 text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                    style={{ color: '#1B2A4A', backgroundColor: '#E8F0FE' }}
+                  <div
+                    className={cn(
+                      'flex items-center justify-center rounded-full flex-shrink-0 text-sm font-semibold transition-colors duration-200',
+                      isSelected
+                        ? 'bg-[#0066CC] text-white'
+                        : 'bg-[#F2F2F2] text-neutral-500'
+                    )}
+                    style={{ width: '28px', height: '28px' }}
                   >
-                    Recommended
+                    {LETTERS[i]}
+                  </div>
+                  <span className="flex-1" style={{ fontSize: '16px', color: '#1B2A4A' }}>
+                    {opt.label}
                   </span>
+                  {isRecommended && (
+                    <span
+                      className="flex-shrink-0 text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
+                      style={{ color: '#1B2A4A', backgroundColor: '#E8F0FE' }}
+                    >
+                      Recommended
+                    </span>
+                  )}
+                </button>
+                {isRecommended && recommended?.rationale && (
+                  <p
+                    className="mt-1"
+                    style={{ fontSize: '13px', color: '#888888' }}
+                  >
+                    {recommended.rationale}
+                  </p>
                 )}
-              </button>
+              </div>
             )
           })}
         </div>
 
-        {/* Advisor reassurance */}
-        {reassurance && (
-          <div
-            className="animate-fade-in-up w-full mt-4 rounded-lg"
-            style={{ animationDelay: '900ms', backgroundColor: '#F8F8FA', padding: '12px', borderRadius: '8px' }}
-          >
-            <p style={{ fontSize: '13px', color: '#999999' }}>
-              {reassurance}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   )

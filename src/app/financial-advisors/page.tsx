@@ -1,11 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen } from '@/components/fa-screens'
-import type { FAFunnelData, MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective } from '@/types/fa-funnel'
+import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, StateConfirmationScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen } from '@/components/fa-screens'
+import { getStateFromZip } from '@/lib/zip-lookup'
+import type { FAFunnelData, MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective, RelationshipPreference } from '@/types/fa-funnel'
 import { Header } from '@/components/layout/Header'
 
-type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives'
+type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'stateConfirmation' | 'relationship' | 'email' | 'namePhone'
 
 export default function FinancialAdvisorsPage() {
   const [funnelData, setFunnelData] = React.useState<FAFunnelData>({})
@@ -59,6 +60,7 @@ export default function FinancialAdvisorsPage() {
           <AffirmationMoment
             motivationDriver={funnelData.motivationDriver}
             ageRange={funnelData.ageRange}
+            onBack={() => setStep('motivation')}
             onNext={() => setStep('income')}
           />
         )}
@@ -96,6 +98,172 @@ export default function FinancialAdvisorsPage() {
             onBack={() => setStep('savings')}
             onSubmit={(value: InvestmentObjective) => {
               update({ investmentObjective: value })
+              setStep('growthHorizon')
+            }}
+          />
+        )}
+
+        {step === 'growthHorizon' && (
+          <GrowthHorizonScreen
+            motivationDriver={funnelData.motivationDriver}
+            ageRange={funnelData.ageRange}
+            incomeRange={funnelData.incomeRange}
+            savingsRange={funnelData.savingsRange}
+            investmentObjective={funnelData.investmentObjective}
+            onBack={() => setStep('objectives')}
+            onNext={(email?: string) => {
+              if (email) update({ savedEmail: email } as Partial<FAFunnelData>)
+              setStep('specialties')
+            }}
+          />
+        )}
+
+        {step === 'specialties' && (
+          <NewSpecialtiesScreen
+            motivationDriver={funnelData.motivationDriver}
+            ageRange={funnelData.ageRange}
+            savingsRange={funnelData.savingsRange}
+            incomeRange={funnelData.incomeRange}
+            funnelData={funnelData}
+            onBack={() => setStep('growthHorizon')}
+            onSubmit={(specialties: string[]) => {
+              update({ specialties })
+              setStep('marital')
+            }}
+          />
+        )}
+
+        {step === 'marital' && (
+          <MaritalScreen
+            initialValue={funnelData.maritalStatus}
+            motivationDriver={funnelData.motivationDriver}
+            funnelData={funnelData}
+            onBack={() => setStep('specialties')}
+            onSubmit={(value: string) => {
+              update({ maritalStatus: value as FAFunnelData['maritalStatus'] })
+              setStep('home')
+            }}
+          />
+        )}
+
+        {step === 'home' && (
+          <HomeownershipScreen
+            maritalStatus={funnelData.maritalStatus}
+            motivationDriver={funnelData.motivationDriver}
+            funnelData={funnelData}
+            onBack={() => setStep('marital')}
+            onSubmit={(value: string) => {
+              update({ homeownership: value as FAFunnelData['homeownership'] })
+              setStep('zip')
+            }}
+          />
+        )}
+
+        {step === 'zip' && (
+          <ZipCodeScreen
+            initialValue={funnelData.zipCode}
+            homeownership={funnelData.homeownership}
+            motivationDriver={funnelData.motivationDriver}
+            funnelData={funnelData}
+            onBack={() => setStep('home')}
+            onSubmit={(zip: string, derivedState?: string) => {
+              update({ zipCode: zip, state: derivedState })
+              setStep('stateConfirmation')
+            }}
+          />
+        )}
+
+        {step === 'stateConfirmation' && (() => {
+          const stateInfo = funnelData.zipCode ? getStateFromZip(funnelData.zipCode) : null
+          return (
+            <StateConfirmationScreen
+              stateAbbr={stateInfo?.abbr}
+              stateName={stateInfo?.name}
+              motivationDriver={funnelData.motivationDriver}
+              onBack={() => setStep('zip')}
+              onNext={() => setStep('relationship')}
+            />
+          )
+        })()}
+
+        {step === 'relationship' && (() => {
+          const stateInfo = funnelData.zipCode ? getStateFromZip(funnelData.zipCode) : null
+          return (
+            <AdvisorRelationshipScreen
+              motivationDriver={funnelData.motivationDriver}
+              stateName={stateInfo?.name}
+              savedEmail={funnelData.savedEmail ?? funnelData.email}
+              funnelData={funnelData}
+              onBack={() => setStep('stateConfirmation')}
+              onSubmit={(data: { preference: RelationshipPreference; phone?: string; email?: string; tcpaConsent?: boolean }) => {
+                const updates: Partial<FAFunnelData> = {
+                  relationshipPreference: data.preference,
+                }
+                if (data.phone) updates.phone = data.phone
+                if (data.email) updates.email = data.email
+                if (data.tcpaConsent) {
+                  updates.tcpaConsent = true
+                  updates.tcpaConsentTimestamp = new Date().toISOString()
+                }
+                update(updates)
+
+                const hasEmail = !!(data.email || funnelData.email || funnelData.savedEmail)
+                const hasPhone = !!data.phone
+
+                if (hasEmail && hasPhone) {
+                  // TODO: advance to Screen B / loading
+                  setStep('namePhone')
+                } else if (hasEmail) {
+                  setStep('namePhone')
+                } else if (hasPhone) {
+                  setStep('email')
+                } else {
+                  setStep('email')
+                }
+              }}
+            />
+          )
+        })()}
+
+        {step === 'email' && (
+          <EmailWithReviewScreen
+            motivationDriver={funnelData.motivationDriver}
+            relationshipPreference={funnelData.relationshipPreference}
+            stateName={funnelData.zipCode ? getStateFromZip(funnelData.zipCode)?.name : undefined}
+            savedEmail={funnelData.savedEmail}
+            hasTcpaConsent={funnelData.tcpaConsent}
+            funnelData={funnelData}
+            onBack={() => setStep('relationship')}
+            onSubmit={(email: string) => {
+              update({ email })
+              if (funnelData.phone) {
+                // TODO: advance to Screen B / loading
+                setStep('namePhone')
+              } else {
+                setStep('namePhone')
+              }
+            }}
+          />
+        )}
+
+        {step === 'namePhone' && (
+          <NamePhoneWithReviewScreen
+            motivationDriver={funnelData.motivationDriver}
+            existingPhone={funnelData.phone}
+            hasTcpaConsent={funnelData.tcpaConsent}
+            hasEmailFromPrevious={!!(funnelData.savedEmail && !funnelData.email)}
+            stateName={funnelData.zipCode ? getStateFromZip(funnelData.zipCode)?.name : undefined}
+            funnelData={funnelData}
+            onBack={() => funnelData.email ? setStep('email') : setStep('relationship')}
+            onSubmit={(data: { firstName: string; lastName: string; phone: string; tcpaConsent: boolean }) => {
+              update({
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phone: data.phone,
+                tcpaConsent: data.tcpaConsent,
+                tcpaConsentTimestamp: data.tcpaConsent ? new Date().toISOString() : undefined,
+              })
+              // TODO: advance to Screen B / loading
             }}
           />
         )}
