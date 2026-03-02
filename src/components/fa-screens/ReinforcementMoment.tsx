@@ -20,7 +20,7 @@ export function ReinforcementMoment({ funnelData, onNext }: ReinforcementMomentP
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar currentStep={FA_STEP_NUMBER.reinforcement} />
+      <FAProgressBar stepName="specialties" />
           <div className="animate-slide-up mt-8">
             <div className="max-w-content mx-auto">
               <div className="flex flex-col items-center justify-center min-h-[320px]">

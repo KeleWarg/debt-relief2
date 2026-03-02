@@ -81,7 +81,7 @@ function getRecommended(
   if (savings === 'under_50k') recs.add('debt_management')
   if (savings === '750k_1.5m' || savings === '1.5m_plus') recs.add('estate_planning')
   if (income === '250k_500k' || income === '500k_plus') recs.add('tax_strategy')
-  const arr = [...recs]
+  const arr = Array.from(recs)
   return new Set(arr.slice(0, 3))
 }
 
@@ -122,7 +122,7 @@ export function NewSpecialtiesScreen({
   }
 
   const handleContinue = () => {
-    onSubmit?.([...checked])
+    onSubmit?.(Array.from(checked))
   }
 
   return (

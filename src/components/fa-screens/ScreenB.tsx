@@ -37,7 +37,7 @@ function generateInsight(
   const specialtySet = new Set(specialties ?? [])
 
   if (motivation === 'behind_retirement') {
-    if (objective === 'protecting') {
+    if (objective === 'preservation') {
       return 'a retirement catch-up specialist who can help you build a realistic plan'
     }
     return 'a growth-focused advisor experienced in accelerated retirement planning'
@@ -148,7 +148,7 @@ export function ScreenB({
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar currentStep={FA_STEP_NUMBER.screenB} onBack={onBack} />
+      <FAProgressBar stepName="assets" onBack={onBack} />
           <div
             className={`animate-slide-up has-sticky-button mt-8 space-y-6 text-center transition-all duration-700 ${
               visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'

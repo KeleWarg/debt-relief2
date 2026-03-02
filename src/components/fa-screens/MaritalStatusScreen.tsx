@@ -22,7 +22,7 @@ export function MaritalStatusScreen({ initialValue, onBack, onSubmit }: MaritalS
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar currentStep={FA_STEP_NUMBER.married} onBack={onBack} />
+      <FAProgressBar stepName="married" onBack={onBack} />
       <div className="animate-slide-up mt-8">
         <div className="max-w-content mx-auto text-center">
           <h1 className="font-display text-display sm:text-display-md lg:text-display-lg text-neutral-900 mb-3">
