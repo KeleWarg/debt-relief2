@@ -64,7 +64,7 @@ export default function FinancialAdvisorsPage() {
   if (isHero) {
     return (
       <div className="h-screen flex flex-col bg-white overflow-hidden relative">
-        <Header className="absolute top-0 left-0 right-0 z-50 bg-transparent lg:relative lg:bg-white [&_img]:brightness-0 [&_img]:invert lg:[&_img]:brightness-100 lg:[&_img]:invert-0" />
+        <Header className="sticky top-0 z-50 bg-white" />
         <div className="flex-1 min-h-0">
           <MotivationScreen
             initialMotivation={funnelData.motivationDriver}

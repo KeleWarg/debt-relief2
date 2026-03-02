@@ -192,8 +192,8 @@ export function HeroLayout({
       >
         <div className="w-1/2 flex items-center justify-center py-10 xl:py-14 pl-10 xl:pl-16 pr-6">
           <div
-            className="relative w-full max-w-[624px] rounded-2xl overflow-hidden"
-            style={{ height: 'clamp(400px, calc(100vh - 18rem), 100%)' }}
+            className="relative w-full max-w-[624px] rounded-2xl overflow-hidden aspect-[3/4]"
+            style={{ maxHeight: 'calc(100vh - 10rem)' }}
           >
             <HeroCarousel slides={slides} />
           </div>
@@ -211,7 +211,7 @@ export function HeroLayout({
         <div className="relative w-full aspect-[5/2] max-h-[23vh] overflow-hidden flex-shrink-0">
           <HeroCarousel slides={slides} />
         </div>
-        <main className="flex-1 flex flex-col justify-center px-6 sm:px-10 py-8 pb-24 sm:pb-8">
+        <main className="flex-1 flex flex-col px-6 sm:px-10 pt-3 sm:pt-4 pb-24 sm:pb-8">
           <div className="w-full max-w-[520px] mx-auto">
             {children}
           </div>

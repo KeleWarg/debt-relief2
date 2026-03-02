@@ -291,7 +291,7 @@ function MotivationOptions({
               >
                 {LETTERS[i]}
               </div>
-              <span style={{ fontSize: '16px', color: '#1B2A4A' }}>
+              <span className="text-sm sm:text-base" style={{ color: '#1B2A4A' }}>
                 {opt.label}
               </span>
             </button>
