@@ -3,9 +3,10 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
-const QUESTION_STEPS = [
-  'motivation', 'age', 'income', 'savings', 'objectives', 'specialties',
-  'married', 'home', 'assets', 'relationship', 'zipCode', 'email', 'namePhone',
+const ALL_STEPS = [
+  'motivation', 'age', 'affirmation', 'income', 'savings', 'objectives',
+  'growthHorizon', 'specialties', 'married', 'home', 'zipCode',
+  'stateConfirmation', 'relationship', 'email', 'namePhone',
 ] as const
 
 const SECTION_LABELS: Record<string, string> = {
@@ -19,26 +20,30 @@ const SECTION_LABELS: Record<string, string> = {
   specialties: 'Your Goals & Preferences',
   married: 'Your life situation',
   home: 'Your life situation',
-  assets: 'Your life situation',
-  relationship: 'Finding Your Match',
   zipCode: 'Finding Your Match',
+  stateConfirmation: 'Finding Your Match',
+  relationship: 'Finding Your Match',
   email: 'Finding Your Match',
   namePhone: 'Finding Your Match',
 }
 
-const PROGRESS_ALIAS: Record<string, string> = {
-  affirmation: 'age',
-  growthHorizon: 'objectives',
-}
+const FAST_PHASE_COUNT = 7
+const FAST_PHASE_TARGET = 75
 
 /**
- * Returns overall progress (0–100) for a given question step name.
+ * Returns overall progress (0–100). First 7 steps cover 0–75% in big jumps,
+ * remaining steps cover 75–100% in smaller increments.
  */
 export function faProgressPercent(stepName: string): number {
-  const resolved = PROGRESS_ALIAS[stepName] ?? stepName
-  const idx = QUESTION_STEPS.indexOf(resolved as typeof QUESTION_STEPS[number])
+  const idx = ALL_STEPS.indexOf(stepName as typeof ALL_STEPS[number])
   if (idx === -1) return 0
-  return Math.round(((idx + 1) / QUESTION_STEPS.length) * 100)
+  const step = idx + 1
+  if (step <= FAST_PHASE_COUNT) {
+    return Math.round((step / FAST_PHASE_COUNT) * FAST_PHASE_TARGET)
+  }
+  const remaining = ALL_STEPS.length - FAST_PHASE_COUNT
+  const stepsIntoSlow = step - FAST_PHASE_COUNT
+  return Math.round(FAST_PHASE_TARGET + (stepsIntoSlow / remaining) * (100 - FAST_PHASE_TARGET))
 }
 
 /**

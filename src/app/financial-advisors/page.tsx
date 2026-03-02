@@ -20,7 +20,7 @@ const STEP_TO_PROGRESS: Record<Step, string> = {
   marital: 'married',
   home: 'home',
   zip: 'zipCode',
-  stateConfirmation: 'zipCode',
+  stateConfirmation: 'stateConfirmation',
   relationship: 'relationship',
   email: 'email',
   namePhone: 'namePhone',

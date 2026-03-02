@@ -7,20 +7,32 @@ import { cn } from '@/lib/utils'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
-const OBJ_CONFIRMATION: Record<MotivationDriver, string> = {
-  behind_retirement: 'Your financial profile is taking shape. Last question: how do you want your money to work?',
-  family_protection: 'Your financial profile is taking shape. Last question: how do you want your money to work?',
-  windfall: 'Your financial profile is taking shape. Last question: how do you want your new wealth to work?',
-  optimization: "Your financial profile is taking shape. Last question: what's the priority for your money?",
-  plan_review: "Your financial profile is taking shape. Last question: what's the goal for your investments?",
-}
+const BLUE = '#0066CC'
 
-const OBJ_REASSURANCE: Record<MotivationDriver, string> = {
-  behind_retirement: 'This shapes how aggressively your advisor approaches your catch-up plan.',
-  family_protection: 'This tells your advisor how to balance growth with the security your family needs.',
-  windfall: "Different objectives suit different situations. Your advisor will tailor the approach to your new wealth.",
-  optimization: "Your objective drives your advisor's strategy. They'll fine-tune it based on your full profile.",
-  plan_review: "Not sure? That's okay. Your advisor can help refine this during your review.",
+const OBJ_CONTENT: Record<MotivationDriver, {
+  headline: React.ReactNode
+  subCopy: string
+}> = {
+  behind_retirement: {
+    headline: <>Your profile is taking shape. <span style={{ color: BLUE }}>Your information + our strategy combined</span>, will get you one step closer to catching up on retirement.</>,
+    subCopy: 'This shapes how aggressively your advisor approaches your catch-up plan.',
+  },
+  family_protection: {
+    headline: <>Your profile is taking shape. <span style={{ color: BLUE }}>Your information + our strategy combined</span>, will get you one step closer to protecting your family.</>,
+    subCopy: 'This tells your advisor how to balance growth with the security your family needs.',
+  },
+  windfall: {
+    headline: <>Your profile is taking shape. <span style={{ color: BLUE }}>Your information + our strategy combined</span>, will get you one step closer to positioning your new wealth.</>,
+    subCopy: "Your advisor will tailor the approach to your new wealth based on your full profile.",
+  },
+  optimization: {
+    headline: <>Your profile is taking shape. <span style={{ color: BLUE }}>Your information + our strategy combined</span>, will get you one step closer to optimizing your finances.</>,
+    subCopy: "Your objective drives your advisor's strategy. They'll fine-tune it based on your full profile.",
+  },
+  plan_review: {
+    headline: <>Your profile is taking shape. <span style={{ color: BLUE }}>Your information + our strategy combined</span>, will get you one step closer to a professional review of your plan.</>,
+    subCopy: "Not sure? That's okay. Your advisor can help refine this during your review.",
+  },
 }
 
 const RECOMMENDATION_MATRIX: Record<MotivationDriver, Record<AgeRange, InvestmentObjective>> = {
@@ -121,9 +133,8 @@ export function ObjectivesScreen({
   onBack,
   onSubmit,
 }: ObjectivesScreenProps) {
-  const [selected, setSelected] = React.useState<string>(initialValue ?? '')
-
   const recommended = getRecommended(motivationDriver, ageRange, savingsRange)
+  const [selected, setSelected] = React.useState<string>(initialValue ?? recommended?.objective ?? '')
 
   const handleSelect = (value: string) => {
     setSelected(value)
@@ -132,49 +143,33 @@ export function ObjectivesScreen({
     }, 400)
   }
 
-  const confirmation = motivationDriver ? OBJ_CONFIRMATION[motivationDriver] : undefined
-  const reassurance = motivationDriver ? OBJ_REASSURANCE[motivationDriver] : undefined
+  const content = motivationDriver ? OBJ_CONTENT[motivationDriver] : null
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="flex flex-col items-start w-full">
-        {/* Zone 1: Confirmation */}
-        <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
-            {confirmation ?? 'Good. One more question to complete your profile.'}
-          </p>
-        </div>
-
-        {/* Divider */}
-        <div
-          className="animate-fade-in-up w-full border-t mb-6 mt-4"
-          style={{ animationDelay: '300ms', borderColor: '#E0E0E0' }}
-        />
-
-        {/* Zone 2: Question */}
+        {/* Section label */}
         <p
           className="animate-fade-in-up text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3"
           style={{ animationDelay: '400ms' }}
         >
           Building your financial profile
         </p>
+
+        {/* Headline */}
         <h1
-          className="animate-fade-in-up font-display text-display sm:text-display-md lg:text-display-lg mb-3"
+          className="animate-fade-in-up font-display text-headline-lg sm:text-display lg:text-display-md mb-3"
           style={{ animationDelay: '400ms', color: '#1B2A4A' }}
         >
-          You don&apos;t need the perfect strategy.{' '}
-          <span style={{ color: '#0066CC' }}>Your advisor will refine it with you.</span>
+          {content?.headline ?? <>You don{'\u2019'}t need the perfect strategy. <span style={{ color: BLUE }}>Your advisor will refine it with you.</span></>}
         </h1>
+
+        {/* Sub-copy */}
         <p
           className="animate-fade-in-up leading-relaxed mb-8"
           style={{ animationDelay: '500ms', fontSize: '15px', color: '#666666' }}
         >
-          What best describes your investment goal?
+          {content?.subCopy ?? "What best describes your investment goal?"}
         </p>
 
         {/* Options */}
@@ -231,7 +226,6 @@ export function ObjectivesScreen({
             )
           })}
         </div>
-
       </div>
     </div>
   )
