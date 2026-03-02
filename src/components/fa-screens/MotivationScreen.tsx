@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { HeroLayout } from '@/components/layout/HeroLayout'
 import { Button } from '@/components/ui/Button'
-import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 import { MOTIVATION_OPTIONS, AGE_OPTIONS } from '@/types/fa-funnel'
 import type { MotivationDriver, AgeRange } from '@/types/fa-funnel'
 import { cn } from '@/lib/utils'
@@ -309,14 +308,14 @@ function MotivationOptions({
         </p>
       </div>
 
-      <StickyButtonContainer className="mt-8">
+      <div className="mt-8">
         <Button
           onClick={onContinue}
           className="min-w-[180px]"
         >
           Continue
         </Button>
-      </StickyButtonContainer>
+      </div>
     </>
   )
 }

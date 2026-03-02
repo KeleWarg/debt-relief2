@@ -80,16 +80,22 @@ export function StateConfirmationScreen({
         {/* Confirmed badge */}
         <div
           className={cn(
-            'flex items-start gap-2 transition-opacity duration-200',
+            'flex items-center gap-2.5 transition-opacity duration-200',
             stage >= 1 ? 'opacity-100' : 'opacity-0'
           )}
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0 mt-0.5">
-            <circle cx="9" cy="9" r="9" fill="#0B6E4F" />
-            <path d="M5.5 9.5L7.5 11.5L12.5 6.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <p style={{ fontSize: '15px', color: '#1B2A4A' }}>
-            Confirmed
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
+            {motivationDriver === 'behind_retirement' && `Advisors confirmed in ${displayName}. Now let\u2019s set up how you\u2019ll connect with your catch-up specialist.`}
+            {motivationDriver === 'family_protection' && `Advisors confirmed in ${displayName}. Now let\u2019s set up how you\u2019ll connect with your protection advisor.`}
+            {motivationDriver === 'windfall' && `Advisors confirmed in ${displayName}. Now let\u2019s set up how you\u2019ll connect with your wealth advisor.`}
+            {motivationDriver === 'optimization' && `Advisors confirmed in ${displayName}. Now let\u2019s set up how you\u2019ll connect with your optimization specialist.`}
+            {motivationDriver === 'plan_review' && `Advisors confirmed in ${displayName}. Now let\u2019s set up how you\u2019ll connect with your reviewer.`}
+            {!motivationDriver && `Advisors confirmed in ${displayName}.`}
           </p>
         </div>
 

@@ -43,7 +43,7 @@ export default function FinancialAdvisorsPage() {
 
   const handleBack = React.useCallback(() => {
     switch (step) {
-      case 'motivation': setMotivationPhase('motivation'); break
+      case 'motivation': update({ motivationDriver: undefined, ageRange: undefined }); setMotivationPhase('motivation'); break
       case 'affirmation': setStep('motivation'); break
       case 'income': setStep('affirmation'); break
       case 'savings': setStep('income'); break
