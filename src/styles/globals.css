@@ -238,6 +238,16 @@
   animation: slideOutToBottom 0.5s ease-in;
 }
 
+/* Blinking cursor for typewriter */
+.animate-blink {
+  animation: blink 0.75s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Gentle floating animation */
 .animate-float {
   animation: float-gentle 3s ease-in-out infinite;

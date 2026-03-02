@@ -9,34 +9,90 @@ import { cn } from '@/lib/utils'
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E']
 
+const ROTATING_PHRASES = [
+  'as hard as you do.',
+  'for your future.',
+  'while you sleep.',
+  'for your family.',
+  'toward your goals.',
+]
+
+const TYPE_SPEED = 60
+const DELETE_SPEED = 35
+const PAUSE_AFTER_TYPE = 2500
+const PAUSE_AFTER_DELETE = 400
+
+function RotatingTypewriter() {
+  const [phraseIndex, setPhraseIndex] = React.useState(0)
+  const [displayed, setDisplayed] = React.useState('')
+  const [isDeleting, setIsDeleting] = React.useState(false)
+
+  React.useEffect(() => {
+    const phrase = ROTATING_PHRASES[phraseIndex]
+
+    if (!isDeleting && displayed === phrase) {
+      const t = setTimeout(() => setIsDeleting(true), PAUSE_AFTER_TYPE)
+      return () => clearTimeout(t)
+    }
+
+    if (isDeleting && displayed === '') {
+      const t = setTimeout(() => {
+        setPhraseIndex((prev) => (prev + 1) % ROTATING_PHRASES.length)
+        setIsDeleting(false)
+      }, PAUSE_AFTER_DELETE)
+      return () => clearTimeout(t)
+    }
+
+    const speed = isDeleting ? DELETE_SPEED : TYPE_SPEED
+    const t = setTimeout(() => {
+      setDisplayed(
+        isDeleting
+          ? phrase.slice(0, displayed.length - 1)
+          : phrase.slice(0, displayed.length + 1)
+      )
+    }, speed)
+    return () => clearTimeout(t)
+  }, [displayed, isDeleting, phraseIndex])
+
+  return (
+    <span style={{ color: '#0066CC' }}>
+      {displayed}
+      <span
+        className="inline-block w-[2px] ml-0.5 align-baseline animate-blink"
+        style={{ height: '0.85em', backgroundColor: '#0066CC' }}
+      />
+    </span>
+  )
+}
+
 const AGE_CONTENT: Record<string, {
   confirmation: string
-  headline: [string, string]
+  headline: string
   subCopy: string
 }> = {
   behind_retirement: {
     confirmation: 'Got it! You want to catch up on retirement.',
-    headline: ['Your age is your runway.', "And there's more of it than you think."],
+    headline: "You mentioned being worried about being behind on retirement savings. Your age shapes your plan, let\u2019s work together.",
     subCopy: 'Your age tells an advisor how much runway you have, and which strategies will close the gap fastest.',
   },
   family_protection: {
     confirmation: 'Got it! You want to protect your family.',
-    headline: ['Your age shapes the plan.', 'And right now is the best time to build one.'],
+    headline: "You said you want to protect your family. Your age shapes your plan and there\u2019s no better time than to act now.",
     subCopy: 'Your age tells an advisor what type of coverage and estate planning makes the most sense right now.',
   },
   windfall: {
     confirmation: "Got it! You're managing new wealth.",
-    headline: ['Your age decides the strategy.', 'And yours opens up the most options.'],
+    headline: "You mentioned you\u2019ve received an unexpected income. Your age shapes your plan and now\u2019s the time to put that money to work.",
     subCopy: 'Your age tells an advisor how to balance growing this money with protecting it.',
   },
   optimization: {
     confirmation: 'Got it! You want to optimize your finances.',
-    headline: ['Your age unlocks the levers.', 'And every year you act earlier compounds.'],
+    headline: "You mentioned wanting to stop leaving money on the table. Your age shapes your plan and the best time to start is now.",
     subCopy: 'Your age tells an advisor which tax and investment strategies will have the biggest impact.',
   },
   plan_review: {
     confirmation: 'Got it! You want a professional review.',
-    headline: ['Your age sets the priorities.', 'And knowing them is half the work.'],
+    headline: "You mentioned wanting a 2nd opinion on your plan. Your age shapes that plan, let\u2019s see what we can do together.",
     subCopy: 'Your age tells an advisor which parts of your plan to stress-test first.',
   },
 }
@@ -45,14 +101,14 @@ type Phase = 'motivation' | 'age'
 
 const PHASE_CONTENT = {
   motivation: {
-    headline: <>You deserve a plan that works as <span style={{ color: '#0066CC' }}>hard as you do.</span></>,
+    headline: <>You deserve a plan that works <RotatingTypewriter /></>,
     sub: "What matters most to you right now?",
   },
   age: {
     headline: <>How old are you?</>,
     sub: "Advisors typically assess strategies by your financial horizon which is determined by your age.",
   },
-} as const
+}
 
 interface MotivationScreenProps {
   initialMotivation?: MotivationDriver
@@ -174,31 +230,6 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
 
   const ageContent = (
     <div className="flex flex-col items-start w-full">
-      {/* Zone 1: Confirmation */}
-      {ageData && (
-        <>
-          <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p
-              className="font-sans text-base font-bold"
-              style={{ color: '#1B2A4A' }}
-            >
-              {ageData.confirmation}
-            </p>
-          </div>
-        </>
-      )}
-
-      {/* Divider */}
-      <div
-        className="animate-fade-in-up w-full border-t mb-6 mt-4"
-        style={{ animationDelay: '300ms', borderColor: '#E0E0E0' }}
-      />
-
       {/* Zone 2: Question */}
       <p
         className="animate-fade-in-up text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3"
@@ -208,11 +239,10 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
       </p>
       {ageData && (
         <h1
-          className="animate-fade-in-up font-display text-display sm:text-display-md lg:text-display-lg mb-3"
+          className="animate-fade-in-up font-display text-headline-lg sm:text-display lg:text-display-md mb-3"
           style={{ animationDelay: '400ms', color: '#1B2A4A' }}
         >
-          {ageData.headline[0]}{' '}
-          <span style={{ color: '#0066CC' }}>{ageData.headline[1]}</span>
+          {ageData.headline}
         </h1>
       )}
       {ageData && (
@@ -247,10 +277,8 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
   }
 
   return (
-    <div style={opacityStyle} className="h-full w-full">
-      <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
-        {ageContent}
-      </div>
+    <div style={opacityStyle} className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
+      {ageContent}
     </div>
   )
 }

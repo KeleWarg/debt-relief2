@@ -67,6 +67,7 @@ export default function FinancialAdvisorsPage() {
         <Header className="sticky top-0 z-50 bg-white" />
         <div className="flex-1 min-h-0">
           <MotivationScreen
+            key="hero"
             initialMotivation={funnelData.motivationDriver}
             initialAge={funnelData.ageRange}
             onPhaseChange={setMotivationPhase}
@@ -93,6 +94,7 @@ export default function FinancialAdvisorsPage() {
       <div className="flex-1 min-h-0 pb-24 sm:pb-0">
         {step === 'motivation' && (
           <MotivationScreen
+            key="form"
             initialMotivation={funnelData.motivationDriver}
             initialAge={funnelData.ageRange}
             onPhaseChange={setMotivationPhase}
