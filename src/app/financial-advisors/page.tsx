@@ -1,13 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, StateConfirmationScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen } from '@/components/fa-screens'
+import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScreen, ObjectivesScreen, SavingsInterstitialScreen, GrowthHorizonScreen, NewSpecialtiesScreen, MaritalScreen, HomeownershipScreen, ZipCodeScreen, StateConfirmationScreen, AdvisorRelationshipScreen, EmailWithReviewScreen, NamePhoneWithReviewScreen } from '@/components/fa-screens'
 import { getStateFromZip } from '@/lib/zip-lookup'
 import type { FAFunnelData, MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective, RelationshipPreference } from '@/types/fa-funnel'
 import { Header } from '@/components/layout/Header'
 import { FAProgressBar } from '@/components/fa-screens/FAProgressBar'
+import { cn } from '@/lib/utils'
 
-type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'stateConfirmation' | 'relationship' | 'email' | 'namePhone'
+type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'savingsInterstitial' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'stateConfirmation' | 'relationship' | 'email' | 'namePhone'
 
 const STEP_TO_PROGRESS: Record<Step, string> = {
   motivation: 'age',
@@ -15,6 +16,7 @@ const STEP_TO_PROGRESS: Record<Step, string> = {
   income: 'income',
   savings: 'savings',
   objectives: 'objectives',
+  savingsInterstitial: 'savingsInterstitial',
   growthHorizon: 'growthHorizon',
   specialties: 'specialties',
   marital: 'married',
@@ -40,6 +42,7 @@ export default function FinancialAdvisorsPage() {
   }, [step])
 
   const isHero = step === 'motivation' && motivationPhase === 'motivation'
+  const isDarkStep = step === 'savingsInterstitial'
 
   const handleBack = React.useCallback(() => {
     switch (step) {
@@ -48,7 +51,8 @@ export default function FinancialAdvisorsPage() {
       case 'income': setStep('affirmation'); break
       case 'savings': setStep('income'); break
       case 'objectives': setStep('savings'); break
-      case 'growthHorizon': setStep('objectives'); break
+      case 'savingsInterstitial': setStep('objectives'); break
+      case 'growthHorizon': setStep('savingsInterstitial'); break
       case 'specialties': setStep('growthHorizon'); break
       case 'marital': setStep('specialties'); break
       case 'home': setStep('marital'); break
@@ -84,10 +88,12 @@ export default function FinancialAdvisorsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-page-gradient overflow-auto">
-      <div className="sticky top-0 z-50 bg-white">
+      <div className="sticky top-0 z-50">
         <Header />
+      </div>
+      <div className={cn('sticky top-[56px] z-40', isDarkStep ? 'bg-transparent' : 'bg-white')}>
         <div className="max-w-content mx-auto px-4 sm:px-6">
-          <FAProgressBar stepName={STEP_TO_PROGRESS[step]} onBack={handleBack} />
+          <FAProgressBar stepName={STEP_TO_PROGRESS[step]} onBack={handleBack} dark={isDarkStep} />
         </div>
       </div>
 
@@ -147,8 +153,19 @@ export default function FinancialAdvisorsPage() {
             onBack={() => setStep('savings')}
             onSubmit={(value: InvestmentObjective) => {
               update({ investmentObjective: value })
-              setStep('growthHorizon')
+              setStep('savingsInterstitial')
             }}
+          />
+        )}
+
+        {step === 'savingsInterstitial' && (
+          <SavingsInterstitialScreen
+            savingsRange={funnelData.savingsRange}
+            motivationDriver={funnelData.motivationDriver}
+            ageRange={funnelData.ageRange}
+            incomeRange={funnelData.incomeRange}
+            onBack={() => setStep('objectives')}
+            onNext={() => setStep('growthHorizon')}
           />
         )}
 

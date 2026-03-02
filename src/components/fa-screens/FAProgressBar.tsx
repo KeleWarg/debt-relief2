@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 const ALL_STEPS = [
   'motivation', 'age', 'affirmation', 'income', 'savings', 'objectives',
-  'growthHorizon', 'specialties', 'married', 'home', 'zipCode',
+  'savingsInterstitial', 'growthHorizon', 'specialties', 'married', 'home', 'zipCode',
   'stateConfirmation', 'relationship', 'email', 'namePhone',
 ] as const
 
@@ -56,14 +56,11 @@ export function faSectionLabel(stepName: string): string {
 interface FAProgressBarProps {
   stepName: string
   onBack?: () => void
+  dark?: boolean
   className?: string
 }
 
-/**
- * Renders the section label (+ optional back button) below the header.
- */
-export function FAProgressBar({ stepName, onBack, className }: FAProgressBarProps) {
-  const label = SECTION_LABELS[stepName] ?? ''
+export function FAProgressBar({ stepName, onBack, dark, className }: FAProgressBarProps) {
   const progress = faProgressPercent(stepName)
 
   return (
@@ -72,7 +69,12 @@ export function FAProgressBar({ stepName, onBack, className }: FAProgressBarProp
         {onBack && (
           <button
             onClick={onBack}
-            className="flex-shrink-0 w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-900 hover:bg-neutral-200 transition-colors"
+            className={cn(
+              'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors',
+              dark
+                ? 'bg-white/10 text-white hover:bg-white/20'
+                : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
+            )}
             aria-label="Go back"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -80,10 +82,16 @@ export function FAProgressBar({ stepName, onBack, className }: FAProgressBarProp
             </svg>
           </button>
         )}
-        <div className="flex-1 h-[6px] bg-[#E0E0E6] rounded-full overflow-hidden">
+        <div
+          className="flex-1 h-[6px] rounded-full overflow-hidden"
+          style={{ backgroundColor: dark ? 'rgba(255,255,255,0.2)' : '#E0E0E6' }}
+        >
           <div
-            className="h-full bg-[#1A1A2E] rounded-full transition-all duration-700 ease-out"
-            style={{ width: `${progress}%` }}
+            className="h-full rounded-full transition-all duration-700 ease-out"
+            style={{
+              width: `${progress}%`,
+              backgroundColor: dark ? '#FFB934' : '#1A1A2E',
+            }}
           />
         </div>
       </div>

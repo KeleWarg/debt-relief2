@@ -7,20 +7,32 @@ import type { MotivationDriver, AgeRange, SavingsRange, IncomeRange, FAFunnelDat
 import { ProfileDropdown } from './ProfileDropdown'
 import { cn } from '@/lib/utils'
 
-const CONFIRMATION: Record<MotivationDriver, string> = {
-  behind_retirement: "Your growth horizon is set. Now let's match you with the right expertise.",
-  family_protection: "Your growth horizon is set. Now let's match you with the right protection.",
-  windfall: "Your growth horizon is set. Now let's find the right expertise for your new wealth.",
-  optimization: "Your growth horizon is set. Now let's find the right optimization mix.",
-  plan_review: "Your growth horizon is set. Now let's make sure your reviewer covers everything.",
-}
+const BLUE = '#0066CC'
 
-const REASSURANCE: Record<MotivationDriver, string> = {
-  behind_retirement: 'Most people catching up benefit from retirement planning, tax strategy, and catch-up expertise working together.',
-  family_protection: 'Protection planning often involves insurance, estate documents, and education funding working together.',
-  windfall: 'New wealth typically requires tax strategy, investment management, and asset protection as a starting point.',
-  optimization: 'Optimization touches tax strategy, investment management, and fee reduction. Most people benefit from all three.',
-  plan_review: 'A good review covers retirement readiness, tax strategy, and whatever else surfaces. Cast a wide net.',
+const SPEC_CONTENT: Record<MotivationDriver, {
+  headline: React.ReactNode
+  subCopy: string
+}> = {
+  behind_retirement: {
+    headline: <>Now let{'\u2019'}s match you with the right expertise. <span style={{ color: BLUE }}>The right specialties shape your catch-up plan</span> and how quickly you close the gap.</>,
+    subCopy: 'Most people catching up benefit from retirement planning, tax strategy, and catch-up expertise working together.',
+  },
+  family_protection: {
+    headline: <>Now let{'\u2019'}s match you with the right protection. <span style={{ color: BLUE }}>The right specialties ensure your family is covered</span> from every angle.</>,
+    subCopy: 'Protection planning often involves insurance, estate documents, and education funding working together.',
+  },
+  windfall: {
+    headline: <>Now let{'\u2019'}s find the right expertise for your new wealth. <span style={{ color: BLUE }}>The right specialties position your money</span> for long-term growth.</>,
+    subCopy: 'New wealth typically requires tax strategy, investment management, and asset protection as a starting point.',
+  },
+  optimization: {
+    headline: <>Now let{'\u2019'}s find the right optimization mix. <span style={{ color: BLUE }}>The right specialties unlock the biggest levers</span> in your financial picture.</>,
+    subCopy: 'Optimization touches tax strategy, investment management, and fee reduction. Most people benefit from all three.',
+  },
+  plan_review: {
+    headline: <>Now let{'\u2019'}s make sure your reviewer covers everything. <span style={{ color: BLUE }}>The right specialties ensure a thorough review</span> of your plan.</>,
+    subCopy: 'A good review covers retirement readiness, tax strategy, and whatever else surfaces. Cast a wide net.',
+  },
 }
 
 const SPECIALTY_OPTIONS = [
@@ -101,8 +113,7 @@ export function NewSpecialtiesScreen({
   const [checked, setChecked] = React.useState<Set<string>>(new Set())
 
   const recommended = getRecommended(motivationDriver, ageRange, savingsRange, incomeRange)
-  const confirmation = motivationDriver ? CONFIRMATION[motivationDriver] : ''
-  const reassurance = motivationDriver ? REASSURANCE[motivationDriver] : ''
+  const content = motivationDriver ? SPEC_CONTENT[motivationDriver] : null
 
   const handlePrimary = (value: string) => {
     setPrimarySelection(value)
@@ -127,46 +138,32 @@ export function NewSpecialtiesScreen({
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="flex flex-col items-start w-full">
-        {/* Zone 1: Confirmation */}
-        <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0B6E4F' }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <p className="font-sans text-base font-bold" style={{ color: '#1B2A4A' }}>
-            {confirmation}
-          </p>
-        </div>
-
-        {funnelData && <ProfileDropdown data={funnelData} className="animate-fade-in-up w-full mt-4 mb-4" />}
-
-        {/* Divider */}
-        <div
-          className="animate-fade-in-up w-full border-t mb-6 mt-0"
-          style={{ animationDelay: '300ms', borderColor: '#E0E0E0' }}
-        />
-
-        {/* Zone 2: Headline + Options */}
+        {/* Section label */}
         <p
           className="animate-fade-in-up text-xs font-medium uppercase tracking-wider text-neutral-400 mb-3"
           style={{ animationDelay: '400ms' }}
         >
           Your advisor match
         </p>
+
+        {/* Headline */}
         <h1
-          className="animate-fade-in-up font-display text-display sm:text-display-md lg:text-display-lg mb-3"
+          className="animate-fade-in-up font-display text-headline-lg sm:text-display lg:text-display-md mb-3"
           style={{ animationDelay: '400ms', color: '#1B2A4A' }}
         >
-          You don&apos;t have to know exactly what you need.{' '}
-          <span style={{ color: '#0066CC' }}>That&apos;s what the first conversation is for.</span>
+          {content?.headline ?? <>You don{'\u2019'}t have to know exactly what you need. <span style={{ color: BLUE }}>That{'\u2019'}s what the first conversation is for.</span></>}
         </h1>
+
+        {/* Sub-copy */}
         <p
           className="animate-fade-in-up leading-relaxed mb-6"
           style={{ animationDelay: '500ms', fontSize: '15px', color: '#666666' }}
         >
-          What would you like help with?
+          {content?.subCopy ?? 'What would you like help with?'}
         </p>
+
+        {/* Profile dropdown */}
+        {funnelData && <ProfileDropdown data={funnelData} className="animate-fade-in-up w-full mb-6" />}
 
         {/* Primary options */}
         <div className="w-full flex flex-col animate-fade-in-up" style={{ gap: '12px', animationDelay: '500ms' }}>
@@ -248,7 +245,7 @@ export function NewSpecialtiesScreen({
                 {isRec && (
                   <span
                     className="flex-shrink-0 text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                    style={{ color: '#1B2A4A', backgroundColor: '#E8F0FE' }}
+                    style={{ color: '#1B2A4A', backgroundColor: '#F3C060' }}
                   >
                     Recommended
                   </span>
@@ -257,16 +254,6 @@ export function NewSpecialtiesScreen({
             )
           })}
         </div>
-
-        {/* Reassurance */}
-        {reassurance && (
-          <p className="animate-fade-in-up mt-4" style={{ animationDelay: '700ms', fontSize: '14px', color: '#666666' }}>
-            {reassurance}
-          </p>
-        )}
-        <p className="animate-fade-in-up mt-2" style={{ animationDelay: '700ms', fontSize: '13px', color: '#999999' }}>
-          You&apos;re not locked in. Your advisor will refine this with you.
-        </p>
 
         {/* Continue (only when specifics selected) */}
         {checked.size > 0 && (
