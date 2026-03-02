@@ -45,7 +45,7 @@ type Phase = 'motivation' | 'age'
 
 const PHASE_CONTENT = {
   motivation: {
-    headline: <>You deserve a plan that works as hard as you do.</>,
+    headline: <>You deserve a plan that works as <span style={{ color: '#0066CC' }}>hard as you do.</span></>,
     sub: "What matters most to you right now?",
   },
   age: {
