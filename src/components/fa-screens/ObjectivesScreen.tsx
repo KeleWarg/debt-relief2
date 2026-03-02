@@ -208,7 +208,7 @@ export function ObjectivesScreen({
                   {isRecommended && (
                     <span
                       className="flex-shrink-0 text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                      style={{ color: '#1B2A4A', backgroundColor: '#E8F0FE' }}
+                      style={{ color: '#1B2A4A', backgroundColor: '#F3C060' }}
                     >
                       Recommended
                     </span>
