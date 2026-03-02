@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { FAProgressBar } from './FAProgressBar'
 import type { MotivationDriver, MaritalStatus, FAFunnelData } from '@/types/fa-funnel'
 import { ProfileDropdown } from './ProfileDropdown'
 import { cn } from '@/lib/utils'
@@ -93,8 +92,6 @@ export function HomeownershipScreen({
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar stepName="home" onBack={onBack} />
-
       <div className="flex flex-col items-start w-full mt-6">
         {/* Zone 1: Confirmation */}
         {confirmation && (

@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { FAProgressBar } from './FAProgressBar'
 import { OBJECTIVE_OPTIONS } from '@/types/fa-funnel'
 import type { InvestmentObjective, MotivationDriver, AgeRange, SavingsRange } from '@/types/fa-funnel'
 import { cn } from '@/lib/utils'
@@ -138,7 +137,6 @@ export function ObjectivesScreen({
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar stepName="objectives" onBack={onBack} />
       <div className="flex flex-col items-start w-full mt-6">
         {/* Zone 1: Confirmation */}
         <div className="animate-fade-in-up flex items-center gap-2.5 mb-3">

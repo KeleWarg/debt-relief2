@@ -4,7 +4,6 @@ import * as React from 'react'
 import { Button } from '@/components/ui'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 import { USMap } from '@/components/ui/USMap'
-import { FAProgressBar } from './FAProgressBar'
 import type { MotivationDriver } from '@/types/fa-funnel'
 import { getStateFinancialData } from '@/data/stateFinancialData'
 import { cn } from '@/lib/utils'
@@ -77,7 +76,6 @@ export function StateConfirmationScreen({
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar stepName="zipCode" onBack={onBack} />
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Confirmed badge */}
         <div

@@ -5,7 +5,6 @@ import { CheckCircle2, Shield, Users, Clock } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 import { MOTIVATION_LABELS } from '@/types/fa-funnel'
-import { FAProgressBar } from './FAProgressBar'
 import { getGapVariant } from '@/data/affirmation-gap-data'
 import type { GapVariant } from '@/data/affirmation-gap-data'
 import type { MotivationDriver, AgeRange } from '@/types/fa-funnel'
@@ -212,7 +211,6 @@ export function AffirmationMoment({ motivationDriver, ageRange, onBack, onNext }
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar stepName="affirmation" onBack={onBack} />
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Bar chart */}
         <GapBarChart data={gapData} stage={stage} />

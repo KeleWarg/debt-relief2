@@ -6,7 +6,6 @@ import { Button } from '@/components/ui'
 import { Input } from '@/components/ui'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
 import { MOTIVATION_LABELS } from '@/types/fa-funnel'
-import { FAProgressBar } from './FAProgressBar'
 import type { MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective } from '@/types/fa-funnel'
 import { cn } from '@/lib/utils'
 
@@ -355,7 +354,6 @@ export function GrowthHorizonScreen({
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar stepName="growthHorizon" onBack={onBack} />
       <div className="space-y-6 has-sticky-button mt-6">
         {/* Headline */}
         <h1

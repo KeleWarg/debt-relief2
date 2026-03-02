@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { FAProgressBar } from './FAProgressBar'
 import { ProfileDropdown } from './ProfileDropdown'
 import { Button } from '@/components/ui/Button'
 import { StickyButtonContainer } from '@/components/ui/StickyButtonContainer'
@@ -182,8 +181,6 @@ export function AdvisorRelationshipScreen({
 
   return (
     <div className="w-full max-w-content mx-auto px-4 sm:px-6 py-4 sm:py-8">
-      <FAProgressBar stepName="relationship" onBack={onBack} />
-
       <div className="flex flex-col items-start w-full mt-6">
         {confirmation && (
           <div className="animate-fade-in-up flex items-start gap-2 mb-4">

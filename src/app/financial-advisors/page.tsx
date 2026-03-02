@@ -5,8 +5,26 @@ import { MotivationScreen, AffirmationMoment, IncomeRangeScreen, SavingsRangeScr
 import { getStateFromZip } from '@/lib/zip-lookup'
 import type { FAFunnelData, MotivationDriver, AgeRange, IncomeRange, SavingsRange, InvestmentObjective, RelationshipPreference } from '@/types/fa-funnel'
 import { Header } from '@/components/layout/Header'
+import { FAProgressBar } from '@/components/fa-screens/FAProgressBar'
 
 type Step = 'motivation' | 'affirmation' | 'income' | 'savings' | 'objectives' | 'growthHorizon' | 'specialties' | 'marital' | 'home' | 'zip' | 'stateConfirmation' | 'relationship' | 'email' | 'namePhone'
+
+const STEP_TO_PROGRESS: Record<Step, string> = {
+  motivation: 'age',
+  affirmation: 'affirmation',
+  income: 'income',
+  savings: 'savings',
+  objectives: 'objectives',
+  growthHorizon: 'growthHorizon',
+  specialties: 'specialties',
+  marital: 'married',
+  home: 'home',
+  zip: 'zipCode',
+  stateConfirmation: 'zipCode',
+  relationship: 'relationship',
+  email: 'email',
+  namePhone: 'namePhone',
+}
 
 export default function FinancialAdvisorsPage() {
   const [funnelData, setFunnelData] = React.useState<FAFunnelData>({})
@@ -22,6 +40,25 @@ export default function FinancialAdvisorsPage() {
   }, [step])
 
   const isHero = step === 'motivation' && motivationPhase === 'motivation'
+
+  const handleBack = React.useCallback(() => {
+    switch (step) {
+      case 'motivation': setMotivationPhase('motivation'); break
+      case 'affirmation': setStep('motivation'); break
+      case 'income': setStep('affirmation'); break
+      case 'savings': setStep('income'); break
+      case 'objectives': setStep('savings'); break
+      case 'growthHorizon': setStep('objectives'); break
+      case 'specialties': setStep('growthHorizon'); break
+      case 'marital': setStep('specialties'); break
+      case 'home': setStep('marital'); break
+      case 'zip': setStep('home'); break
+      case 'stateConfirmation': setStep('zip'); break
+      case 'relationship': setStep('stateConfirmation'); break
+      case 'email': setStep('relationship'); break
+      case 'namePhone': funnelData.email ? setStep('email') : setStep('relationship'); break
+    }
+  }, [step, funnelData.email])
 
 
   if (isHero) {
@@ -45,7 +82,12 @@ export default function FinancialAdvisorsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-page-gradient overflow-auto">
-      <Header />
+      <div className="sticky top-0 z-50 bg-white">
+        <Header />
+        <div className="max-w-content mx-auto px-4 sm:px-6">
+          <FAProgressBar stepName={STEP_TO_PROGRESS[step]} onBack={handleBack} />
+        </div>
+      </div>
 
       <div className="flex-1 min-h-0 pb-24 sm:pb-0">
         {step === 'motivation' && (
