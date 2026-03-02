@@ -58,6 +58,7 @@ interface MotivationScreenProps {
   initialAge?: AgeRange
   onSubmit?: (motivation: MotivationDriver, age: AgeRange) => void
   onPhaseChange?: (phase: 'motivation' | 'age') => void
+  onMotivationSelect?: (motivation: MotivationDriver) => void
 }
 
 type LayoutTransition = 'idle' | 'exiting' | 'pre-enter' | 'entering'
@@ -65,7 +66,7 @@ type LayoutTransition = 'idle' | 'exiting' | 'pre-enter' | 'entering'
 const LAYOUT_EXIT_MS = 350
 const LAYOUT_ENTER_MS = 450
 
-export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPhaseChange }: MotivationScreenProps) {
+export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPhaseChange, onMotivationSelect }: MotivationScreenProps) {
   const [phase, setPhase] = React.useState<Phase>(initialMotivation ? 'age' : 'motivation')
   const [motivationValue, setMotivationValue] = React.useState<string>(initialMotivation ?? '')
   const [ageValue, setAgeValue] = React.useState<string>(initialAge ?? '')
@@ -111,6 +112,7 @@ export function MotivationScreen({ initialMotivation, initialAge, onSubmit, onPh
 
   const handleMotivationSelect = (value: string) => {
     setMotivationValue(value)
+    onMotivationSelect?.(value as MotivationDriver)
     setTimeout(() => crossfadeTo('age'), 500)
   }
 
