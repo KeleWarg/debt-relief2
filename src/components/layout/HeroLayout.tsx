@@ -8,9 +8,6 @@ import { Footer } from './Footer'
 import { TrustBadges } from './TrustBadges'
 
 const DEFAULT_CAROUSEL: CarouselSlide[] = [
-  { src: '/hero-phone.png', alt: 'Woman reviewing her financial plan' },
-  { src: '/hero-phone-2.png', alt: 'Financial plan dashboard on phone' },
-  { src: '/hero-phone-3.png', alt: 'Portfolio growth overview on phone' },
   { src: '/hero-4.png', alt: 'Man celebrating a financial milestone' },
   { src: '/hero-5.png', alt: 'Retired couple enjoying life together' },
 ]
